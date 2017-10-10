@@ -1,0 +1,41 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Emigma Starter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-10 14:25+0000\n"
+"PO-Revision-Date: 2017-10-10 14:26+0000\n"
+"Last-Translator: alen@emigma.com <alen@emigma.com>\n"
+"Language-Team: \n"
+"Language: sl_SI\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : "
+"n%100==3||n%100==4 ? 2 : 3;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#. Name of the theme
+msgid "Emigma Starter"
+msgstr ""
+
+#. Description of the theme
+msgid ""
+"Simple, clear and modern Bootstrap 3-based theme. Perfect base for "
+"developing all kinds of responsive sites with Toolsets, including the "
+"Layouts plugin (no extra integration needed, you activate Layouts and the "
+"drag and drop facilities work out of the box). Uses WordPress theme "
+"customizer and supports Font Awesome Icons. Supports WooCommerce integration "
+"by styles unification."
+msgstr ""
+
+#. URI of the theme
+msgid "http://starter.razvija.se/"
+msgstr ""
+
+#. Author of the theme
+msgid "Emigma Multimedia Labs"
+msgstr ""
+
+#. Author URI of the theme
+msgid "https://emigma.com"
+msgstr ""

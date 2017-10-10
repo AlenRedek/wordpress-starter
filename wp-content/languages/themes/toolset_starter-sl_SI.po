@@ -1,0 +1,345 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Toolset Starter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-10 14:27+0000\n"
+"PO-Revision-Date: 2017-10-10 14:27+0000\n"
+"Last-Translator: alen@emigma.com <alen@emigma.com>\n"
+"Language-Team: \n"
+"Language: sl_SI\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : "
+"n%100==3||n%100==4 ? 2 : 3;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: ../toolset-starter/functions.php:92
+msgid "Header Menu"
+msgstr ""
+
+#: ../toolset-starter/functions.php:149
+msgid "Default Sidebar"
+msgstr ""
+
+#: ../toolset-starter/functions.php:162
+msgid "Widgets in Footer"
+msgstr ""
+
+#: ../toolset-starter/functions.php:171
+msgid "Widgets in Header"
+msgstr ""
+
+#: ../toolset-starter/functions.php:409
+msgid "Do you want to prepare this site for quick editing with Toolset?"
+msgstr ""
+
+#: ../toolset-starter/functions.php:414
+msgid "We will:"
+msgstr ""
+
+#: ../toolset-starter/functions.php:420
+#, php-format
+msgid "Automatically install the Toolset plugins that are needed for %s"
+msgstr ""
+
+#: ../toolset-starter/functions.php:427
+#, php-format
+msgid "Set up layouts, template, archives and other site elements for %s"
+msgstr ""
+
+#: ../toolset-starter/functions.php:436
+msgid "Run Installer"
+msgstr ""
+
+#: ../toolset-starter/header.php:39
+msgid "Toggle navigation"
+msgstr ""
+
+#: ../toolset-starter/comments.php:20
+msgid "One thought on"
+msgstr ""
+
+#: ../toolset-starter/comments.php:23
+msgid "thoughts on"
+msgstr ""
+
+#: ../toolset-starter/comments.php:38
+msgid "Older Comments"
+msgstr ""
+
+#: ../toolset-starter/comments.php:39
+msgid "Newer Comments"
+msgstr ""
+
+#: ../toolset-starter/index.php:17
+msgid "No posts found"
+msgstr ""
+
+#: ../toolset-starter/image.php:13
+msgid "Previous Image"
+msgstr ""
+
+#: ../toolset-starter/image.php:14
+msgid "Next Image"
+msgstr ""
+
+#: ../toolset-starter/404.php:10
+msgid "Error 404"
+msgstr ""
+
+#: ../toolset-starter/404.php:12
+msgid "Unfortunately the page you were looking for does not exist"
+msgstr ""
+
+#: ../toolset-starter/404.php:14
+msgid "Don't worry! You can always"
+msgstr ""
+
+#: ../toolset-starter/404.php:16
+msgid "Homepage"
+msgstr ""
+
+#: ../toolset-starter/404.php:16
+msgid "go to homepage"
+msgstr ""
+
+#: ../toolset-starter/search-form.php:3 ../toolset-starter/search-form.php:5
+msgid "Search for:"
+msgstr ""
+
+#: ../toolset-starter/search-form.php:4
+msgid "Search &hellip;"
+msgstr ""
+
+#: ../toolset-starter/search-form.php:9
+msgid "Search"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:19
+msgid "Olders posts"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:22
+msgid "Newer posts"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:63
+msgid "Next page"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:64
+msgid "Previous page"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:159
+msgid "Post author"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:166
+msgid "at"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:172
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:182
+msgid "Edit"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:186
+msgid "Reply"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:217
+msgid "Comment"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:222
+msgid "You may use these"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:222
+msgid "tags and attributes:"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:244
+msgid "Name"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:246
+msgid "Email"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:248
+msgid "Website"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:269
+msgid "This post is password protected."
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:269
+msgid "To view it please enter your password below"
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:272
+msgid "Password: "
+msgstr ""
+
+#: ../toolset-starter/functions/bootstrap-wordpress.php:275
+msgid "Submit"
+msgstr ""
+
+#: ../toolset-starter/functions/bs-nav-walker.php:165
+msgid "Home"
+msgstr ""
+
+#: ../toolset-starter/functions/bs-nav-walker.php:167
+msgid "Add a menu"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:10
+msgid "There is no Content Template assigned"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:12
+#: ../toolset-starter/functions/toolset-assigned-message.php:49
+msgid "Dismiss"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:17
+#: ../toolset-starter/functions/toolset-assigned-message.php:54
+msgid "Do you want this page to look different?"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:20
+msgid "Content Templates"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:21
+msgid "Assign a Content Template"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:27
+msgid "Designing WordPress Content with Content Templates"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:28
+msgid "Learn about Content Templates"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:34
+msgid ""
+"You can see this message because you are logged in as a user who can assign "
+"Content Templates. <br>Your visitors won't see this message."
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:47
+msgid "There is no WordPress Archive Template assigned"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:57
+msgid "WordPress Archive"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:58
+msgid "Assign a WordPress Archive Template"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:64
+msgid "Customize Archive Page with WordPress Archive Template"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:65
+msgid "Learn about WordPress Archive Templates"
+msgstr ""
+
+#: ../toolset-starter/functions/toolset-assigned-message.php:70
+msgid ""
+"You can see this message because you are logged in as a user who can assign "
+"WordPress Archive Templates. <br>Your visitors won't see this message."
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:29
+msgid "Logo"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:40
+msgid "Upload a logo"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:46
+msgid "Menu Styling"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:86
+msgid "Add your own CSS class to the menu"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:103
+msgid "Remove all default CSS classes"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:117
+msgid "Advanced Settings"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:119
+msgid ""
+"Change these settings only if you are sure you know what you are doing<br>"
+"<br>"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:132
+msgid "Load theme CSS for WooCommerce"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:149
+msgid "Load theme CSS"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:166
+msgid "Enable Primary Color setting"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:184
+msgid "Enable global .container wrapper"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:185
+msgid ""
+"Uncheck this only if want to disable global Bootstrap .container wrapper "
+"from the theme"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:211
+#: ../toolset-starter/functions/theme-customizer.php:217
+msgid "Primary Color"
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:212
+msgid "Applied to the menu, links, etc."
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:212
+msgid ""
+"You turned off the Primary Color setting in Advanced Settings.<br><br> To "
+"change the Primary Color turn the setting on."
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:218
+#, php-format
+msgid ""
+"Your PHP version (%s) does not support this feature. Please upgrade to at "
+"least PHP 5.3 version to customise your colors."
+msgstr ""
+
+#: ../toolset-starter/functions/theme-customizer.php:299
+msgid "Custom CSS"
+msgstr ""
+
+#: ../toolset-starter/functions/layouts/application/setup_toolset_starter.php:15
+msgid "Page"
+msgstr ""

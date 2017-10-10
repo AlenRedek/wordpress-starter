@@ -53,7 +53,7 @@ if ( ! function_exists('admin_enqueue_styles_scripts') ) {
 if ( ! function_exists('theme_setup_features') ) {
     add_action( 'after_setup_theme', 'theme_setup_features' );
     function theme_setup_features() {
-        load_theme_textdomain( 'toolset_starter', get_stylesheet_directory() . '/languages' );
+        $x=load_theme_textdomain( 'emigma', get_stylesheet_directory() . '/languages' );
     }
 }
 
