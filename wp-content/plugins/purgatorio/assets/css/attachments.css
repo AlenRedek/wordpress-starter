@@ -1,0 +1,14 @@
+.files-panel .row > div[class^="col-"] {
+    padding: 0 15px;
+}
+.files-panel .panel-heading, .files-panel .panel-body {
+    border: none;
+    padding: 0;
+}
+.file-item {
+    margin: 15px 0;
+}
+.file-item .fa {
+    margin-right: 10px;
+    font-size: 2rem;
+}

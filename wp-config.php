@@ -75,24 +75,19 @@ if ( ! isset($environment) ) {
 }
 
 if ($environment === 'development') {
-    
-    ini_set('xdebug.var_display_max_depth', 20);
-    ini_set('xdebug.var_display_max_children', 256);
-    ini_set('xdebug.var_display_max_data', 5000);
-
-    define('WP_HOME', 'http://starter.razvija.se/');
 	define('WP_SITEURL', 'http://starter.razvija.se/');
+    define('WP_HOME', 'http://starter.razvija.se/');
 
 	define('BLOG_PUBLIC', false);
 
     define('FS_METHOD', 'direct');
 
-    define('WP_DEBUG', false);
+    define('WP_DEBUG', true);
     define('WP_CACHE', false);
 
 } else {
-    define('WP_HOME', 'http://starter.razvija.se/');
 	define('WP_SITEURL', 'http://starter.razvija.se/');
+    define('WP_HOME', 'http://starter.razvija.se/');
 
 	define('BLOG_PUBLIC', true);
 
@@ -112,6 +107,7 @@ define('FTP_CONTENT_DIR', $_SERVER['DOCUMENT_ROOT'].'/wp-content/');
 define('FTP_PLUGIN_DIR ', $_SERVER['DOCUMENT_ROOT'].'/wp-content/plugins/');
 define('DISALLOW_FILE_EDIT', true);
 define('WP_AUTO_UPDATE_CORE', true );
+define('WPCF_META_PREFIX', ''); // Remove meta key prefix wpcf- from custom meta fields which is added by Toolset plugin
 
 /* That's all, stop editing! Happy blogging. */
 
