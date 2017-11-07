@@ -10,12 +10,10 @@ Tested up to: 4.8.2
 Various helper functions and classes for faster theme development.
 
 == Third-Party Dependencies ==
-* Toolset Starter Theme Guides https://wp-types.com/documentation/user-guides/toolset-starter-theme/
 * WP_Query Arguments Code Snippets https://www.billerickson.net/code/wp_query-arguments/
 * WP Theme Customization https://codex.wordpress.org/Class_Reference/WP_Customize_Manager/add_control
-* Toolset Theme Customization https://wp-types.com/2017/04/how-to-add-custom-theme-options-to-a-toolset-based-theme/
 * Polylang Function Reference https://polylang.wordpress.com/documentation/documentation-for-developers/functions-reference/
-* Gravity Forms Shortcode https://docs.gravityforms.com/shortcodes/
+* Theme development with Gulp, Bower & Livereload https://codeable.io/speed-up-your-theme-development-with-gulp/
 
 = Shortcodes =
 

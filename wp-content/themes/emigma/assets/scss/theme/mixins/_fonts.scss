@@ -1,0 +1,40 @@
+$font_dir: '../fonts/';
+
+/* _simple-font-url('Chunkfive', 'eot'); */
+@function _simple-font-url($name, $extension)
+{
+    @return url($font_dir + $name + '.' + $extension);
+}
+
+/* _full-font-url('Chunkfive', 'woff', 'embedded-opentype', '?#iefix'); */
+@function _full-font-url($name, $extension, $format, $hash: '')
+{
+    @return url($font_dir + $name + '/' + $name + '.' + $extension + $hash) format($format);
+}
+
+/* register-font('Chunkfive'); */
+@mixin register-font($name, $extension)
+{
+    @font-face {
+        font-family: $name;
+        font-style: normal;
+        font-weight: normal;
+        src: _simple-font-url($name, $extension);
+        /*src: _simple-font-url($name, 'eot');
+        src: _full-font-url($name, 'woff', 'embedded-opentype', '?#iefix'),
+             _full-font-url($name, 'ttf', 'truetype'),
+             _full-font-url($name, 'svg', 'esvg', '?#' + $name);*/
+	}
+}
+
+/*
+prevent faux bold
+http://www.alistapart.com/articles/say-no-to-faux-bold/
+use-registered-font('Chunkfive');
+*/
+@mixin use-registered-font($name)
+{
+    font-family: $name, $sans-serif;
+    font-weight: normal;
+    letter-spacing: 0;
+}

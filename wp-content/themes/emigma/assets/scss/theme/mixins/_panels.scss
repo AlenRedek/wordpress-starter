@@ -1,0 +1,16 @@
+@mixin panel-style($panel-bg, $panel-title-color, $panel-color, $panel-link-color, $panel-hover-color) {
+    .panel-title {
+        color: $panel-title-color;
+    }
+    .panel-heading,
+    .panel-body {
+        background-color: $panel-bg;
+		color: $panel-color;
+    }
+    a {
+        color: $panel-link-color;
+        &:hover,&:active,&:focus {
+        	color: $panel-hover-color;
+        }
+    }
+}

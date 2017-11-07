@@ -1,4 +1,3 @@
-"use strict";
 jQuery.noConflict();
 (function($) {
 

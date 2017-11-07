@@ -1,0 +1,67 @@
+@mixin generate-spacing-classes(
+  $breakpoint,
+  $space-amounts-with-direction: (0, 5, 10, 15, 20, 25, 30, 50, 60, 100, 150)
+) {
+  @each $space in $space-amounts-with-direction {
+    .#{$breakpoint}-p-#{$space}    { padding:        #{$space}px; }
+    .#{$breakpoint}-pt-#{$space}   { padding-top:    #{$space}px; }
+    .#{$breakpoint}-pr-#{$space}   { padding-right:  #{$space}px; }
+    .#{$breakpoint}-pb-#{$space}   { padding-bottom: #{$space}px; }
+    .#{$breakpoint}-pl-#{$space}   { padding-left:   #{$space}px; }
+
+    .#{$breakpoint}-m-#{$space}    { margin:        #{$space}px; }
+    .#{$breakpoint}-mt-#{$space}   { margin-top:    #{$space}px; }
+    .#{$breakpoint}-mr-#{$space}   { margin-right:  #{$space}px; }
+    .#{$breakpoint}-mb-#{$space}   { margin-bottom: #{$space}px; }
+    .#{$breakpoint}-ml-#{$space}   { margin-left:   #{$space}px; }
+  }
+}
+
+@mixin color-variants($class, $color) {
+  .text-#{$class} {
+    color: $color !important;
+    &:hover, &:focus, &:active {
+      color: $color !important;
+    }
+  }
+  .bg-#{$class} {
+    background-color: $color !important;
+  }
+  .bg-alpha-#{$class} {
+    background-color: rgba($color, 0.50) !important;
+  }
+  .bg-gradient-#{$class} {
+    @include background-gradient(left, rgba($color, 0.35) 50%, transparent 100%);
+    @media(min-width: $screen-md){
+        @include background-gradient(left, rgba($color, 0.35) 35%, transparent 65%);
+    }
+  }
+  .border-#{$class} {
+    border-color: $color !important;
+  }
+}
+
+@mixin helper-classes($breakpoint) {
+  .#{$breakpoint}-width-100 {
+    width: 100;
+  }
+  .#{$breakpoint}-width-50 {
+    width: 50%;
+  }
+  .#{$breakpoint}-height-100 {
+    height: 100%;
+  }
+  .pull-left-#{$breakpoint} {
+    float: left;
+  }
+  .pull-right-#{$breakpoint} {
+    float: right;
+  }
+  .text-right-#{$breakpoint} {
+    text-align: right;
+  }
+  .inline-block-#{$breakpoint} {
+    display: inline-block;
+	  vertical-align: middle;
+  }
+}

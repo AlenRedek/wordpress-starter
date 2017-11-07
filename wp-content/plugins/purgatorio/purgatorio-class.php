@@ -72,6 +72,10 @@ class Purgatorio {
 			wp_enqueue_script('purgatorio-typekit-src', 'https://use.typekit.net/'.$typekit_id.'.js', array(), PURGATORIO_VERSION, false);
 	    	wp_enqueue_script('purgatorio-typekit', PURGATORIO__PLUGIN_URL . 'assets/js/typekit.js', array('tpurgatorio-typekit-src'), PURGATORIO_VERSION, false);
 		}
+		if(pg_is_dev() && $this->get_option('enable_livereload')){
+			wp_enqueue_script('livereload', PURGATORIO__PLUGIN_URL . 'assets/js/livereload.js', array(), PURGATORIO_VERSION, true );
+		}
+		
 		if ( is_singular() && comments_open() && get_option('thread_comments') ){
             wp_enqueue_script( 'comment-reply' );
         }
