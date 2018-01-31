@@ -1,8 +1,5 @@
 <?php
 
-if( ! interface_exists( 'Toolset_User_Editors_Medium_Screen_Interface', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/medium/screen/interface.php' );
-
 abstract class Toolset_User_Editors_Medium_Screen_Abstract
 	implements Toolset_User_Editors_Medium_Screen_Interface {
 
@@ -11,17 +8,17 @@ abstract class Toolset_User_Editors_Medium_Screen_Abstract
 	 */
 	protected $manager;
 
-	public function isActive() {
+	public function is_active() {
 		return false;
 	}
 
-	public function dropIfNotActive() {
+	public function drop_if_not_active() {
 		return true;
 	}
 
-	public function equivalentEditorScreenIsActive() {}
+	public function equivalent_editor_screen_is_active() {}
 
-	public function addManager( Toolset_User_Editors_Manager_Interface $manager ) {
+	public function add_manager( Toolset_User_Editors_Manager_Interface $manager ) {
 		$this->manager = $manager;
 	}
 }

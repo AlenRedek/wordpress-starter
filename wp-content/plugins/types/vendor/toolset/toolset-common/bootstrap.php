@@ -1,38 +1,39 @@
 <?php
 
 /**
-* Toolset_Common_Bootstrap
-*
-* General class to manage common code loading for all Toolset plugins
-*
-* This class is used to load Toolset Common into all Toolset plugins that have it as a dependency.
-* Note that Assets, Menu, Utils, Settings, Localization, Promotion, Debug, Admin Bar and WPML compatibility are always loaded when first instantiating this class.
-* Toolset_Common_Bootstrap::load_sections must be called after_setup_theme:10 with an array of sections to load, named as follows:
-* 	toolset_forms						Toolset Forms, the shared component for Types and CRED
-* 	toolset_visual_editor				Visual Editor Addon, to display buttons and dialogs over editors
-* 	toolset_parser						Toolset Parser, to parse conditionals
-*
-* New sections can be added here, following the same structure.
-*
-*
-* Note that you have available the following constants:
-* 	TOOLSET_COMMON_VERSION				The Toolset Common version
-* 	TOOLSET_COMMON_PATH					The path to the active Toolset Common directory
-* 	TOOLSET_COMMON_DIR					The name of the directory of the active Toolset Common
-* 	TOOLSET_COMMON_URL					The URL to the root of Toolset Common, to be used in backend - adjusted as per SSL settings
-* 	TOOLSET_COMMON_FRONTEND_URL			The URL to the root of Toolset Common, to be used in frontend - adjusted as per SSL settings
-*
-* 	TOOLSET_COMMON_PROTOCOL				Deprecated - To be removed - The protocol of TOOLSET_COMMON_URL - http | https
-* 	TOOLSET_COMMON_FRONTEND_PROTOCOL	Deprecated - To be removed - The protocol of TOOLSET_COMMON_FRONTEND_URL - http | https
-*
-* @todo create an admin page with Common info: path, bundled libraries versions, etc
-*/
-
+ * Toolset_Common_Bootstrap
+ *
+ * General class to manage common code loading for all Toolset plugins
+ *
+ * This class is used to load Toolset Common into all Toolset plugins that have it as a dependency.
+ * Note that Assets, Menu, Utils, Settings, Localization, Promotion, Debug, Admin Bar and WPML compatibility are always
+ * loaded when first instantiating this class. Toolset_Common_Bootstrap::load_sections must be called
+ * on after_setup_theme:10 with an array of sections to load, named as follows:
+ * 	toolset_forms						Toolset Forms, the shared component for Types and CRED
+ * 	toolset_visual_editor				Visual Editor Addon, to display buttons and dialogs over editors
+ * 	toolset_parser						Toolset Parser, to parse conditionals
+ *
+ * New sections can be added here, following the same structure.
+ *
+ *
+ * Note that you have available the following constants:
+ * 	TOOLSET_COMMON_VERSION				The Toolset Common version
+ * 	TOOLSET_COMMON_PATH					The path to the active Toolset Common directory
+ * 	TOOLSET_COMMON_DIR					The name of the directory of the active Toolset Common
+ * 	TOOLSET_COMMON_URL					The URL to the root of Toolset Common, to be used in backend - adjusted as per SSL settings
+ * 	TOOLSET_COMMON_FRONTEND_URL			The URL to the root of Toolset Common, to be used in frontend - adjusted as per SSL settings
+ *
+ * 	TOOLSET_COMMON_PROTOCOL				Deprecated - To be removed - The protocol of TOOLSET_COMMON_URL - http | https
+ * 	TOOLSET_COMMON_FRONTEND_PROTOCOL	Deprecated - To be removed - The protocol of TOOLSET_COMMON_FRONTEND_URL - http | https
+ *
+ * @todo create an admin page with Common info: path, bundled libraries versions, etc
+ * todo the above should imho be part of a Troubleshooting page
+ */
 class Toolset_Common_Bootstrap {
 
     private static $instance;
 	private static $sections_loaded;
-	
+
 	public $assets_manager;
 	public $object_relationship;
 	public $menu;
@@ -60,21 +61,20 @@ class Toolset_Common_Bootstrap {
 	const TOOLSET_GUI_BASE = 'toolset_gui_base';
 	const TOOLSET_RELATIONSHIPS = 'toolset_relationships';
 
-
     // Request mode
-    const MODE_UNDEFINED = '';
-    const MODE_AJAX = 'ajax';
-    const MODE_ADMIN = 'admin';
-    const MODE_FRONTEND = 'frontend';
+	const MODE_UNDEFINED = '';
+	const MODE_AJAX = 'ajax';
+	const MODE_ADMIN = 'admin';
+	const MODE_FRONTEND = 'frontend';
 
 
-    /**
-     * @var string One of the MODE_* constants.
-     */
-    private $mode = self::MODE_UNDEFINED;
+	/**
+	 * @var string One of the MODE_* constants.
+	 */
+	private $mode = self::MODE_UNDEFINED;
 
 
-    private function __construct() {
+	private function __construct() {
 		self::$sections_loaded = array();
 
 	    // Register assets, utils, settings, localization, promotion, debug, admin bar and WPML compatibility
@@ -82,9 +82,9 @@ class Toolset_Common_Bootstrap {
 		$this->register_res();
 		$this->register_libs();
 		$this->register_inc();
-		
+
 		add_filter( 'toolset_is_toolset_common_available', '__return_true' );
-		
+
 		add_action( 'switch_blog', array( $this, 'clear_settings_instance' ) );
 
         /**
@@ -96,6 +96,7 @@ class Toolset_Common_Bootstrap {
          */
         do_action( 'toolset_common_loaded', $this );
     }
+
 
 	/**
 	 * @return Toolset_Common_Bootstrap
@@ -129,7 +130,7 @@ class Toolset_Common_Bootstrap {
 		return in_array( $section_name, self::$sections_loaded );
 	}
 
-	
+
 	/**
 	 * Add a section name to the list of the loaded ones.
 	 *
@@ -199,14 +200,14 @@ class Toolset_Common_Bootstrap {
 		if ( $this->should_load_section( $load, self::TOOLSET_USER_EDITOR ) ) {
 			$this->register_user_editor();
 		}
-		
+
 		// Maybe register the editor addon
 		if ( $this->should_load_section( $load, self::TOOLSET_SHORTCODE_GENERATOR ) ) {
 			$this->register_shortcode_generator();
 		}
 
 	}
-	
+
 	public function register_res() {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_RESOURCES ) ) {
@@ -217,7 +218,7 @@ class Toolset_Common_Bootstrap {
 			$this->apply_filters_on_sections_loaded( 'toolset_register_assets_section' );
 		}
 	}
-	
+
 	public function register_libs() {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_LIBRARIES ) ) {
@@ -246,7 +247,7 @@ class Toolset_Common_Bootstrap {
 			$this->apply_filters_on_sections_loaded( 'toolset_register_library_section' );
 		}
 	}
-	
+
 	public function register_inc() {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_INCLUDES ) ) {
@@ -255,39 +256,44 @@ class Toolset_Common_Bootstrap {
 
 			$this->register_autoloaded_classes();
 
+			// Make sure we check for upgrades after the Toolset Common library is fully loaded.
+			$upgrade_controller = Toolset_Upgrade_Controller::get_instance();
+			$upgrade_controller->initialize();
+
+			// Manually load the more sensitive code.
 			if ( ! class_exists( 'Toolset_Settings', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.settings.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.settings.class.php';
 				$this->settings = Toolset_Settings::get_instance();
 			}
 			if ( ! class_exists( 'Toolset_Localization', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.localization.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.localization.class.php';
 				$this->localization = new Toolset_Localization();
 			}
 			if ( ! class_exists( 'Toolset_WPLogger', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.wplogger.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.wplogger.class.php';
 			}
 			if ( ! class_exists( 'Toolset_Object_Relationship', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.object.relationship.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.object.relationship.class.php';
 				$this->object_relationship = Toolset_Object_Relationship::get_instance();
 			}
 			if ( ! class_exists( 'Toolset_Settings_Screen', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.settings.screen.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.settings.screen.class.php';
 				$this->settings_screen = new Toolset_Settings_Screen();
 			}
 			if ( ! class_exists( 'Toolset_Export_Import_Screen', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.export.import.screen.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.export.import.screen.class.php';
 				$this->export_import_screen = new Toolset_Export_Import_Screen();
 			}
 			if ( ! class_exists( 'Toolset_Menu', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.menu.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.menu.class.php';
 				$this->menu = new Toolset_Menu();
 			}
 			if ( ! class_exists( 'Toolset_Promotion', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.promotion.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.promotion.class.php';
 				$this->promotion = new Toolset_Promotion();
 			}
 			if ( ! class_exists( 'Toolset_Admin_Bar_Menu', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.admin.bar.menu.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.admin.bar.menu.class.php';
 				/**
 				 * @var Toolset_Admin_Bar_Menu $toolset_admin_bar_menu
 				 * @deprecated Please use Toolset_Admin_Bar_Menu::get_instance() instead of this global variable.
@@ -300,7 +306,7 @@ class Toolset_Common_Bootstrap {
 				$this->internal_compatibility = new Toolset_Internal_Compatibility();
 			}
 			if ( ! class_exists( 'Toolset_WPML_Compatibility', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.wpml.compatibility.class.php' );
+				require_once TOOLSET_COMMON_PATH . '/inc/toolset.wpml.compatibility.class.php';
 				Toolset_WPML_Compatibility::initialize();
 			}
 			if ( ! class_exists( 'Toolset_Relevanssi_Compatibility', false ) ) {
@@ -310,7 +316,7 @@ class Toolset_Common_Bootstrap {
 
             if ( ! class_exists( 'Toolset_CssComponent', false ) ) {
 				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.css.component.class.php' );
-				$toolset_bs_component = Toolset_CssComponent::getInstance();
+				Toolset_CssComponent::getInstance();
 			}
 
 			if ( ! class_exists( 'Toolset_Bootstrap_Loader', false ) ) {
@@ -324,32 +330,37 @@ class Toolset_Common_Bootstrap {
 				Toolset_Admin_Notices_Manager::init();
 			}
 
-			// Load Theme Integration Class
-			// Wait until TC 2.5
-			/*
-			if ( ! class_exists( 'Toolset_Theme_Integration', false ) ) {
-				require_once( TOOLSET_COMMON_PATH . '/inc/toolset.theme.integration.php' );
-				Toolset_Theme_Integration::get_instance();
-			}
-			*/
-
 			// Load Admin Notices Controller (user of our Toolset_Admin_Notices_Manager)
             if( ! class_exists( 'Toolset_Controller_Admin_Notices', false ) ) {
 				require_once( TOOLSET_COMMON_PATH . '/inc/controller/admin/notices.php' );
 				new Toolset_Controller_Admin_Notices();
             }
 
-            // Get compatibility loader class instance
-            Toolset_Compatibility_Loader::get_instance();
-
 			require_once( TOOLSET_COMMON_PATH . '/inc/toolset.compatibility.php' );
 			require_once( TOOLSET_COMMON_PATH . '/inc/toolset.function.helpers.php' );
 			require_once( TOOLSET_COMMON_PATH . '/deprecated.php' );
 
+			// Initialize the AJAX handler if DOING_AJAX.
+			//
+			// Otherwise we'll only register it with the autoloader so that it's still safe to create subclasses
+			// from it and use them throughout plugins without too much limitations.
+			$ajax_class_path = TOOLSET_COMMON_PATH . '/inc/toolset.ajax.class.php';
+			if( ( self::MODE_AJAX == $this->get_request_mode() )
+				&& ! class_exists( 'Toolset_Ajax', false ) )
+			{
+				require_once $ajax_class_path;
+				Toolset_Ajax::initialize();
+			} else {
+				$autoloader = Toolset_Common_Autoloader::get_instance();
+				$autoloader->register_classmap( array( 'Toolset_Ajax' => $ajax_class_path ) );
+			}
+
+			$this->register_relationships();
+
 			$this->apply_filters_on_sections_loaded( 'toolset_register_include_section' );
 		}
 	}
-	
+
 	public function register_utils() {
 
 		if( ! $this->is_section_loaded( self::TOOLSET_AUTOLOADER ) ) {
@@ -383,12 +394,14 @@ class Toolset_Common_Bootstrap {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_DEBUG ) ) {
 			$this->add_section_loaded( self::TOOLSET_DEBUG );
-			require_once( TOOLSET_COMMON_PATH . '/debug/debug-information.php' );
+
+			require_once TOOLSET_COMMON_PATH . '/debug/troubleshooting-page.php';
 
 			$this->apply_filters_on_sections_loaded( 'toolset_register_debug_section' );
 		}
 	}
-	
+
+
 	public function register_toolset_forms() {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_FORMS ) ) {
@@ -407,7 +420,7 @@ class Toolset_Common_Bootstrap {
 			$this->apply_filters_on_sections_loaded( 'toolset_register_forms_section' );
 		}
 	}
-	
+
 	public function register_visual_editor() {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_VISUAL_EDITOR ) ) {
@@ -418,7 +431,7 @@ class Toolset_Common_Bootstrap {
 			$this->apply_filters_on_sections_loaded( 'toolset_register_visual_editor_section' );
 		}
 	}
-	
+
 	public function register_parser() {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_PARSER ) ) {
@@ -439,7 +452,7 @@ class Toolset_Common_Bootstrap {
 			$this->apply_filters_on_sections_loaded( 'toolset_register_user_editor_section' );
 		}
 	}
-	
+
 	public function register_shortcode_generator() {
 
 		if ( ! $this->is_section_loaded( self::TOOLSET_SHORTCODE_GENERATOR ) ) {
@@ -447,6 +460,39 @@ class Toolset_Common_Bootstrap {
 			require_once( TOOLSET_COMMON_PATH . '/inc/toolset.shortcode.generator.class.php' );
 			$this->apply_filters_on_sections_loaded( 'toolset_register_shortcode_generator_section' );
 		}
+	}
+
+	/**
+	 * Include the "GUI base" module.
+	 *
+	 * That will give you Toolset_Gui_Base which you can initialize whenever convenient.
+	 *
+	 * @since 2.1
+	 */
+	public function register_gui_base() {
+
+		if( $this->is_section_loaded( self::TOOLSET_GUI_BASE ) ) {
+			return;
+		}
+
+		require_once TOOLSET_COMMON_PATH . '/utility/gui-base/main.php';
+		$this->add_section_loaded( self::TOOLSET_GUI_BASE );
+	}
+
+
+	private function register_relationships() {
+
+		if( $this->is_section_loaded( self::TOOLSET_RELATIONSHIPS ) ) {
+			return;
+		}
+
+		require_once TOOLSET_COMMON_PATH . '/inc/m2m/controller.php';
+		$relationships_controller = Toolset_Relationship_Controller::get_instance();
+
+		// We need this allways
+		$relationships_controller->initialize_core();
+
+		$this->add_section_loaded( self::TOOLSET_RELATIONSHIPS );
 	}
 
 
@@ -473,46 +519,58 @@ class Toolset_Common_Bootstrap {
 	}
 
 
+
 	public function clear_settings_instance() {
 		Toolset_Settings::clear_instance();
 	}
 
 
-    /**
-     * See get_request_mode().
-     *
-     * @since 2.3
-     */
-    private function determine_request_mode() {
-        if( is_admin() ) {
-            if( defined( 'DOING_AJAX' ) ) {
-                $this->mode = self::MODE_AJAX;
-            } else {
-                $this->mode = self::MODE_ADMIN;
-            }
-        } else {
-            $this->mode = self::MODE_FRONTEND;
-        }
-    }
+	/**
+	 * See get_request_mode().
+	 *
+	 * @since 2.3
+	 */
+	private function determine_request_mode() {
+		if( is_admin() ) {
+			if( defined( 'DOING_AJAX' ) ) {
+				$this->mode = self::MODE_AJAX;
+			} else {
+				$this->mode = self::MODE_ADMIN;
+			}
+		} else {
+			$this->mode = self::MODE_FRONTEND;
+		}
+	}
 
 
-    /**
-     * Get current request mode.
-     *
-     * Possible values are:
-     * - MODE_UNDEFINED before the main controller initialization is completed
-     * - MODE_AJAX when doing an AJAX request
-     * - MODE_ADMIN when showing a WP admin page
-     * - MODE_FRONTEND when rendering a frontend page
-     *
-     * @return string
-     * @since 2.3
-     */
-    public function get_request_mode() {
-        if( self::MODE_UNDEFINED == $this->mode ) {
-            $this->determine_request_mode();
-        }
-        return $this->mode;
-    }
+	/**
+	 * Get current request mode.
+	 *
+	 * Possible values are:
+	 * - MODE_UNDEFINED before the main controller initialization is completed
+	 * - MODE_AJAX when doing an AJAX request
+	 * - MODE_ADMIN when showing a WP admin page
+	 * - MODE_FRONTEND when rendering a frontend page
+	 *
+	 * @return string
+	 * @since 2.3
+	 */
+	public function get_request_mode() {
+		if( self::MODE_UNDEFINED == $this->mode ) {
+			$this->determine_request_mode();
+		}
+		return $this->mode;
+	}
+
+
+	/**
+	 * Perform a full initialization of the m2m API.
+	 *
+	 * @since m2m
+	 */
+	public function initialize_m2m() {
+		Toolset_Relationship_Controller::get_instance()->initialize_full();
+	}
+
 
 };

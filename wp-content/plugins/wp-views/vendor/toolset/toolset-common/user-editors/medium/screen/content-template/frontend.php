@@ -1,17 +1,13 @@
 <?php
 
-if( ! class_exists( 'Toolset_User_Editors_Medium_Screen_Abstract', false ) ) {
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/medium/screen/abstract.php' );
-}
-
 class Toolset_User_Editors_Medium_Screen_Content_Template_Frontend
 	extends Toolset_User_Editors_Medium_Screen_Abstract {
 
-	public function dropIfNotActive() {
+	public function drop_if_not_active() {
 		return false;
 	}
 
-	public function isActive() {
+	public function is_active() {
 		if( is_admin() ) {
 			return false;
 		}
@@ -22,22 +18,22 @@ class Toolset_User_Editors_Medium_Screen_Content_Template_Frontend
 			return false;
 		}
 
-		if( $id = $this->isActiveSinglePost() ) {
+		if( $id = $this->is_active_single_post() ) {
 			return $id;
 		}
 
-		if( $id = $this->isActiveTaxonomyArchive() ) {
+		if( $id = $this->is_active_taxonomy_archive() ) {
 			return $id;
 		}
 
-		if( $id = $this->isActivePostArchive() ) {
+		if( $id = $this->is_active_post_archive() ) {
 			return $id;
 		}
 
 		return false;
 	}
 
-	private function isActiveSinglePost() {
+	private function is_active_single_post() {
 		global $post;
 
 		if( is_single() && is_object( $post ) ) {
@@ -51,7 +47,7 @@ class Toolset_User_Editors_Medium_Screen_Content_Template_Frontend
 		return false;
 	}
 
-	private function isActiveTaxonomyArchive() {
+	private function is_active_taxonomy_archive() {
 		global $wp_query;
 		if (
 			is_tax()
@@ -69,7 +65,7 @@ class Toolset_User_Editors_Medium_Screen_Content_Template_Frontend
 		return false;
 	}
 
-	private function isActivePostArchive() {
+	private function is_active_post_archive() {
 		global $post;
 
 		if( is_object( $post ) == false ) {

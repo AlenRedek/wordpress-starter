@@ -1,17 +1,5 @@
 <?php
 
-if( ! interface_exists( 'Toolset_User_Editors_Manager_Interface', false ) ) {
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/interface.php' );
-}
-
-if( ! interface_exists( 'Toolset_User_Editors_Medium_Interface', false ) ) {
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/medium/interface.php' );
-}
-
-if( ! interface_exists( 'Toolset_User_Editors_Editor_Interface', false ) ) {
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/interface.php' );
-}
-
 class Toolset_User_Editors_Manager implements  Toolset_User_Editors_Manager_Interface {
 
 	/**
@@ -40,7 +28,7 @@ class Toolset_User_Editors_Manager implements  Toolset_User_Editors_Manager_Inte
 	 */
 	public function __construct( Toolset_User_Editors_Medium_Interface $medium ) {
 		$this->medium = $medium;
-		$this->medium->addManager( $this );
+		$this->medium->add_manager( $this );
 	}
 
 	/**
@@ -48,12 +36,12 @@ class Toolset_User_Editors_Manager implements  Toolset_User_Editors_Manager_Inte
 	 *
 	 * @return bool
 	 */
-	public function addEditor( Toolset_User_Editors_Editor_Interface $editor ) {
-		if( ! $editor->requiredPluginActive() ) {
+	public function add_editor( Toolset_User_Editors_Editor_Interface $editor ) {
+		if( ! $editor->required_plugin_active() ) {
 			return false;
 		}
 
-		$this->editors[$editor->getId()] = $editor;
+		$this->editors[$editor->get_id()] = $editor;
 		return true;
 	}
 
@@ -61,7 +49,7 @@ class Toolset_User_Editors_Manager implements  Toolset_User_Editors_Manager_Inte
 	 * Return all editors
 	 * @return Toolset_User_Editors_Editor_Interface[]
 	 */
-	public function getEditors() {
+	public function get_editors() {
 		return $this->editors;
 	}
 
@@ -70,55 +58,55 @@ class Toolset_User_Editors_Manager implements  Toolset_User_Editors_Manager_Inte
 	 *
 	 * @return false|Toolset_User_Editors_Editor_Interface
 	 */
-	public function getActiveEditor() {
+	public function get_active_editor() {
 		if( $this->active_editor === null ) {
-			$this->active_editor = $this->fetchActiveEditor();
+			$this->active_editor = $this->fetch_active_editor();
 		}
 
 		return $this->active_editor;
 	}
 
-	public function getMedium() {
+	public function get_medium() {
 		return $this->medium;
 	}
 
 	/**
 	 * @return bool
 	 */
-	protected function fetchActiveEditor() {
+	protected function fetch_active_editor() {
 
-		$user_editor_choice = $this->medium->userEditorChoice();
+		$user_editor_choice = $this->medium->user_editor_choice();
 		// check every screen of medium
-		foreach( $this->medium->getScreens() as $id => $screen ) {
+		foreach( $this->medium->get_screens() as $id => $screen ) {
 
 			// if screen is active
-			if( $id_medium = $screen->isActive() ) {
-				$screen->addManager( $this );
+			if( $id_medium = $screen->is_active() ) {
+				$screen->add_manager( $this );
 
 				// check editors
-				foreach( $this->getEditors() as $editor ) {
+				foreach( $this->get_editors() as $editor ) {
 
 					// skip if we have a user editor choice and current editor not matching selection
 					if( $user_editor_choice
 					    && array_key_exists( $user_editor_choice, $this->editors )
-					    && $user_editor_choice !=  $editor->getId()
+					    && $user_editor_choice !=  $editor->get_id()
 					)
 						continue;
 
 					// check editor screens
-					if( $editor_screen = $editor->getScreenById( $id ) ) {
-						$this->medium->setId( $id_medium );
-						if( $editor_screen->isActive() ) {
-							$screen->equivalentEditorScreenIsActive();
+					if( $editor_screen = $editor->get_screen_by_id( $id ) ) {
+						$this->medium->set_id( $id_medium );
+						if( $editor_screen->is_active() ) {
+							$screen->equivalent_editor_screen_is_active();
 							
 							return $editor;
-						} else if( $screen->dropIfNotActive() ) {
-							$this->medium->removeScreen( $id );
+						} else if( $screen->drop_if_not_active() ) {
+							$this->medium->remove_screen( $id );
 						}
 					}
 				}
-			} else if( $screen->dropIfNotActive() ) {
-				$this->medium->removeScreen( $id );
+			} else if( $screen->drop_if_not_active() ) {
+				$this->medium->remove_screen( $id );
 			}
 		}
 
@@ -135,7 +123,7 @@ class Toolset_User_Editors_Manager implements  Toolset_User_Editors_Manager_Inte
 			$this->active_editor = null;
 		}
 
-		if( $editor = $this->getActiveEditor() ) {
+		if( $editor = $this->get_active_editor() ) {
 			$editor->run();
 		}
 	}

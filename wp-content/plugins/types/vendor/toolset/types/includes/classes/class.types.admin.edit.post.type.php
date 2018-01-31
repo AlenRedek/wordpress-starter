@@ -81,40 +81,8 @@ class Types_Admin_Edit_Post_Type extends Types_Admin_Page
             ),
         );
 
-        /**
-         * Summary.
-         *
-         * Description.
-         *
-         * @since x.x.x
-         *
-         * @param type  $var Description.
-         * @param array $args {
-         *     Short description about this hash.
-         *
-         *     @type type $var Description.
-         *     @type type $var Description.
-         * }
-         * @param type  $var Description.
-         */
         $this->boxes = apply_filters('wpcf_meta_box_order_defaults', $this->boxes, $this->post_type);
 
-        /**
-         * Summary.
-         *
-         * Description.
-         *
-         * @since x.x.x
-         *
-         * @param type  $var Description.
-         * @param array $args {
-         *     Short description about this hash.
-         *
-         *     @type type $var Description.
-         *     @type type $var Description.
-         * }
-         * @param type  $var Description.
-         */
         $this->boxes = apply_filters('wpcf_meta_box_post_type', $this->boxes);
 
         /**
@@ -1116,7 +1084,8 @@ class Types_Admin_Edit_Post_Type extends Types_Admin_Page
         }
 
         $data['slug'] = $post_type;
-        $custom_types = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	    $post_type_option = new Types_Utils_Post_Type_Option();
+        $custom_types = $post_type_option->get_post_types();
         $protected_data_check = array();
 
         if ( wpcf_is_builtin_post_types($data['slug']) ) {
@@ -1158,10 +1127,7 @@ class Types_Admin_Edit_Post_Type extends Types_Admin_Page
                      * update post meta "_wp_types_group_post_types"
                      */
                     $sql = $wpdb->prepare(
-                        sprintf(
-                            'select meta_id, meta_value from %s where meta_key = %%s',
-                            $wpdb->postmeta
-                        ),
+                        "select meta_id, meta_value from {$wpdb->postmeta} where meta_key = %%s",
                         '_wp_types_group_post_types'
                     );
                     $all_meta = $wpdb->get_results($sql, OBJECT_K);

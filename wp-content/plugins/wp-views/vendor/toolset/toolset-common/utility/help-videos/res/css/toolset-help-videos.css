@@ -25,6 +25,7 @@
     top: 10px;
     overflow: hidden;
 }
+.toolset-box-video div.mejs-overlay-play{display:none!important;} /** let's make sure that the overlay is hidden even if original JS has $overlay.show(); **/
 
 .toolset-box-container {
     margin-bottom: 0px;

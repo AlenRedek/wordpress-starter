@@ -3,6 +3,8 @@
  */
 jQuery(document).ready(function($){
 
+    var wpcfBody = $( 'body' );
+
     /**
      * Store all current used field slugs
      * @type {Array}
@@ -597,7 +599,7 @@ jQuery(document).ready(function($){
     /**
      * update box fifle by field name
      */
-    $('.wpcf-forms-set-legend').live('keyup', function(){
+    wpcfBody.on( 'keyup', '.wpcf-forms-set-legend', function(){
         var val = $(this).val();
         if ( val ) {
             val = val.replace(/</, '&lt;');
@@ -652,7 +654,7 @@ jQuery(document).ready(function($){
         });
         if (passed == false) {
             // Bind message fade out
-            $('.wpcf-compare-unique-value').live('keyup', function(){
+            wpcfBody.on( 'keyup', '.wpcf-compare-unique-value', function(){
                 $(this).parents('.wpcf-compare-unique-value-wrapper').find('.wpcf-form-error-unique-value').fadeOut(function(){
                     $(this).remove();
                 });
@@ -689,7 +691,7 @@ jQuery(document).ready(function($){
         });
         if (passed == false) {
             // Bind message fade out
-            $('.wpcf-forms-field-name').live('keyup', function(){
+            wpcfBody.on( 'keyup', '.wpcf-forms-field-name', function(){
                 $(this).removeClass('wpcf-name-checked-error').prev('.wpcf-form-error-unique-value').fadeOut(function(){
                     $(this).remove();
                 });
@@ -752,7 +754,7 @@ jQuery(document).ready(function($){
 
         if (passed == false) {
             // Bind message fade out
-            $('.wpcf-forms-field-slug').live('keyup', function(){
+            wpcfBody.on( 'keyup', '.wpcf-forms-field-slug', function(){
                 $(this).removeClass('wpcf-slug-checked-error').prev('.wpcf-form-error-unique-value').fadeOut(function(){
                     $(this).remove();
                 });

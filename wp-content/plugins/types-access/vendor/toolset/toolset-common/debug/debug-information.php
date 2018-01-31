@@ -14,7 +14,10 @@
 * $toolset_common_bootstrap = Toolset_Common_Bootstrap::getInstance();
 * $toolset_common_bootstrap->register_debug();
 *
-* @since unknown
+ * @since unknown
+ * @deprecated Please refer to the Toolset Troubleshooting page, which includes this information and where you can add
+ *     your plugin's troubleshooting elements. This file is deprecated and should not be included anywhere.   
+ * 
 */
 
 include_once dirname(__FILE__) . '/functions_debug_information.php';

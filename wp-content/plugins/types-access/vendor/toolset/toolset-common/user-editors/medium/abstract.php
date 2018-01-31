@@ -1,10 +1,5 @@
 <?php
 
-if( ! interface_exists( 'Toolset_User_Editors_Medium_Interface', false ) ) {
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/medium/interface.php' );
-}
-
-
 /**
  * Class Toolset_User_Editors_Medium_Abstract
  */
@@ -52,19 +47,19 @@ abstract class Toolset_User_Editors_Medium_Abstract
 	/**
 	 * @param $id
 	 */
-	public function setId( $id ) {
+	public function set_id( $id ) {
 		$this->id = $id;
 	}
 
-	public function getId() {
+	public function get_id() {
 		return $this->id;
 	}
 
-	public function getSlug() {
+	public function get_slug() {
 		return $this->slug;
 	}
 
-	public function getOptionNameEditorChoice() {
+	public function get_option_name_editor_choice() {
 		return $this->option_name_editor_choice;
 	}
 
@@ -72,14 +67,14 @@ abstract class Toolset_User_Editors_Medium_Abstract
 	 * @param $id
 	 * @param Toolset_User_Editors_Medium_Screen_Interface $screen
 	 */
-	public function addScreen( $id, Toolset_User_Editors_Medium_Screen_Interface $screen ) {
+	public function add_screen( $id, Toolset_User_Editors_Medium_Screen_Interface $screen ) {
 		$this->screens[$id] = $screen;
 	}
 
 	/**
 	 * @param $id
 	 */
-	public function removeScreen( $id ) {
+	public function remove_screen( $id ) {
 		if( array_key_exists( $id, $this->screens ) ) {
 			unset( $this->screens[$id] );
 		}
@@ -88,15 +83,15 @@ abstract class Toolset_User_Editors_Medium_Abstract
 	/**
 	 * @return Toolset_User_Editors_Medium_Screen_Interface[]
 	 */
-	public function getScreens() {
+	public function get_screens() {
 		return $this->screens;
 	}
 
-	public function addManager( Toolset_User_Editors_Manager_Interface $manager ) {
+	public function add_manager( Toolset_User_Editors_Manager_Interface $manager ) {
 		$this->manager = $manager;
 	}
 	
-	public function getManager() {
+	public function get_manager() {
 		return $this->manager;
 	}
 

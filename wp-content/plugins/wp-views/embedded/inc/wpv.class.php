@@ -626,7 +626,7 @@ class WP_Views {
         }
         
 		$out = $this->render_view_ex( $id, md5( serialize( $atts ) ) );
-		$out = apply_filters( 'wpv_filter_wpv_view_shortcode_output', $out, $id );
+		
 		array_pop( $this->view_shortcode_attributes );
         
         // Update Views cache if applicable
@@ -643,6 +643,8 @@ class WP_Views {
                 update_option( 'wpv_transient_view_index', $cached_output_index );
             }
         }
+		
+		$out = apply_filters( 'wpv_filter_wpv_view_shortcode_output', $out, $id );
         
 		return $out;
 
@@ -4207,8 +4209,8 @@ function wpv_views_plugin_plugin_row_meta( $plugin_meta, $plugin_file, $plugin_d
 	if ( $plugin_file == $this_plugin ) {
 		$plugin_meta[] = sprintf(
 				'<a href="%s" target="_blank">%s</a>',
-				'https://wp-types.com/version/views-2-4-1/?utm_source=viewsplugin&utm_campaign=views&utm_medium=release-notes-plugin-row&utm_term=Views 2.4.1 release notes',
-				__( 'Views 2.4.1 release notes', 'wpv-views' ) 
+				'https://wp-types.com/version/views-2-5-1/?utm_source=viewsplugin&utm_campaign=views&utm_medium=release-notes-plugin-row&utm_term=Views 2.5.1 release notes',
+				__( 'Views 2.5.1 release notes', 'wpv-views' ) 
 			);
 	}
 	return $plugin_meta;

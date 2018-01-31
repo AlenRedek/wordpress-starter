@@ -79,13 +79,20 @@ final class Toolset_Common_Autoloader {
 	 * The one who is adding mappings is responsible for existence of the files.
 	 *
 	 * @param string[string] $classmap class name => absolute path to a file where this class is defined
+	 * @param null|string $base_path
 	 * @throws InvalidArgumentException
 	 * @since m2m
 	 */
-	public function register_classmap( $classmap ) {
+	public function register_classmap( $classmap, $base_path = null ) {
 
 		if( ! is_array( $classmap ) ) {
 			throw new InvalidArgumentException( 'The classmap must be an array.' );
+		}
+
+		if( is_string( $base_path ) ) {
+			foreach( $classmap as $class_name => $relative_path ) {
+				$classmap[ $class_name ] = "$base_path/$relative_path";
+			}
 		}
 
 		$this->classmap = array_merge( $this->classmap, $classmap );

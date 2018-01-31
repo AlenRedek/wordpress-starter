@@ -1220,15 +1220,20 @@ WPV_Toolset.Utils._strip_tags_and_preserve_text = function (text) {
  * When user tries to leave the page, check if confirmation is needed, and if so, displays a confirmation message and
  * runs custom action.
  *
+ * WARNING: http://stackoverflow.com/a/37782307
+ *
  * @param {function} checkIfConfirmationNeededCallback Should return true if confirmation should be shown (e.g. unsaved data).
- * @param {function} onBeforeUnloadCallback Will be called before showing the confirmation.
+ * @param {function|null} onBeforeUnloadCallback Will be called before showing the confirmation.
  * @param {string} confirmationMessage Confirmation message that should be shown by the browser.
+ * @since unknown
  */
 WPV_Toolset.Utils.setConfirmUnload = function (checkIfConfirmationNeededCallback, onBeforeUnloadCallback, confirmationMessage) {
     window.onbeforeunload = function (e) {
         if (checkIfConfirmationNeededCallback()) {
 
-            onBeforeUnloadCallback();
+            if(_.isFunction(onBeforeUnloadCallback)) {
+                onBeforeUnloadCallback();
+            }
 
             // For IE and Firefox prior to version 4
             if (e) {

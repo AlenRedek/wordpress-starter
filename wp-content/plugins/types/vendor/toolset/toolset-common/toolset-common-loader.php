@@ -1,11 +1,11 @@
 <?php
 
 if( !defined('TOOLSET_VERSION') ){
-	define('TOOLSET_VERSION', '2.4.5');
+	define('TOOLSET_VERSION', '2.5.5');
 }
 
 if ( ! defined('TOOLSET_COMMON_VERSION' ) ) {
-    define( 'TOOLSET_COMMON_VERSION', '2.4.5' );
+    define( 'TOOLSET_COMMON_VERSION', '2.5.5' );
 }
 
 if ( ! defined('TOOLSET_COMMON_PATH' ) ) {
@@ -21,7 +21,7 @@ require_once( TOOLSET_COMMON_PATH . '/bootstrap.php' );
 if ( ! function_exists( 'toolset_common_boostrap' ) ) {
     function toolset_common_boostrap() {
         global $toolset_common_bootstrap;
-        $toolset_common_bootstrap = Toolset_Common_Bootstrap::getInstance();
+        $toolset_common_bootstrap = Toolset_Common_Bootstrap::get_instance();
     }
 
 	/**
@@ -36,21 +36,25 @@ if ( ! function_exists( 'toolset_common_boostrap' ) ) {
 	 * @TODO: there is no need to manipulate URL values for http/https if everyone uses plugins_url, but not everyone does, so:
      * this is necessary, but it should be enough to do $url = set_url_scheme( $url ) and the protocol
      * will be calculated by itself.
-	 * Note that set_url_scheme( $url ) takes care of FORCE_SSL_AMIN too: 
+	 * Note that set_url_scheme( $url ) takes care of FORCE_SSL_AMIN too:
 	 * https://developer.wordpress.org/reference/functions/set_url_scheme/
 	 *
      * @TODO: no need of TOOLSET_COMMON_URL, TOOLSET_COMMON_PROTOCOL, TOOLSET_COMMON_FRONTEND_URL, TOOLSET_COMMON_FRONTEND_PROTOCOL
 	 * In fact, TOOLSET_COMMON_PROTOCOL and TOOLSET_COMMON_FRONTEND_PROTOCOL are not used anywhere and I am maring them as deprecated.
      * define('TOOLSET_COMMON_URL', set_url_scheme( $url ) ); covers everything
-	 * although there might be cases where an AJAX call is performed, hence happening on the backend, 
+	 * although there might be cases where an AJAX call is performed, hence happening on the backend,
 	 * and we ned to build a frontend URL based on the Toolset Common URL, while they have different SSL schemas,
 	 * so if possible, I would keep those two constants.
+	 *
+	 * @param string $url
+	 * @param int $version_number The "$toolset_common_version" value of the loaded library. Will be used to define
+	 *     the TOOLSET_COMMON_VERSION_NUMBER constant.
 	 */
-    function toolset_common_set_constants_and_start( $url ) {
-		
+	function toolset_common_set_constants_and_start( $url, $version_number = 0 ) {
+
 		// Backwards compatibility: make sure that the URL constants do not include a trailing slash.
 		$url = untrailingslashit( $url );
-		
+
 		if (
 			is_ssl()
 			|| (
@@ -71,6 +75,20 @@ if ( ! function_exists( 'toolset_common_boostrap' ) ) {
 			define( 'TOOLSET_COMMON_FRONTEND_URL', str_replace( 'https://', 'http://', TOOLSET_COMMON_URL ) );
 			define( 'TOOLSET_COMMON_FRONTEND_PROTOCOL', 'http' ); // DEPRECATED
 		}
+
+		// By preventing a re-definition we're easily allowing helper plugins like tcl-override to function.
+		// If nothing fancy is happening on the site, this will have zero impact.
+	    if( 0 !== (int) $version_number && ! defined( 'TOOLSET_COMMON_VERSION_NUMBER' ) ) {
+
+		    /**
+		     * If defined, this is an integer version number of the common library.
+		     *
+		     * It can be used for simple version comparison.
+		     *
+		     * @since 2.5.1
+		     */
+		    define( 'TOOLSET_COMMON_VERSION_NUMBER', $version_number );
+	    }
     }
     // Load early
 	// We register scripts and styles that are dependences for Toolset assets

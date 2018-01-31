@@ -1,8 +1,12 @@
 <?php
 
-
-if( ! class_exists( 'Toolset_User_Editors_Editor_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/abstract.php' );
+/**
+ * Editor class for the Basic editor (CodeMirror).
+ *
+ * Handles all the functionality needed to allow the Basic editor (CodeMirror) to work with Content Template editing.
+ *
+ * @since 2.5.0
+ */
 
 class Toolset_User_Editors_Editor_Basic
 	extends Toolset_User_Editors_Editor_Abstract {
@@ -10,7 +14,7 @@ class Toolset_User_Editors_Editor_Basic
 	protected $id = 'basic';
 	protected $name = 'HTML';
 
-	public function requiredPluginActive() {
+	public function required_plugin_active() {
 		return true;
 	}
 

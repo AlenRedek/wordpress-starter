@@ -96,9 +96,6 @@ if ( !defined('WPCF_AUTHOR' )){
 function wpcf_admin_init_hook()
 {
     wp_register_style('wpcf-css-embedded', WPCF_EMBEDDED_RES_RELPATH . '/css/basic.css', array(), WPCF_VERSION );
-
-    wp_enqueue_style('toolset-dashicons');
-
 }
 
 
@@ -570,7 +567,8 @@ function wpcf_admin_menu_summary_cpt()
         array('page'=>'wpcf-edit-type'),
         __('Add New', 'wpcf')
     );
-    $to_display_posts = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	$post_type_option = new Types_Utils_Post_Type_Option();
+    $to_display_posts = $post_type_option->get_post_types();
     $to_display_tax = get_option( WPCF_OPTION_NAME_CUSTOM_TAXONOMIES, array() );
     if ( !empty( $to_display_posts ) || !empty( $to_display_tax ) ) {
         add_action( 'wpcf_types_tax_list_table_after', 'wpcf_admin_promotional_text' );
@@ -1670,7 +1668,8 @@ function wpcf_admin_deactivate_content($type, $arg, $action = 'delete')
         case 'taxonomy':
             // Clean post relations
             if ( $action == 'delete' ) {
-                $custom = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	            $post_type_option = new Types_Utils_Post_Type_Option();
+                $custom = $post_type_option->get_post_types();
                 foreach ( $custom as $post_type => $data ) {
                     if ( empty( $data['taxonomies'] ) ) {
                         continue;

@@ -23,6 +23,7 @@ class WPToolset_Field_Colorpicker extends FieldFactory
                 false,
                 1
             );
+			// colorpicker.js uses iris, not wp-color-picker. Check whether this is needed.
             wp_enqueue_script(
                 'wp-color-picker',
                 admin_url( 'js/color-picker.min.js' ),
@@ -30,12 +31,6 @@ class WPToolset_Field_Colorpicker extends FieldFactory
                 false,
                 1
             );
-            $colorpicker_l10n = array(
-                'clear' => __( 'Clear' ),
-                'defaultString' => __( 'Default', 'wpv-views' ),
-                'pick' => __( 'Select', 'wpv-views' )." Color"
-            );
-            wp_localize_script( 'wp-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
         }
         wp_register_script(
             'wptoolset-field-colorpicker',

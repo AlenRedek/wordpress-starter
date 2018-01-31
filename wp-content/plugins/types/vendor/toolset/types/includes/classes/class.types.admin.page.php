@@ -346,23 +346,7 @@ abstract class Types_Admin_Page
         }
     }
 
-    /**
-     * Summary.
-     *
-     * Description.
-     *
-     * @since x.x.x
-     * @access (for functions: only use if private)
-     *
-     * @see Function/method/class relied on
-     * @link URL
-     * @global type $varname Description.
-     * @global type $varname Description.
-     *
-     * @param type $var Description.
-     * @param type $var Optional. Description.
-     * @return type Description.
-     */
+
     public function add_box_howto($boxes)
     {
         $displaying_custom_content = include( WPCF_ABSPATH . '/marketing/displaying-custom-content/title-content.php' );
@@ -674,7 +658,8 @@ abstract class Types_Admin_Page
     {
         $post_type = '';
         if (isset($_REQUEST[$request_name]) ) {
-            $post_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+	        $post_type_option = new Types_Utils_Post_Type_Option();
+            $post_types = $post_type_option->get_post_types();
             if ( array_key_exists($_REQUEST[$request_name], $post_types) ) {
                 $post_type = sanitize_text_field( $_REQUEST[$request_name] );
             }

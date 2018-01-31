@@ -1,13 +1,9 @@
 <?php
 
-if( ! class_exists( 'Toolset_User_Editors_Medium_Screen_Abstract', false ) ) {
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/medium/screen/abstract.php' );
-}
-
 class Toolset_User_Editors_Medium_Screen_Content_Template_Backend
 	extends Toolset_User_Editors_Medium_Screen_Abstract {
 
-	public function isActive() {
+	public function is_active() {
 		if( ! is_admin() || ! array_key_exists( 'ct_id', $_REQUEST ) ) {
 			return false;
 		}
@@ -15,7 +11,7 @@ class Toolset_User_Editors_Medium_Screen_Content_Template_Backend
 		return (int) $_REQUEST['ct_id'];
 	}
 
-	public function equivalentEditorScreenIsActive() {
+	public function equivalent_editor_screen_is_active() {
 		add_filter( 'wpv_ct_editor_localize_script', array( $this, 'set_user_editor_choice' ) );
 	}
 	
@@ -27,7 +23,7 @@ class Toolset_User_Editors_Medium_Screen_Content_Template_Backend
 	*/
 	
 	public function set_user_editor_choice( $l10n_data ) {
-		$l10n_data['user_editor'] = $this->manager->getActiveEditor()->getId();
+		$l10n_data['user_editor'] = $this->manager->get_active_editor()->get_id();
 		return $l10n_data;
 	}
 

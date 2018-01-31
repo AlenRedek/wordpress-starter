@@ -6,8 +6,8 @@ Text Domain: wpcf
 Domain Path: /embedded/locale
 License: GPLv2
 Requires at least: 3.7
-Tested up to: 4.8.1
-Stable tag: 2.2.16
+Tested up to: 4.9
+Stable tag: 2.2.20
 
 The complete and reliable plugin for managing custom post types, custom taxonomies and custom fields.
 
@@ -157,6 +157,23 @@ Additionally, Types is the only plugin that lets you define parent/child relatio
 10. Bulk editing child content using Field Tables
 
 == Changelog ==
+
+= 2.2.20 =
+* Fixed an issue that field title was not available on filter "wpt_field_options"
+* Fixed an issue with the background when resizing transparent indexed colored PNGs
+* Fixed an issue with special character entities import
+
+= 2.2.19 =
+* Fixed an issue when using 3rd party shortcodes on the WYSIWYG field
+
+= 2.2.18 =
+* Fixed an issue when adding option to checkbox / radio / select field
+* Fixed an issue with Custom Post Types loading (since WordPress 4.8.2)
+
+= 2.2.17 =
+* Fixed an issue when saving field conditional while the latest version of Views was active.
+* Updated the list of WordPress reserved names.
+* Fixed a formatting issue when using a WYSIWYG field in Content Templates.
 
 = 2.2.16 =
 * Fixed a bug with numeric validation used a different decimal sign than a dot.

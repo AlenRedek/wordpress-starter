@@ -54,9 +54,14 @@ final class Access_Helper
              * Running preview_custom_error twice to fix an issue on multi-site when WP replace updated $current_user to original
              */
             add_action( 'wp_head',            array( __CLASS__, 'preview_custom_error' ) );
-            add_filter( 'next_post_link',                   array( __CLASS__, 'toolset_access_filter_post_link' ), null, 5 );
-			add_filter( 'previous_post_link',               array( __CLASS__, 'toolset_access_filter_post_link' ), null, 5 );
-        }
+			add_filter( 'get_previous_post_where',              array( __CLASS__, 'filter_post_link_query' ), null, 5 );
+			add_filter( 'get_next_post_where',                  array( __CLASS__, 'filter_post_link_query' ), null, 5 );
+
+			add_filter( 'toolset_access_check_if_post_type_managed', array( __CLASS__, 'check_if_post_type_managed' ), null, 2 );
+			add_filter( 'toolset_access_get_allowed_post_groups', array( __CLASS__, 'get_allowed_post_groups' ), null, 2 );
+
+
+		}
 	    add_filter( 'wp_link_query',            array( __CLASS__, 'filter_wp_link_query' ), null, 2 );
 
 
@@ -132,31 +137,100 @@ final class Access_Helper
 	    return $result;
     }
 
-	/*
-     * Filter for get_adjacent_post_link function
-     * Check if current user can read $post from previous or next link
-	 * @param string $output
-	 * @param string $format
-	 * @param string $link
-	 * @param object $post
+	/**
+     * Add Post Group to next/prev link query
      *
-     * @return string
-     *
-     * @since 2.4.2
+	 * @param $where
+	 * @param $in_same_term
+	 * @param $excluded_terms
+	 * @param $taxonomy
+	 * @param $post
+	 *
+	 * @return string
 	 */
-    public static function toolset_access_filter_post_link( $output, $format, $link, $post ) {
-        if ( ! is_object( $post ) || ! isset( $post->ID ) ) {
-            return '';
+	public static function filter_post_link_query( $where, $in_same_term, $excluded_terms, $taxonomy, $post ) {
+		global $wpdb;
+
+		if ( ! apply_filters( 'toolset_access_check_if_post_type_managed', true, $post->post_type )
+                && ! apply_filters( 'toolset_access_check_if_post_type_managed', true, 'post' ) ) {
+		    return $where;
         }
+		$is_post_type_allowed = apply_filters( 'toolset_access_api_get_post_type_permissions', false, $post->post_type, 'read' );
 
-	    $show_post_link = apply_filters( 'toolset_access_api_get_post_permissions', false, $post, 'read' );
-
-        if( $show_post_link ) {
-            return $output;
+		$where_groups = '';
+        if ( ! $is_post_type_allowed ) {
+	        $post_groups = apply_filters( 'toolset_access_get_allowed_post_groups', array(), true );
+            $where = ", {$wpdb->postmeta} as postmeta " . $where;
+            for ( $i = 0; $i < count( $post_groups ); $i++ ) {
+	            $where_groups .= " postmeta.meta_value = '{$post_groups[ $i ]}' OR ";
+            }
+	        if ( ! empty( $where_groups ) ) {
+		        $where_groups = substr( $where_groups, 0, - 3 );
+		        $where .= " AND postmeta.meta_key = '_wpcf_access_group' AND ( {$where_groups} ) ".
+		                   " AND p.ID = postmeta.post_id";
+	        }
         } else {
-            return '';
+            $post_groups = apply_filters( 'toolset_access_get_allowed_post_groups', array(), false );
+
+	        for ( $i = 0; $i < count( $post_groups ); $i++ ) {
+		        $where_groups .= "'{$post_groups[ $i ]}', ";
+	        }
+	        if ( ! empty( $where_groups ) ) {
+		        $where_groups = substr( $where_groups, 0, - 2 );
+		        $where = " LEFT JOIN $wpdb->postmeta postmeta ON p.ID = postmeta.post_id ".
+		                 "AND postmeta.meta_key = '_wpcf_access_group' " . $where;
+		        $where .= " AND ( postmeta.meta_value IS NULL OR ( postmeta.meta_value IS NOT NULL AND postmeta.meta_value ".
+		                  "NOT IN ({$where_groups}) ) ) ";
+
+	        }
         }
+
+		return $where;
+	}
+
+	/**
+     * Get list of Post groups where user can/can't read posts
+     *
+	 * @param $user_can_read
+	 *
+	 * @return array
+	 */
+	public static function get_allowed_post_groups( $groups, $user_can_read ) {
+		global $wpcf_access;
+
+		$types = $wpcf_access->settings->types;
+		$current_role = self::wpcf_get_current_logged_user_role();
+		foreach ( $types as $group_slug => $group_data ) {
+			if ( strpos( $group_slug, 'wpcf-custom-group-' ) === 0 ) {
+                $read = $group_data['permissions']['read']['roles'];
+				if ( in_array( $current_role, $read ) && $user_can_read ){
+				    $groups[] = $group_slug;
+				} elseif ( ! in_array( $current_role, $read ) && ! $user_can_read ) {
+					$groups[] = $group_slug;
+                }
+			}
+        }
+        return $groups;
+	}
+
+	/**
+     * Check if post type or 'post' managed by Access
+	 * @param $post
+	 *
+	 * @return bool
+	 */
+	public static function check_if_post_type_managed ( $status, $post_type ) {
+		global $wpcf_access;
+
+		$types = $wpcf_access->settings->types;
+
+		if ( isset( $types[ $post_type ] ) && $types[ $post_type ]['mode'] == 'permissions' ) {
+		    return true;
+        }
+
+        return false;
     }
+
 
     /**
      *
@@ -621,6 +695,38 @@ final class Access_Helper
         
         add_filter('types_access_dependencies', array(__CLASS__,  'wpcf_access_dependencies_filter'));
 
+		/**
+		 * Filter to check permission for post types
+		 * @param $has_permission | required
+		 * @param $post_type(slug)(string) | required
+		 * @param $option_name (publish, edit_own, edit_any, delete_own, delete_any, read) | optional | default: read
+		 * @param $user | optional, default: $current_user
+		 * @param $language (code)| optional, default: default language, example: en
+		 * @return (boolean)true|false
+		 */
+		add_filter( 'toolset_access_api_get_post_type_permissions', array(__CLASS__, 'toolset_access_api_get_post_type_permissions_process'), 10, 5 );
+
+		/**
+		 * Filter to check permission for taxonomies
+		 * @param $has_permission | required
+		 * @param $taxonomy(slug) | required
+		 * @param $option_name (assign_terms, delete_terms, edit_terms, manage_terms) | optional | default: manage_terms
+		 * @param $user(object) | optional, default: $current_user
+		 * @return (boolean)true|false
+		 */
+		add_filter( 'toolset_access_api_get_taxonomy_permissions', array(__CLASS__, 'toolset_access_api_get_taxonomy_permissions_process'), 10, 4 );
+
+		/**
+		 * Filter to check permission for specific post
+		 * @param $has_permission | required
+		 * @param $post_id(string) | $post(object) | required
+		 * @param $option_name (read, edit) | optional | default: read
+		 * @param $user | optional, default: $current_user
+		 * @param $language (code)| optional, default: default language, example: en
+		 * @return (boolean)true|false
+		 */
+		add_filter( 'toolset_access_api_get_post_permissions', array(__CLASS__, 'toolset_access_api_get_post_permissions_process'), 10, 5 );
+
         TAccess_Loader::load('CLASS/Upload');
         TAccess_Loader::load('CLASS/Debug');
 
@@ -652,39 +758,6 @@ final class Access_Helper
             }
         }
 
-        /**
-         * Filter to check permission for post types
-         * @param $has_permission | required
-         * @param $post_type(slug)(string) | required
-         * @param $option_name (publish, edit_own, edit_any, delete_own, delete_any, read) | optional | default: read
-         * @param $user | optional, default: $current_user
-         * @param $language (code)| optional, default: default language, example: en
-         * @return (boolean)true|false
-         */
-        add_filter( 'toolset_access_api_get_post_type_permissions', array(__CLASS__, 'toolset_access_api_get_post_type_permissions_process'), 10, 5 );
-
-        /**
-         * Filter to check permission for taxonomies
-         * @param $has_permission | required
-         * @param $taxonomy(slug) | required
-         * @param $option_name (assign_terms, delete_terms, edit_terms, manage_terms) | optional | default: manage_terms
-         * @param $user(object) | optional, default: $current_user
-         * @return (boolean)true|false
-         */
-        add_filter( 'toolset_access_api_get_taxonomy_permissions', array(__CLASS__, 'toolset_access_api_get_taxonomy_permissions_process'), 10, 4 );
-
-        /**
-         * Filter to check permission for specific post
-         * @param $has_permission | required
-         * @param $post_id(string) | $post(object) | required
-         * @param $option_name (read, edit) | optional | default: read
-         * @param $user | optional, default: $current_user
-         * @param $language (code)| optional, default: default language, example: en
-         * @return (boolean)true|false
-         */
-        add_filter( 'toolset_access_api_get_post_permissions', array(__CLASS__, 'toolset_access_api_get_post_permissions_process'), 10, 5 );
-
-		
 		// Setup roles
         self::$roles = self::wpcf_get_editable_roles();
     }
@@ -1642,7 +1715,7 @@ final class Access_Helper
         remove_filter( 'posts_results', array( __CLASS__, 'filter_posts_results' ), 10, 2 );
 
         if ( empty( $posts ) ){
-            return;
+            return array();
         }
 
         $post_id = $posts[0]->ID;
@@ -2310,8 +2383,11 @@ final class Access_Helper
                 $publish_roles = $publish_users = array();
                 $def = array( 'edit_own', 'delete_own', 'edit_any', 'delete_any', 'publish' );
                 for ($i=0;$i<count($def);$i++){
-
-                    ${$def[$i] . '_roles'} = $current_wpml_settings[$def[$i]]['roles'];
+                    if ( isset( $current_wpml_settings[ $def[ $i ] ]['roles'] ) ) {
+	                    ${$def[ $i ] . '_roles'} = $current_wpml_settings[ $def[ $i ] ]['roles'];
+                    }else{
+	                    ${$def[ $i ] . '_roles'} = array();
+                    }
 
                     if ( isset($current_wpml_settings[$def[$i]]['users']) ){
                         ${$def[$i] . '_users'} = $current_wpml_settings[$def[$i]]['users'];
@@ -4630,7 +4706,7 @@ final class Access_Helper
 		if ( isset( $template[0] ) && isset( $template[1] ) && $template[0] == 'error_layouts' ){
 			$do = 'unhide';
 			$return = 1;
-			add_action( 'wp_head', array(__CLASS__, 'wpv_access_error_template_layout' ) );
+			add_action( 'wp', array(__CLASS__, 'wpv_access_error_template_layout' ) );
 		}
 		if ( isset($template[0]) && isset($template[1]) && $template[0] == 'error_404' && !$template[2] ){
 			$do = 'hide';
@@ -4705,7 +4781,7 @@ final class Access_Helper
      */
 	public static function wpv_access_error_template_layout( $content ){
 		global $post;
-        remove_action( 'wp_head', array( __CLASS__, 'wpv_access_error_template_layout' ) );
+        remove_action( 'wp', array( __CLASS__, 'wpv_access_error_template_layout' ) );
 
         if( ! class_exists('WPDD_Layouts') ){
             return '';
@@ -4728,9 +4804,13 @@ final class Access_Helper
             return '';
         }
 
-		if ( $is_layout_template ){
-             add_filter( 'get_layout_id_for_render', array( __CLASS__, 'wpcf_access_load_layout') );
-        }else{
+		add_filter( 'get_layout_id_for_render', array( __CLASS__, 'wpcf_access_load_layout' ) );
+		add_filter( 'ddl-get_layout_id_by_slug', array( __CLASS__, 'wpcf_access_load_layout' ) );
+
+		do_action( 'toolset_theme_settings_force_settings_refresh', $post->ID  );
+		add_filter( 'force_get_settings_for_layout_or_ct_passed_from_url', '__return_true');
+
+		if ( ! $is_layout_template ){
             /**
              * ddl_apply_the_content_filter_in_cells, ddl_apply_the_content_filter_in_post_content_cell disable the_content filter for
              * visual editor and post content cells when loading custom error assigned to layout
@@ -5808,6 +5888,7 @@ final class Access_Helper
                 'title' => __('Edit others posts', 'wpcf-access'),
                 'roles' => self::toolset_access_get_roles_by_role('', 'edit_others_posts'),
                 'predefined' => 'edit_any',
+                'fallback' => array( 'moderate_comments' ),
             ),
             'edit_published_posts' => array(
                 'title' => __('Edit published posts', 'wpcf-access'),

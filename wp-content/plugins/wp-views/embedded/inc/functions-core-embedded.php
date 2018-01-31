@@ -169,7 +169,7 @@ function wpv_update_dissident_posts_from_template( $template_id, $content_type, 
 		foreach ( $posts as $post ) {
 			$template_selected = get_post_meta( $post, '_views_template', true );
 			if ( $template_selected != $template_id ) {
-				update_post_meta( $post, '_views_template', $template_id );
+				WPV_Content_Template_Embedded::assign_ct_to_post_object( $post, $template_id, $template_selected );
 				$updated_count += 1;
 			}
 		}

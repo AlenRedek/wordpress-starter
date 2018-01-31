@@ -2,82 +2,64 @@
 
 require_once 'class.textfield.php';
 
+/**
+ * Class responsible to create Google Recaptcha V2
+ */
 class WPToolset_Field_Recaptcha extends WPToolset_Field_Textfield {
 
-    private $pubkey = '';
-    private $privkey = '';
+	private $pubkey = '';
+	private $privkey = '';
 
-    public function init() {
+	/**
+	 * Recaptcha init getting public and private keys, the source lang of the component by wp or wpml if actived
+	 */
+	public function init() {
+		$attr = $this->getAttr();
 
-        $attr = $this->getAttr();
+		//Site Key
+		$this->pubkey = isset( $attr['public_key'] ) ? $attr['public_key'] : '';
+		//Secret Key
+		$this->privkey = isset( $attr['private_key'] ) ? $attr['private_key'] : '';
 
-        //Site Key
-        $this->pubkey = isset( $attr['public_key'] ) ? $attr['public_key'] : '';
+		// get_user_locale() was introduced in WordPress 4.7
+		$locale = ( function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale() );
+		$user_locale_lang = substr( $locale, 0, 2 );
 
-        //Secret Key
-        $this->privkey = isset( $attr['private_key'] ) ? $attr['private_key'] : '';
+		$wpml_source_lang = isset( $_REQUEST['source_lang'] ) ? sanitize_text_field( $_REQUEST['source_lang'] ) : apply_filters( 'wpml_current_language', null );
+		$wpml_lang = isset( $_REQUEST['lang'] ) ? sanitize_text_field( $_REQUEST['lang'] ) : $wpml_source_lang;
 
-        global $sitepress;
+		$lang = isset( $wpml_lang ) ? $wpml_lang : $user_locale_lang;
 
-        // get_user_locale() was introduced in WordPress 4.7
-        $locale = ( function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale() );
-        $lang = substr( $locale, 0, 2 );
+		wp_enqueue_script( 'wpt-cred-recaptcha', '//www.google.com/recaptcha/api.js?onload=onLoadRecaptcha&render=explicit&hl=' . $lang );
+	}
 
-        if ( isset( $sitepress ) ) {
-            if ( isset( $_GET['source_lang'] ) ) {
-                $src_lang = sanitize_text_field( $_GET['source_lang'] );
-            } else {
-                $src_lang = $sitepress->get_current_language();
-            }
-            if ( isset( $_GET['lang'] ) ) {
-                $lang = sanitize_text_field( $_GET['lang'] );
-            } else {
-                $lang = $src_lang;
-            }
-        }
+	/**
+	 * Create recaptcha metaform as requested by superclass
+	 *
+	 * @return array
+	 */
+	public function metaform() {
+		$form = array();
+		$data = $this->getData();
 
-        wp_enqueue_script( 'wpt-cred-recaptcha', '//www.google.com/recaptcha/api.js?hl=' . $lang );
-    }
+		$capture = '';
+		if (
+			$this->pubkey
+			|| ! Toolset_Utils::is_real_admin()
+		) {
+			$capture = '<div id="recaptcha_' . esc_attr( $data['id'] ) . '" class="g-recaptcha" data-sitekey="' . esc_attr( $this->pubkey ) . '"></div><div class="recaptcha_error" style="color:#aa0000;display:none;">' . __( 'Please validate reCAPTCHA', 'wpv-views' ) . '</div>';
+		}
 
-    public static function registerStyles() {
-        
-    }
+		$form[] = array(
+			'#type' => 'textfield',
+			'#title' => '',
+			'#name' => '_recaptcha',
+			'#value' => '',
+			'#attributes' => array( 'style' => 'display:none;' ),
+			'#before' => $capture,
+		);
 
-    public function enqueueScripts() {
-        
-    }
-
-    public function enqueueStyles() {
-        
-    }
-
-    public function metaform() {
-        $form = array();
-
-        $capture = '';
-        if ( $this->pubkey || !Toolset_Utils::is_real_admin() ) {
-            try {
-                $capture = '<div class="g-recaptcha" data-sitekey="' . $this->pubkey . '"></div><div class="recaptcha_error" style="color:#aa0000;display:none;">' . __( 'Please validate reCAPTCHA', 'wpv-views' ) . '</div>';
-            } catch (Exception $e) {
-                // https://icanlocalize.basecamphq.com/projects/7393061-toolset/todo_items/188424989/comments
-                if ( current_user_can( 'manage_options' ) ) {
-                    $id_field = $this->getId();
-                    $text = 'Caught exception: ' . $e->getMessage();
-                    $capture = "<label id=\"lbl_$id_field\" class=\"wpt-form-error\">$text</label><div style=\"clear:both;\"></div>";
-                }
-            }
-        }
-
-        $form[] = array(
-            '#type' => 'textfield',
-            '#title' => '',
-            '#name' => '_recaptcha',
-            '#value' => '',
-            '#attributes' => array('style' => 'display:none;'),
-            '#before' => $capture
-        );
-
-        return $form;
-    }
+		return $form;
+	}
 
 }

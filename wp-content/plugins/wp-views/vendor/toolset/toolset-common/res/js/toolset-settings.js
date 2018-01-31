@@ -13,6 +13,7 @@ ToolsetCommon.ToolsetSettings = function( $ ) {
 		self.update_event_completed();
 		self.update_event_failed();
 		self.check_selected_bootstrap_version( toolset_settings_texts.toolset_bootstrap_version_filter, toolset_settings_texts.toolset_bootstrap_version_selected );
+		self.trigger_tab_switch_after_load();
     };
 
 
@@ -29,13 +30,25 @@ ToolsetCommon.ToolsetSettings = function( $ ) {
 					thiz.addClass( 'nav-tab-active' );
 					$( '.js-toolset-tabbed-section-item-' + target ).fadeIn( 'fast', function() {
 						$( this ).addClass( 'toolset-tabbed-section-current-item js-toolset-tabbed-section-current-item' );
+						thiz.trigger( 'toolsetSettings:afterTabSwitch', target );
 					});
 				});
 			}
 		});
 	};
 
-
+	/**
+	 * Triggers an after tab switch event for active tab, so listeners can render stuff that's waiting for such event.
+	 *
+	 * Example when this is needed: tab opened in another browser tab.
+	 * After load is so that listeners have time to register on document ready.
+	 */
+	self.trigger_tab_switch_after_load = function(){
+		$( window ).load(function(){
+			var active_tab = $('.js-toolset-nav-tab.nav-tab-active').data( 'target' );
+			$('.js-toolset-nav-tab').trigger( 'toolsetSettings:afterTabSwitch', active_tab );
+		})
+	};
 
 	/**
 	 * --------------------

@@ -1734,7 +1734,15 @@ add_action ( 'edit_form_after_editor', 'wpv_formatting_help_content_template', 5
  * @param null|WP_Post $template Will be deprecated after new CT edit page is finished.
  */
 function wpv_formatting_help_content_template( $template = null ) {
-	if ( ( null == $template ) || $template->post_type == 'view-template' ) {
+	global $pagenow;
+	$action = wpv_getget( 'action' );
+	if (
+	        (
+	                null == $template
+                    || 'view-template' == $template->post_type
+            )
+            && 'post.php' != $pagenow
+    ) {
 		$sections = array( 'fields-and-views', 'extra_css', 'extra_js', 'media', 'styling' );
 		$sections = apply_filters( 'wpv_filter_formatting_help_content_template', $sections );
 		$args = array(

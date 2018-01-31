@@ -121,13 +121,43 @@ abstract class FieldFactory extends FieldAbstract
 	    return $actual_value;
     }
 
-
+	/**
+	 * Get the title of a field
+	 *
+	 * ATTENTION: Function uses $this->_data['title'] and $this->_data['_title']
+	 *
+	 * @param bool $_title
+	 *
+	 * @return bool|string
+	 */
     public function getTitle($_title = false)
     {
-        if ( $_title && empty($this->_data['title']) && isset($this->_data['_title']) ) {
-            return $this->_data['_title'];
-        }
-        return $this->_data['title'];
+    	$title = isset( $this->_data['title'] ) && ! empty( $this->_data['title'] )
+		    ? $this->_data['title']
+		    : false;
+
+    	$_title = $_title && isset( $this->_data['_title'] )
+		    ? $this->_data['_title']
+		    : false;
+
+    	// highest priority: '_title' should be used and 'title' is not set or empty
+	    // note: '_title' just needs to be set, but it CAN BE empty
+	    if ( $_title && ! $title ) {
+	    	return $_title;
+	    }
+
+	    // second priority: $this->_data['title'] is not empty
+	    if( $title ) {
+		    return $title;
+	    }
+
+	    // last priority: $this->_data['name'] isset and not starting with 'wpcf'
+	    if( isset( $this->_data['name'] ) && strpos( $this->_data['name'], 'wpcf' ) !== 0 ) {
+	    	// legacy format
+		    return $this->_data['name'];
+	    }
+
+	    return '';
     }
 
     public function getDescription()
@@ -162,7 +192,16 @@ abstract class FieldFactory extends FieldAbstract
 
     public function isRepetitive()
     {
-        return (bool)$this->_data['repetitive'];
+    	if( isset( $this->_data['repetitive'] ) ) {
+		    return (bool) $this->_data['repetitive'];
+	    }
+
+	    if( isset( $this->_data['data'] ) && isset( $this->_data['data']['repetitive'] ) ) {
+			// legacy structure
+		    return (bool) $this->_data['data']['repetitive'];
+	    }
+
+	    return false;
     }
 
     public function getAttr() {

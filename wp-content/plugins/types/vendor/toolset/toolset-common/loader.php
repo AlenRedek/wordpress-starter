@@ -1,5 +1,4 @@
 <?php
-
 /**
 *
 * This file is responsible for loading the latest version of the Toolset Common lbraries.
@@ -10,8 +9,6 @@
 * where this file is located and also the url to this directory.
 * Note that both the path and URL will be normalized with untrailingslashit
 * so they do not pack any trailing slash.
-*
-* 
 *
 * -----------------------------------------------------------------------
 *
@@ -24,21 +21,24 @@
 * where XXX is the future target Toolset Common version number, built upon the stable released one stated in changelog.txt plus 1
 * and YYY is incremented by 1 on each change to the Toolset Common repo
 * so we allow up to 1000 changes per dev cycle.
-* 
 */
+
 /**
  * Now that we have a unique version for all plugins
  * we define the version here
  */
-$toolset_common_version = 245001;
+$toolset_common_version = 255000;
 
 
-// ----------------------------------------------------------------------//
-// WARNING * WARNING * WARNING
-// ----------------------------------------------------------------------//
+/* ---------------------------------------------------------------------- *\
+		WARNING * WARNING * WARNING
+\* ---------------------------------------------------------------------- */
 
-// Don't modify or add to this code.
-// This is only responsible for making sure the latest version of common is loaded.
+/*
+ * Don't modify or add to this code.
+ *
+ * This is only responsible for making sure the latest version of common is loaded.
+ */
 
 global $toolset_common_paths;
 
@@ -64,7 +64,7 @@ if ( ! function_exists( 'toolset_common_plugins_loaded' ) ) {
         }
         if ( $latest > 0 ) {
             require_once $toolset_common_paths[ $latest ]['path'] . '/toolset-common-loader.php';
-            toolset_common_set_constants_and_start( $toolset_common_paths[ $latest ]['url'] );
+            toolset_common_set_constants_and_start( $toolset_common_paths[ $latest ]['url'], $latest );
         }
     }
     add_action( 'plugins_loaded', 'toolset_common_plugins_loaded', -1 );

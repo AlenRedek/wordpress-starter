@@ -29,6 +29,7 @@ ToolsetCommon.ToolsetSettings = function( $ ) {
 					thiz.addClass( 'nav-tab-active' );
 					$( '.js-toolset-tabbed-section-item-' + target ).fadeIn( 'fast', function() {
 						$( this ).addClass( 'toolset-tabbed-section-current-item js-toolset-tabbed-section-current-item' );
+						thiz.trigger( 'toolsetSettings:afterTabSwitch', target );
 					});
 				});
 			}

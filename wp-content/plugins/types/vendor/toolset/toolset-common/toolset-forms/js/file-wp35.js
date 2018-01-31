@@ -32,8 +32,21 @@ var wptFile = (function($, w) {
         });
     }
 
+    /**
+     * Opens the dialog
+     *
+     * @param {Object} $el The jQuery element that opens the dialog
+     * @param {Event} event The event
+     * @param {boolean} updateFrame of the frame needs to be update, it is needed when the file is open from a dialog window that is created with the same ID
+     */
     function bindOpen($el, event)
     {
+            if (arguments.length === 3) {
+              updateFrame = arguments[2];
+            } else {
+              updateFrame = false;
+            }
+
             var $type = $el.data('wpt-type');
             var $id = $el.parent().attr('id');
 
@@ -42,7 +55,7 @@ var wptFile = (function($, w) {
             }
 
             // If the media frame already exists, reopen it.
-            if ( frame[$id] ) {
+            if ( !updateFrame && frame[$id] ) {
                 frame[$id].open();
                 return;
             }
@@ -141,4 +154,3 @@ var wptFile = (function($, w) {
 })(jQuery);
 
 jQuery(document).ready(wptFile.init);
-

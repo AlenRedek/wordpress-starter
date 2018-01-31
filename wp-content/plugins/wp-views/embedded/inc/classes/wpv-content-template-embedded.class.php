@@ -305,7 +305,7 @@ class WPV_Content_Template_Embedded extends WPV_Post_Object_Wrapper {
 			);
 			
 			foreach ( $posts_to_update as $post_updating ) {
-				update_post_meta( $post_updating, '_views_template', $this->id );
+				WPV_Content_Template_Embedded::assign_ct_to_post_object( $post_updating, $this->id );
 			}
 
 		}
@@ -448,6 +448,41 @@ class WPV_Content_Template_Embedded extends WPV_Post_Object_Wrapper {
     public static function is_wppost_ct( $post ) {
         return ( ( $post instanceof WP_Post ) && ( $post->ID > 0 ) && ( WPV_Content_Template_Embedded::POST_TYPE == $post->post_type ) );
     }
+
+	/**
+	 * @param $post_id
+	 * @param $ct_id
+	 * @param string $prev_value
+	 *
+	 * @return mixed|void
+	 * Programmatically assign Content Template assignment to $post object and runs relative filter
+	 */
+	public static final function assign_ct_to_post_object( $post_id, $ct_id, $prev_value = '' ){
+		if( $prev_value === '' || $prev_value === false ){
+			$prev_value = get_post_meta( $post_id, self::POST_TEMPLATE_BINDING_POSTMETA_KEY, true );
+		}
+
+		$ret = update_post_meta( $post_id, self::POST_TEMPLATE_BINDING_POSTMETA_KEY, $ct_id, $prev_value );
+
+		return apply_filters( 'wpv_filter_assign_ct_to_post_object', $ret, $post_id, $ct_id, $prev_value );
+	}
+
+	/**
+	 * @param $post_id
+	 * @param string $prev_value
+	 *
+	 * @return mixed|void
+	 * Programmatically removes Content Template assignment from $post object and runs relative filter
+	 */
+	public static final function remove_ct_assignment_from_post_object( $post_id, $prev_value = '' ){
+		if( $prev_value === '' || $prev_value === false ){
+			$prev_value = get_post_meta( $post_id, self::POST_TEMPLATE_BINDING_POSTMETA_KEY, true );
+		}
+
+		$ret = update_post_meta( $post_id, self::POST_TEMPLATE_BINDING_POSTMETA_KEY, 0, $prev_value );
+
+		return apply_filters( 'wpv_filter_remove_ct_assignment_from_post_object', $ret, $post_id, $prev_value );
+	}
 
 
     /**

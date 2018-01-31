@@ -15,7 +15,6 @@ class WP_Views_plugin extends WP_Views {
 		
         add_filter( 'custom_menu_order', array( $this, 'enable_custom_menu_order' ) );
         add_filter( 'menu_order', array( $this, 'custom_menu_order' ) ); // @todo I really feel this is not used anymore
-        add_action( 'admin_head', array( $this, 'admin_add_help' ) );
 
         parent::init();
 		
@@ -528,7 +527,7 @@ class WP_Views_plugin extends WP_Views {
                 // Create a new Content Template for 'Page Title'
                 
                 /* assign Content Template to Page */
-                update_post_meta( $post_id, '_views_template', $ct_id );
+	            WPV_Content_Template_Embedded::assign_ct_to_post_object( $post_id, $ct_id );
                 
             } else if( $is_cpt ) {
                 
@@ -727,128 +726,6 @@ class WP_Views_plugin extends WP_Views {
 		}
 		return $link;
 	}
-
-    function admin_add_help() {
-        $screen = get_current_screen();
-		
-		if ( is_null( $screen ) ) {
-			return;
-		}
-		
-		$views_admin_pages = array(
-			'toplevel_page_views', 
-			'toolset_page_views', 
-			'views_page_views-editor', //DEPRECATED
-			'toolset_page_views-editor', 
-			'views_page_view-templates', //DEPRECATED
-			'toolset_page_view-templates', 
-			'views_page_ct-editor', //DEPRECATED
-			'toolset_page_ct-editor', 
-			'views_page_view-archives', //DEPRECATED
-			'toolset_page_view-archives', 
-			'views_page_view-archives-editor', //DEPRECATED
-			'toolset_page_view-archives-editor', 
-			'views_page_views-settings', //DEPRECATED
-			'views_page_views-import-export', //DEPRECATED
-			'views_page_views-framework-integration'//DEPRECATED
-		);
-		
-		if ( ! in_array( $screen->id, $views_admin_pages ) ) {
-			return;
-		}
-
-        switch ( $screen->id ) {
-			case 'toplevel_page_views'://DEPRECATED
-			case 'toolset_page_views':
-                $help = '<p>'.__("Use <strong>Views</strong> to load content from the database and display it anyway you choose.",'wpv-views').'</p>';
-                $help .= '<p>'.__("This page lists the <strong>Views</strong> in your site. You have contextual actions to ‘duplicate’ and ‘delete’ Views. You can also perform bulk actions.", 'wpv-views').'</p>';
-                $help .= '<p>'.__("Click on a <strong>Views</strong> name to edit it or create new Views.", 'wpv-views').'</p>';
-                $help .= '<p><a href="https://wp-types.com/documentation/getting-started-with-toolset/adding-lists-of-contents/?utm_source=viewsplugin&utm_campaign=views&utm_medium=views-listing-header&utm_term=Views online help" target="_blank">'.__("Views online help", 'wpv-views') .'</a></p>';
-				$screen->add_help_tab(
-					array(
-						'id'		=> 'views-help',
-						'title'		=> __('Views', 'wpv-views'),
-						'content'	=> $help,
-					)
-				);
-                break;
-			case 'views_page_views-editor'://DEPRECATED
-			case 'toolset_page_views-editor':
-                $help = '<p>'.__("<strong>Views</strong> load content from the database and display it anyway you choose.",'wpv-views').'</p>';
-                $help .= '<p>'.__("To make it easier to use Views, we’ve created different preset usage modes for <strong>Views</strong>. Each usage mode emphasizes the features that you need and hides the ones that are not needed.",'wpv-views').'</p>';
-                $help .= '<p>'.__("You can switch between the different <strong>Views</strong> usage mode by opening the ‘Screen options’ tab.",'wpv-views').'</p>';
-                $help .= '<p>'.__("To create a <strong>View</strong>:", 'wpv-views').'</p>';
-                $help .= '<ol><li>'.__("Set the title", 'wpv-views').'</li>';
-                $help .= '<li>'.__("Select the content to load", 'wpv-views').'</li>';
-                $help .= '<li>'.__("Optionally, apply a filter to the query", 'wpv-views').'</li>';
-                $help .= '<li>'.__("If needed, enable pagination and front-end filters", 'wpv-views').'</li>';
-                $help .= '<li>'.__("Design the output for the View by inserting fields and styling with HTML", 'wpv-views').'</li></ol>';
-                $help .= '<p>'.__("When you are done, remember to add the <strong>View</strong> to your content. You can do that by inserting the <strong>View</strong> as a shortcode to content or displaying it as a widget.",'wpv-views').'</p>';
-                $help .= '<p><a href="https://wp-types.com/documentation/getting-started-with-toolset/adding-lists-of-contents/?utm_source=viewsplugin&utm_campaign=views&utm_medium=view-editor&utm_term=Views online help" target="_blank">'.__("Views online help", 'wpv-views') .'</a></p>';
-                $screen->add_help_tab(
-					array(
-						'id'		=> 'views-help',
-						'title'		=> __('Views', 'wpv-views'),
-						'content'	=> $help,
-					)
-				);
-				break;
-            case 'views_page_view-templates'://DEPRECATED
-            case 'toolset_page_view-templates':
-                $help = '<p>'.__("Use <strong>Content Templates</strong> to design single pages in your site. ",'wpv-views').'</p>';
-                $help .= '<p>'.__("This page lists the <strong>Content Templates</strong> that you have created and allows you to create new ones.",'wpv-views').'</p>';
-                $help .= '<p>'.__("The tabs menu at the top of the page lets you list the <strong>Content Templates</strong> by their name or by how they are used in the site.",'wpv-views').'</p>';
-                $help .= '<p>'.__("Click on the name of a Content Template to edit it or create new <strong>Content Templates</strong> using the ‘Add’ buttons.",'wpv-views').'</p>';
-                $help .= '<p><a href="http://wp-types.com/documentation/user-guides/view-templates/?utm_source=viewsplugin&utm_campaign=views&utm_medium=view-content-template-header-help&utm_term=Content Templates online help" target="_blank">'.__("Content Templates online help", 'wpv-views').'</a></p>';
-                $screen->add_help_tab(
-					array(
-						'id'		=> 'views-help',
-						'title'		=> __('Content Templates', 'wpv-views'),
-						'content'	=> $help,
-					)
-				);
-				break;
-            case 'views_page_ct-editor'://DEPRECATED
-            case 'toolset_page_ct-editor':
-				break;
-            case 'views_page_view-archives'://DEPRECATED
-            case 'toolset_page_view-archives':
-                $help = '<p>'.__("Use <strong>WordPress Archives</strong> to style and design standard listing and archive pages.",'wpv-views').'</p>';
-                $help .= '<p>'.__("This page lists the <strong>WordPress Archives</strong> in your site.", 'wpv-views').'</p>';
-                $help .= '<p>'.__("The tabs menu at the top of the page lets you list the <strong>WordPress Archives</strong> by their name or by how they are used in the site.", 'wpv-views').'</p>';
-                $help .= '<p>'.__("Click on the name of a <strong>WordPress Archives</strong> to edit it or create new WordPress Archives using the ‘Add’ buttons.", 'wpv-views').'</p>';
-                $help .= '<p><a href="http://wp-types.com/documentation/user-guides/normal-vs-archive-views/?utm_source=viewsplugin&utm_campaign=views&utm_medium=archive-listing-header&utm_term=WordPress Archives online help" target="_blank">'.__("WordPress Archives online help", 'wpv-views') .'</a></p>';
-                $screen->add_help_tab(
-					array(
-						'id'		=> 'views-help',
-						'title'		=> __('WordPress Archives', 'wpv-views'),
-						'content'	=> $help,
-					)
-				);
-				break;
-            case 'views_page_view-archives-editor'://DEPRECATED
-            case 'toolset_page_view-archives-editor':
-                $help = '<p>'.__("<strong>WordPress Archives</strong> let you style and design standard listing and archive pages.",'wpv-views').'</p>';
-                $help .= '<p>'.__("To create a <strong>WordPress Archive</strong>:", 'wpv-views').'</p>';
-                $help .= '<ol><li>'.__("Set the title", 'wpv-views').'</li>';
-                $help .= '<li>'.__("Select on which listing pages it displays", 'wpv-views').'</li>';
-                $help .= '<li>'.__("Design the output for the WordPress Archive by inserting fields and styling with HTML", 'wpv-views').'</li></ol>';
-                $help .= '<p><a href="http://wp-types.com/documentation/user-guides/normal-vs-archive-views/?utm_source=viewsplugin&utm_campaign=views&utm_medium=archive-editor&utm_term=WordPress Archives online help" target="_blank">'.__("WordPress Archives online help", 'wpv-views') .'</a></p>';
-                $screen->add_help_tab(
-					array(
-						'id'		=> 'views-help',
-						'title'		=> __('WordPress Archives', 'wpv-views'),
-						'content'	=> $help,
-					)
-				);
-				break;
-			case 'views_page_views-settings':// DERPECATED
-			case 'views_page_views-import-export':// DEPRECATED
-			case 'views_page_views-framework-integration'://DEPRECATED
-				break;
-        }
-
-    }
 
     /**
 	 * Get the available View in a select box

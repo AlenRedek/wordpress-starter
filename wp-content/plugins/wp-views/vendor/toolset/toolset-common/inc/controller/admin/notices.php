@@ -19,7 +19,14 @@ class Toolset_Controller_Admin_Notices {
 	protected $is_tbt_active;
 	protected $is_tbt_inactive;
 
-	public function __construct() {
+	protected $constants;
+
+	public function __construct( Toolset_Constants $constants = null ) {
+		if ( null === $constants ) {
+			$constants = new Toolset_Constants();
+		}
+		$this->constants = $constants;
+
 		add_action( 'after_setup_theme', array( $this, 'init' ), 1000 );
 	}
 
@@ -77,6 +84,25 @@ class Toolset_Controller_Admin_Notices {
 		if( ! is_admin() ) {
 			return;
 		}
+
+		// If Types is active and any of the Commercial Plugins is active, but site is not registered,
+		// then display a notice to force user to register Toolset.
+		if ( $this->is_types_active ) {
+			$repository_id = 'toolset';
+			if (
+				! $this->is_development_environment()
+				&& class_exists( 'WP_Installer' )
+				&& ! WP_Installer()->repository_has_valid_subscription( $repository_id )
+				&& (
+					$this->is_views_active
+					|| $this->is_access_active
+					|| $this->is_cred_active
+					|| $this->is_layouts_active
+				)
+			) {
+				$this->commercial_plugin_installed_but_not_registered();
+			}
+		}
 	}
 
 	/**
@@ -119,6 +145,8 @@ class Toolset_Controller_Admin_Notices {
 
 		) {
 			$this->notices_compilation_introduction();
+
+			$this->notice_wpml_version_doesnt_support_m2m();
 		}
 	}
 
@@ -169,6 +197,7 @@ class Toolset_Controller_Admin_Notices {
 		}
 
 		$this->notices_compilation_introduction();
+		$this->notice_wpml_version_doesnt_support_m2m();
 	}
 
 	/**
@@ -194,6 +223,8 @@ class Toolset_Controller_Admin_Notices {
 			Toolset_Admin_Notices_Manager::add_notice( $notice );
 			return;
 		}
+
+		$this->notice_wpml_version_doesnt_support_m2m();
 
 		// no Toolset Based Theme
 		$this->notices_compilation_introduction();
@@ -276,6 +307,21 @@ class Toolset_Controller_Admin_Notices {
 	}
 
 	/**
+	 *
+	 * Display a Toolset_Admin_Notice_Undismissible notice if the user has not registered this site.
+	 *
+	 * @return Toolset_Admin_Notice_Undismissible
+	 *
+	 */
+	protected function commercial_plugin_installed_but_not_registered() {
+		$notice = new Toolset_Admin_Notice_Undismissible( 'commercial-plugin-installed-not-registered', '', $this->constants );
+		$notice->set_content( $this->tpl_path . '/commercial-plugin-installed/commercial-plugin-installed-but-not-registered.phtml' );
+		Toolset_Admin_Notices_Manager::add_notice( $notice );
+
+		return $notice;
+	}
+
+	/**
 	 * @return Toolset_Admin_Notice_Dismissible
 	 */
 	protected function integration_run_installer() {
@@ -308,4 +354,80 @@ class Toolset_Controller_Admin_Notices {
 
 		return $notice;
 	}
+
+	/**
+	 * Check if the current site is a development environment site or not.
+	 *
+	 * @return bool It return true if the site is a development environment, false in any other case.
+	 */
+	protected function is_development_environment() {
+		$popular_tlds = array(
+			'com',
+			'org',
+			'net',
+			'edu',
+			'de',
+			'es',
+			'fr',
+			'se',
+			'it',
+			'uk',
+			'jp',
+			'pl',
+			'hu',
+			'cz',
+			'dk',
+			'nl',
+			'au',
+			'il',
+			'co',
+			'cl',
+			'ar',
+			'br',
+			'mx',
+			'ie',
+			'io',
+			'gr',
+		);
+
+		$stop_words = array(
+			'staging',
+			'dev',
+			'develop',
+			'local',
+			'localhost',
+		);
+
+		$home_url = get_home_url();
+
+		$broken_down_home_url = explode( ".", parse_url( $home_url, PHP_URL_HOST ) );
+
+		foreach ( $stop_words as $stop_word ) {
+			if ( preg_grep ( '/' . $stop_word . '/', $broken_down_home_url ) ) {
+				return true;
+			}
+		}
+
+		$tld = end( $broken_down_home_url );
+
+		if ( ! in_array( $tld, $popular_tlds ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	protected function notice_wpml_version_doesnt_support_m2m() {
+		$notice = new Toolset_Admin_Notice_Required_Action(
+				'toolset-wpml-version-doesnt-support-m2m',
+				sprintf(
+					__( 'Many-to-many post relationships in Toolset require WPML %s or newer to work properly with post translations. Please upgrade WPML.', 'wpcf' ),
+					sanitize_text_field( Toolset_Relationship_Controller::MINIMAL_WPML_VERSION )
+				)
+		);
+		$notice->add_condition( new Toolset_Condition_Plugin_Wpml_Doesnt_Support_M2m() );
+		Toolset_Admin_Notices_Manager::add_notice( $notice );
+	}
+
 }

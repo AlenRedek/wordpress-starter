@@ -59,6 +59,11 @@ abstract class Toolset_Admin_Notice_Abstract implements Toolset_Admin_Notice_Int
 	protected $template_file;
 
 	/**
+	 * @var Toolset_Constants
+	 */
+	protected $constants;
+
+	/**
 	 * Notice is only for administrators
 	 *
 	 * This is an EXCEPTION of condition being placed directly into notice class
@@ -80,7 +85,13 @@ abstract class Toolset_Admin_Notice_Abstract implements Toolset_Admin_Notice_Int
 	 *
 	 * @throws Exception
 	 */
-	public function __construct( $id, $message = '' ) {
+	public function __construct( $id, $message = '', Toolset_Constants $constants = null ) {
+
+		if ( null === $constants ) {
+			$constants = new Toolset_Constants();
+		}
+		$this->constants = $constants;
+
 		if( ! function_exists( 'sanitize_title' ) ) {
 			// abort, called to early
 			throw new Exception( 'Toolset_Admin_Notice_Abstract Error: "sanitize_title()" does not exists. ' .

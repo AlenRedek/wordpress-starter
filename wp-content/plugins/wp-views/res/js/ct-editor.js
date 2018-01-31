@@ -2316,7 +2316,12 @@ WPViews.CTEditScreen = function( $ ) {
             _.each(self.vm.sections, function(section) {
                if(section.isUpdateNeeded()) {
                    //noinspection JSUnresolvedVariable
-                   self.showErrorMessage(section.messageContainer, section.properties, self.l10n.editor.pending_changes);
+                   // The variable "section.messageContainer" is always an array with selectors, so instead of calling
+                   // "showErrorMessage" with an array of selectors, we need to call it with each selector separately.
+                   // @todo Verify that this functionality is actually used cause the chosen message is never shown. A JS alert appears instead when trying to leave from a page with unsaved changes.
+                   $.each( section.messageContainer, function( index, value ) {
+                       self.showErrorMessage( value, section.properties, self.l10n.editor.pending_changes );
+                   });
                }
             });
         };

@@ -52,17 +52,32 @@ if( ! class_exists( 'Toolset_HelpVideo', false ) ) {
             return $user_id;
         }
 
+	    private function is_wp_older_than_4_dot_9(){
+		    $current = get_bloginfo('version');
+		    return version_compare( $current, '4.9-RC1' ) === -1;
+	    }
+
         public function add_register_scripts($scripts)
         {
-            $scripts['toolset-help-video'] = new Toolset_Script('toolset-help-video', TOOLSET_COMMON_URL . '/utility/help-videos/res/js/toolset-help-videos.js', array('jquery', 'underscore', 'backbone', 'wp-mediaelement', 'toolset-utils'), '1.0', true);
+			if( $this->is_wp_older_than_4_dot_9() ){
+				$scripts['toolset-help-video'] = new Toolset_Script('toolset-help-video', TOOLSET_COMMON_URL . '/utility/help-videos/res/js/toolset-help-videos-retro.js', array('jquery', 'underscore', 'backbone', 'wp-mediaelement', 'toolset-utils'), '1.0', true);
+			} else {
+				$scripts['toolset-help-video'] = new Toolset_Script('toolset-help-video', TOOLSET_COMMON_URL . '/utility/help-videos/res/js/toolset-help-videos.js', array('jquery', 'underscore', 'backbone', 'wp-mediaelement', 'toolset-utils'), '1.0', true);
+			}
+
             return $scripts;
         }
 
-        public function add_register_styles($styles)
-        {
-            $styles['toolset-help-video'] = new Toolset_Style('toolset-help-video', TOOLSET_COMMON_URL . '/utility/help-videos/res/css/toolset-help-videos.css');
-            return $styles;
-        }
+	    public function add_register_styles($styles)
+	    {
+		    if( $this->is_wp_older_than_4_dot_9() ) {
+			    $styles['toolset-help-video'] = new Toolset_Style( 'toolset-help-video', TOOLSET_COMMON_URL . '/utility/help-videos/res/css/toolset-help-videos-retro.css' );
+		    } else {
+			    $styles['toolset-help-video'] = new Toolset_Style( 'toolset-help-video', TOOLSET_COMMON_URL . '/utility/help-videos/res/css/toolset-help-videos.css' );
+		    }
+
+		    return $styles;
+	    }
 
         public function admin_enqueue_scripts()
         {

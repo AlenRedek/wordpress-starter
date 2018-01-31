@@ -217,21 +217,23 @@
     },
     {
         "name": "toolset/toolset-common",
-        "version": "2.4.5",
-        "version_normalized": "2.4.5.0",
+        "version": "2.5.5",
+        "version_normalized": "2.5.5.0",
         "source": {
             "type": "git",
             "url": "ssh://git@git.onthegosystems.com:10022/toolset/toolset-common.git",
-            "reference": "b9ca5fcce457e4909fffb3b6448ef00f44710476"
+            "reference": "d4643145e2ab1e30c26b9f3ec1842d5f644e7c4e"
         },
         "require": {
             "php": ">=5.2.0"
         },
         "require-dev": {
+            "10up/wp_mock": "~0.2.0",
             "otgs/build-tools-ci": "~0.7.0",
-            "otgs/unit-tests-framework": "dev-develop"
+            "otgs/unit-tests-framework": "~1.2.0",
+            "phpunit/php-token-stream": "<2.0"
         },
-        "time": "2017-08-28T07:36:33+00:00",
+        "time": "2017-11-14T09:28:59+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -243,8 +245,10 @@
         "installation-source": "source",
         "autoload": {
             "classmap": [
+                "expression-parser/",
                 "inc/",
                 "toolset-forms/",
+                "user-editors/",
                 "utility/",
                 "bootstrap.php"
             ]
@@ -350,12 +354,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/Roave/SecurityAdvisories.git",
-            "reference": "f40f874cb7139abb9309fa63a31fd37bb49ddd3e"
+            "reference": "43f7f8243b81e3fd843b150a30a6d0a91167d4f5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f40f874cb7139abb9309fa63a31fd37bb49ddd3e",
-            "reference": "f40f874cb7139abb9309fa63a31fd37bb49ddd3e",
+            "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/43f7f8243b81e3fd843b150a30a6d0a91167d4f5",
+            "reference": "43f7f8243b81e3fd843b150a30a6d0a91167d4f5",
             "shasum": ""
         },
         "conflict": {
@@ -363,7 +367,7 @@
             "amphp/artax": ">=2,<2.0.6|<1.0.6",
             "aws/aws-sdk-php": ">=3,<3.2.1",
             "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
-            "cakephp/cakephp": ">=3,<3.0.15|>=2,<2.4.99|>=2.5,<2.5.99|>=2.6,<2.6.12|>=1.3,<1.3.18|>=2.7,<2.7.6|>=3.1,<3.1.4",
+            "cakephp/cakephp": ">=2,<2.4.99|>=1.3,<1.3.18|>=3,<3.0.15|>=2.5,<2.5.99|>=2.6,<2.6.12|>=2.7,<2.7.6|>=3.1,<3.1.4",
             "cart2quote/module-quotation": ">=4.1.6,<=4.4.5|>=5,<5.4.4",
             "cartalyst/sentry": "<2.1",
             "codeigniter/framework": "<=3.0.6",
@@ -383,6 +387,7 @@
             "dompdf/dompdf": ">=0.6,<0.6.2",
             "drupal/core": ">=8,<8.3.7",
             "drupal/drupal": ">=8,<8.3.7",
+            "ezsystems/ezpublish-legacy": ">=2017.8,<2017.8.1.1|>=5.4,<5.4.10.1|>=5.3,<5.3.12.2",
             "firebase/php-jwt": "<2",
             "friendsofsymfony/rest-bundle": ">=1.2,<1.2.2",
             "friendsofsymfony/user-bundle": ">=1.2,<1.3.5",
@@ -402,15 +407,16 @@
             "oro/crm": ">=1.7,<1.7.4",
             "oro/platform": ">=1.7,<1.7.4",
             "phpmailer/phpmailer": ">=5,<5.2.24",
+            "phpxmlrpc/extras": "<6.0.1",
             "pusher/pusher-php-server": "<2.2.1",
             "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
-            "shopware/shopware": "<4.4|>=5,<5.2.16",
+            "shopware/shopware": "<5.2.25",
             "silverstripe/cms": ">=3.1,<3.1.11|>=3,<=3.0.11",
             "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
             "silverstripe/framework": ">=3,<3.3",
             "silverstripe/userforms": "<3",
             "simplesamlphp/saml2": "<1.8.1|>=1.9,<1.9.1|>=1.10,<1.10.3|>=2,<2.3.3",
-            "simplesamlphp/simplesamlphp": "<1.14.15",
+            "simplesamlphp/simplesamlphp": "<1.14.16",
             "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
             "socalnick/scn-social-auth": "<1.15.2",
             "squizlabs/php_codesniffer": ">=1,<2.8.1",
@@ -421,7 +427,7 @@
             "symfony/http-foundation": ">=2,<2.3.27|>=2.4,<2.5.11|>=2.6,<2.6.6",
             "symfony/http-kernel": ">=2,<2.3.29|>=2.4,<2.5.12|>=2.6,<2.6.8",
             "symfony/routing": ">=2,<2.0.19",
-            "symfony/security": ">=2.7.30,<2.7.32|>=2.8.23,<2.8.25|>=3.2.10,<3.2.12|>=3.3.3,<3.3.5|>=2.3,<2.3.37|>=2.4,<2.6.13|>=2.7,<2.7.9|>=2,<2.0.25|>=2.1,<2.1.13|>=2.2,<2.2.9",
+            "symfony/security": ">=2.3,<2.3.37|>=2.4,<2.6.13|>=2.7,<2.7.9|>=2.7.30,<2.7.32|>=2.8.23,<2.8.25|>=3.2.10,<3.2.12|>=3.3.3,<3.3.5|>=2,<2.0.25|>=2.1,<2.1.13|>=2.2,<2.2.9",
             "symfony/security-core": ">=2.7.30,<2.7.32|>=2.8.23,<2.8.25|>=3.2.10,<3.2.12|>=3.3.3,<3.3.5|>=2.8,<2.8.6|>=3,<3.0.6|>=2.4,<2.6.13|>=2.7,<2.7.9",
             "symfony/security-http": ">=2.4,<2.7.13|>=2.3,<2.3.41|>=2.8,<2.8.6|>=3,<3.0.6",
             "symfony/serializer": ">=2,<2.0.11",
@@ -433,8 +439,8 @@
             "thelia/backoffice-default-template": ">=2.1,<2.1.2",
             "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
             "twig/twig": "<1.20",
-            "typo3/cms": ">=6.2,<6.2.30|>=8,<8.6.1|>=7,<7.6.16",
-            "typo3/flow": ">=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5|>=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1",
+            "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.22|>=8,<8.7.5",
+            "typo3/flow": ">=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5|>=1.1,<1.1.1|>=2,<2.0.1|>=1,<1.0.4",
             "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
             "willdurand/js-translation-bundle": "<2.1.1",
             "yiisoft/yii": ">=1.1.14,<1.1.15",
@@ -466,7 +472,7 @@
             "zfcampus/zf-apigility-doctrine": ">=1,<1.0.3",
             "zfr/zfr-oauth2-server-module": "<0.1.2"
         },
-        "time": "2017-08-17T12:55:16+00:00",
+        "time": "2017-10-31T23:55:04+00:00",
         "type": "metapackage",
         "notification-url": "https://packagist.org/downloads/",
         "license": [

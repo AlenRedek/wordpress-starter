@@ -68,6 +68,10 @@ function wpcf_ajax( $fallthrough )
     }
     require_once WPCF_INC_ABSPATH.'/classes/class.wpcf.roles.php';
 
+	// We need to require this file manually because this runs before the autoloader is registered.
+	require_once TYPES_ABSPATH . '/application/controllers/utils/post_type_option.php';
+	$post_type_option = new Types_Utils_Post_Type_Option();
+
     /**
      * check permissions
      */
@@ -356,7 +360,7 @@ function wpcf_ajax( $fallthrough )
         if ( empty($post_type) ) {
             wpcf_ajax_helper_print_error_and_die();
         }
-        $custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+        $custom_types = $post_type_option->get_post_types();
         $custom_types[$post_type]['disabled'] = 1;
         $custom_types[$post_type][TOOLSET_EDIT_LAST] = time();
         update_option(WPCF_OPTION_NAME_CUSTOM_TYPES, $custom_types);
@@ -374,7 +378,7 @@ function wpcf_ajax( $fallthrough )
         if ( empty($post_type) ) {
             wpcf_ajax_helper_print_error_and_die();
         }
-        $custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+        $custom_types = $post_type_option->get_post_types();
         unset($custom_types[$post_type]['disabled']);
         $custom_types[$post_type][TOOLSET_EDIT_LAST] = time();
         update_option(WPCF_OPTION_NAME_CUSTOM_TYPES, $custom_types);
@@ -392,7 +396,7 @@ function wpcf_ajax( $fallthrough )
         if ( empty($post_type) ) {
             wpcf_ajax_helper_print_error_and_die();
         }
-        $post_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+        $post_types = $post_type_option->get_post_types();
 
         /**
          * Delete relation between custom posts types
@@ -459,7 +463,7 @@ function wpcf_ajax( $fallthrough )
             wpcf_ajax_helper_print_error_and_die();
         }
 
-        $post_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+        $post_types = $post_type_option->get_post_types();
 
         $i = 0;
         $key = false;
@@ -544,7 +548,7 @@ function wpcf_ajax( $fallthrough )
                 && is_array($custom_taxonomies[$key]['supports'])
                 && !empty($custom_taxonomies[$key]['supports'])
             ) {
-                $custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+                $custom_types = $post_type_option->get_post_types();
                 foreach( array_keys($custom_taxonomies[$key]['supports']) as $custom_type ) {
                     /**
                      * avoid to create fake CPT from old data
@@ -959,7 +963,8 @@ function wpcf_ajax_helper_get_post_type()
         return false;
     }
     require_once WPCF_INC_ABSPATH . '/custom-types.php';
-    $custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+	$post_type_option = new Types_Utils_Post_Type_Option();
+    $custom_types = $post_type_option->get_post_types();
     if (
         isset($custom_types[$_REQUEST['wpcf-post-type']])
         && isset($custom_types[$_REQUEST['wpcf-post-type']]['slug'])

@@ -36,10 +36,11 @@ class WPToolset_Forms_Validation {
         // Register
         wp_register_script( 'wptoolset-form-jquery-validation', WPTOOLSET_FORMS_RELPATH . '/lib/js/jquery-form-validation/jquery.validate.js', array('jquery'), WPTOOLSET_FORMS_VERSION, true );
         wp_register_script( 'wptoolset-form-jquery-validation-additional', WPTOOLSET_FORMS_RELPATH . '/lib/js/jquery-form-validation/additional-methods.min.js', array('wptoolset-form-jquery-validation'), WPTOOLSET_FORMS_VERSION, true );
-        wp_register_script( 'wptoolset-form-validation', WPTOOLSET_FORMS_RELPATH . '/js/validation.js', array('wptoolset-form-jquery-validation-additional', 'underscore', 'toolset-utils', 'icl_editor-script'), WPTOOLSET_FORMS_VERSION, true );
+	    wp_register_script( 'wptoolset-form-validation', WPTOOLSET_FORMS_RELPATH . '/js/validation.js', array( 'wptoolset-form-jquery-validation-additional', 'underscore', 'toolset-utils', 'toolset-event-manager', 'icl_editor-script' ), WPTOOLSET_FORMS_VERSION, true );
 
         $my_formID = str_replace( "-", "_", $formID );
         wp_localize_script( 'wptoolset-form-validation', 'cred_settings_' . $my_formID, array(
+            'site_url' => get_site_url(),
             'form_id' => $formID,
             'use_ajax' => (!Toolset_Utils::is_real_admin() && isset( $formSET->form['use_ajax'] ) && $formSET->form['use_ajax'] == 1) ? true : false,
             'operation_ok' => __( 'Operation completed successfully', 'wpv-views' ),
@@ -52,13 +53,13 @@ class WPToolset_Forms_Validation {
         add_action( 'wptoolset_forms_field_js_validation_data_' . $this->__formID, array($this, 'filterJsValidation') );
         // Filter form field PHP validation
         add_filter( 'wptoolset_form_' . $this->__formID . '_validate_field', array($this, 'filterFormField'), 10, 2 );
-        
+
 		/**
 		 * @deprecated 2.4.0
 		 * @deprecated 1.9.0 CRED
 		 */
         add_action( 'wptoolset_field_class', array($this, 'wptoolset_field_class_deprecated') );
-		
+
 		/**
 	     * Adds necessary CSS classes to fields with validation output data.
 	     *
@@ -274,9 +275,9 @@ class WPToolset_Forms_Validation {
      * Renders JSON data.
      */
     public function renderJsonData() {
-        printf( '<script type="text/javascript">wptValidationForms.push("#%s");</script>', $this->__formID );
+        printf( '<script type="text/javascript">wptValidationForms.push("#%s");</script>', $this->__formID ? $this->__formID : uniqid( 'form_' ) );
     }
-	
+
 	/**
 	 * Callback for a deprecated action.
 	 *
@@ -284,7 +285,7 @@ class WPToolset_Forms_Validation {
 	 */
 	public function wptoolset_field_class_deprecated() {
 		_doing_it_wrong(
-			'wptoolset_field_class', 
+			'wptoolset_field_class',
 			__( 'This action was deprecated in CRED 1.9.0.', 'wpv-views' ),
 			'1.9.0'
 		);

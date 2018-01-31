@@ -541,7 +541,7 @@ function wpv_ct_editor_general_localize_script( $l10n_data ) {
     $l10n_data['editor'] = array(
         'saved' => __( 'Content template saved', 'wpv-views' ),
         'unsaved' => __( 'Content template not saved', 'wpv-views' ),
-        'pending_changes' => __( 'There are some unsaved changes.'. 'wpv-views' ),
+        'pending_changes' => __( 'There are some unsaved changes.', 'wpv-views' ),
         'confirm_unload' => __( 'You have entered new data on this page.', 'wpv-views' ),
         'pointer_close' => __( 'Close', 'wpv-views' )
     );

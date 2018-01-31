@@ -6,8 +6,13 @@
  */
 class Types_Interop_Handler_The7 implements Types_Interop_Handler_Interface {
 
+	/** @var Types_Interop_Handler_The7 */
 	private static $instance;
 
+
+	/**
+	 * Initialize the interop handler.
+	 */
 	public static function initialize() {
 
 		if ( null === self::$instance ) {
@@ -16,10 +21,13 @@ class Types_Interop_Handler_The7 implements Types_Interop_Handler_Interface {
 		}
 
 		// Not giving away the instance on purpose.
-
 	}
 
 
+	/**
+	 * Hook to the event of rendering the legacy editor code, which happens just before
+	 * enqueuing assets.
+	 */
 	public function add_hooks() {
 		add_action( 'types_leagacy_editor_callback_init', array( $this, 'remove_presscore_hooks' ) );
 	}
@@ -51,13 +59,13 @@ class Types_Interop_Handler_The7 implements Types_Interop_Handler_Interface {
 	 * @since 2.2.16
 	 */
 	public function remove_presscore_hooks() {
-		if( toolset_getget( 'action' ) === 'wpcf_ajax' && toolset_getget( 'wpcf_action' ) === 'editor_callback' ) {
+		if ( toolset_getget( 'action' ) === 'wpcf_ajax' && toolset_getget( 'wpcf_action' ) === 'editor_callback' ) {
 			global $wp_filter;
 			/** @var WP_Hook $admin_enqueue_script_hooks */
 			$admin_enqueue_script_hooks = toolset_getarr( $wp_filter, 'admin_enqueue_scripts', array() );
 
-			foreach( $admin_enqueue_script_hooks->callbacks as $priority => $callbacks_for_priority ) {
-				foreach( $callbacks_for_priority as $callback_id => $callback ) {
+			foreach ( $admin_enqueue_script_hooks->callbacks as $priority => $callbacks_for_priority ) {
+				foreach ( $callbacks_for_priority as $callback_id => $callback ) {
 					$function = $callback['function'];
 
 					$the7_string_prefix = 'presscore_';
@@ -70,7 +78,7 @@ class Types_Interop_Handler_The7 implements Types_Interop_Handler_Interface {
 						&& substr( get_class( $function[0] ), 0, strlen( $the7_class_prefix ) ) === $the7_class_prefix
 					);
 
-					if( $is_the7_class_callback || $is_the7_string_callback ) {
+					if ( $is_the7_class_callback || $is_the7_string_callback ) {
 						remove_action( 'admin_enqueue_scripts', $function, $priority );
 					}
 				}

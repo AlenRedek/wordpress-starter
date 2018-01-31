@@ -1,3 +1,23 @@
+Toolset Views 2.5.1
+	- Prepared the theme settings integration for Avada theme to allow users to control theme elements from Views editors.
+	- Fixed an inconsistency by passing the outcome of the "render_view" API function over the "wpv_filter_wpv_view_shortcode_output" filter.
+	- Fixed several compatibility issues with Visual Composer.
+	
+-------------------------------------------------------------------------------------------------------------------
+Toolset Views 2.5.0 AKA Professor James Moriarty
+	- Added the ability to control the settings from selected themes in a Content Template or WordPress Archive.
+	- Added the option to build the Content Template's template using Divi Builder and Avada's Fusion Builder.
+	- Added support for shortcodes with placeholders instead of brackets to allow usage inside the several page builders' modules fields.
+	- Added help messages for Content Template pages.
+	- Added the MVC file structure and started using it for the help message in the Views pages.
+	- Improved the compatibility with WPML.
+	- Fixed an issue with the Conditional output quicktag on German installations.
+	- Fixed an issue with the Relevanssi integration so frontend text search filters can include content of custom fields.
+	- Fixed an usability problem with CRED edit post links for drafts, private, future or pending posts.
+	- Fixed an issue with the URL generated on AJAX pagination and search related to the view number.
+	- Fixed an issue with the checkboxes not performing the same way as multi-select when “only show available inputs” is selected in the advanced search settings.
+
+-------------------------------------------------------------------------------------------------------------------
 Toolset Views 2.4.1
 	- Added the shortcodes "wpv-post-previous-link" and "wpv-post-next-link" to allow creation of post navigation links.
 	- Added First/Last pagination controls as part of the pagination links.

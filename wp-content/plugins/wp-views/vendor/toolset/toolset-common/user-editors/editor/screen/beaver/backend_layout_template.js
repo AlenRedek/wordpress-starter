@@ -20,19 +20,14 @@ ToolsetCommon.UserEditor.BeaverBuilderBackendLayoutTemplate = function( $ ) {
 	var self = this;
 	
 	self.selector			= '.js-wpv-ct-listing';
-	self.overlay			= "<div class='wpv-setting-overlay js-wpv-layout-template-overlay' style='top:36px'>";
-	self.overlay				+= "<div class='wpv-transparency' style='opacity:0.9'></div>";
-	self.overlay				+= "<div class='wpv-layout-template-overlay-info toolset-alert toolset-alert-info'>";
-	self.overlay					+= "<p><strong>" + toolset_user_editors_beaver_layout_template_i18n.template_overlay.title + "</strong></p>";
-	self.overlay					+= "<p>" + toolset_user_editors_beaver_layout_template_i18n.template_overlay.text + "</p>";
-	self.overlay					+= "<p>";
-	self.overlay						+= "<a href='" + toolset_user_editors_beaver_layout_template_i18n.template_editor_url + "' target='_blank' class='button button-secondary js-wpv-layout-template-overlay-info-link'>" + toolset_user_editors_beaver_layout_template_i18n.template_overlay.button + "</a>";
-	self.overlay					+= '</p><p>';
-	self.overlay						+= "<a href='#' class='wpv-ct-apply-user-editor-basic js-wpv-ct-apply-user-editor js-wpv-ct-apply-user-editor-basic' data-editor='basic'>" + toolset_user_editors_beaver_layout_template_i18n.template_overlay.discard + "</a>";
-	self.overlay					+= "</p>";
-	self.overlay				+= "</div>";
-	self.overlay			+= "</div>";
-	self.overlayContainer	= $( self.overlay );
+    self.template_selector = '#js-wpv-layout-template-overlay-template';
+    self.overlayContainer = _.template( jQuery( self.template_selector ).html() );
+    self.i18n_data = {
+        title: toolset_user_editors_beaver_layout_template_i18n.template_overlay.title,
+        url: toolset_user_editors_beaver_layout_template_i18n.template_editor_url,
+        button: toolset_user_editors_beaver_layout_template_i18n.template_overlay.button,
+        discard: toolset_user_editors_beaver_layout_template_i18n.template_overlay.discard,
+    };
 	
 	self.initBeaverEditors = function() {
 		$( self.selector ).each( function() {
@@ -55,7 +50,7 @@ ToolsetCommon.UserEditor.BeaverBuilderBackendLayoutTemplate = function( $ ) {
 			item.addClass( 'js-wpv-ct-listing-user-editor-inited' );
 			item.find( '.js-wpv-layout-template-overlay' ).remove();
 			item.find( '.js-wpv-ct-apply-user-editor:not(.js-wpv-ct-apply-user-editor-beaver)' ).prop( 'disabled', false );
-			item.prepend( self.overlayContainer.clone() );
+            item.prepend( self.overlayContainer( self.i18n_data ) );
 			item.find( '.CodeMirror' ).css( { 'height' : '0px'} );
 			self.updateBeaverCTEditorLinkTarget( item );
 		}

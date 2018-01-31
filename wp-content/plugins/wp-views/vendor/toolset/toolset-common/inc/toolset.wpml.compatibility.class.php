@@ -143,6 +143,23 @@ if ( ! class_exists( 'Toolset_WPML_Compatibility', false ) ) {
 			return ( defined( 'WPML_ST_VERSION') );
 		}
 
+		/**
+		 * Check whether WPML TM is active.
+		 *
+		 * This will return false when WPML is not configured.
+		 *
+		 * @return bool
+		 * @since 2.5
+		 */
+		public function is_wpml_tm_active() {
+
+			if ( ! $this->is_wpml_active_and_configured() ) {
+				return false;
+			}
+
+			return ( defined( 'WPML_TM_VERSION' ) );
+		}
+
 
 		/**
 		 * Get the version of WPML core, if it's defined.

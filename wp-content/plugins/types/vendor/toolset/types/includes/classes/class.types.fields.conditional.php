@@ -778,7 +778,7 @@ class Types_Fields_Conditional extends Types_Admin_Page
 			$toolset_bootstrap->register_parser();
 
 			$tokenizer = new Toolset_Tokenizer();
-			$tokens = $tokenizer->Tokanize( $expression );
+			$tokens = $tokenizer->Tokenize( $expression );
 
 			$token_value_replacements = array(
 				'<' => 'lt',

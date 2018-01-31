@@ -1,5 +1,35 @@
 # Toolset Common Library
 
+## 2.5.5
+* Released with Types 2.2.20 and Views 2.5.1
+* Fix the way we determine whether the m2m API should be enabled on fresh sites without post relationships by default (types-1252).
+* Fix several compatibility issues with Visual Composer.
+* Fix a problem when gathering the title of some Types fields.
+
+## 2.5.4
+* Released with CRED 1.9.3
+* Include a shared Toolset JS shortcodes library.
+* Fixed a problem with loading the latest Bootstrap CSS Components from Toolset Common.
+* Fixed some notices caused by slightly different array structures on fields.
+
+## 2.5.3
+* Released with Types 2.2.17
+
+## 2.5.2
+* Released with Views 2.5 and Layouts 2.1
+
+## 2.5.1
+* Moved Twig from Types to the Toolset Common Library (toolsetcommon-63).
+* Created an abstraction of a listing page in the Toolset Common Library (toolsetcommon-64).
+* Added an extendable Toolset Troubleshooting page (toolsetcommon-76).
+* Implemented a generic upgrade mechanism (toolsetcommon-75).
+* Moved classes related to Types fields to the library (toolsetcommon-84, toolsetcommon-104).
+* Fix a minor issue with search while not on first page of the listing in Field Control and Custom Fields pages in Types (toolsetcommon-178)
+* Implemented the m2m API (toolsetcommon-70).
+
+## 2.5.0
+- Added the ability to control the settings from selected themes.
+
 ## 2.4.5
 - Compatibility with Types 2.2.16 and the new admin notice asking users to register their commercial plugins.
 
@@ -46,10 +76,11 @@
 - Extend the post objects relationships management with two actions to gather data on demand.
 - Only include the jQuery datepicker stylesheet on demand when the current page contains a datepicker from Toolset.
 - Include the user editors in the common bootstrap class.
-- toolsetcommon-127: Include knockout.js
+- toolsetcommon-127, toolsetcommon-55: Include knockout.js
 - toolsetcommon-139: Clean up Toolset_Assets_Manager and define constants for asset handles 
 - toolsetcommon-144: Added Toolset_Admin_Notices_Manager
 - toolsetcommon-137: Make the toolset-forms classes autoloaded.
+- toolsetcommon-72: Implemented a classmap-based autoloader for all Toolset plugins.
 - toolsetcommon-140: Improve a way to detect the status of WPML.
 - toolsetcommon-142: Use get_user_locale() instead of get_locale() if it's available.
 
@@ -77,7 +108,7 @@
 
 ## 2.2.4 (November 2, 2016)
 
-- Fixed a problem with some assets management by definind better rules on constant definitions.
+- Fixed a problem with some assets management by defining better rules on constant definitions.
 
 ## 2.2.3 (October 10, 2016)
 

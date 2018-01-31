@@ -91,6 +91,7 @@ class Toolset_Controller_Admin_Notices {
 			$repository_id = 'toolset';
 			if (
 				! $this->is_development_environment()
+				&& class_exists( 'WP_Installer' )
 				&& ! WP_Installer()->repository_has_valid_subscription( $repository_id )
 				&& (
 					$this->is_views_active
@@ -144,6 +145,8 @@ class Toolset_Controller_Admin_Notices {
 
 		) {
 			$this->notices_compilation_introduction();
+
+			$this->notice_wpml_version_doesnt_support_m2m();
 		}
 	}
 
@@ -194,6 +197,7 @@ class Toolset_Controller_Admin_Notices {
 		}
 
 		$this->notices_compilation_introduction();
+		$this->notice_wpml_version_doesnt_support_m2m();
 	}
 
 	/**
@@ -219,6 +223,8 @@ class Toolset_Controller_Admin_Notices {
 			Toolset_Admin_Notices_Manager::add_notice( $notice );
 			return;
 		}
+
+		$this->notice_wpml_version_doesnt_support_m2m();
 
 		// no Toolset Based Theme
 		$this->notices_compilation_introduction();
@@ -410,4 +416,18 @@ class Toolset_Controller_Admin_Notices {
 
 		return false;
 	}
+
+
+	protected function notice_wpml_version_doesnt_support_m2m() {
+		$notice = new Toolset_Admin_Notice_Required_Action(
+				'toolset-wpml-version-doesnt-support-m2m',
+				sprintf(
+					__( 'Many-to-many post relationships in Toolset require WPML %s or newer to work properly with post translations. Please upgrade WPML.', 'wpcf' ),
+					sanitize_text_field( Toolset_Relationship_Controller::MINIMAL_WPML_VERSION )
+				)
+		);
+		$notice->add_condition( new Toolset_Condition_Plugin_Wpml_Doesnt_Support_M2m() );
+		Toolset_Admin_Notices_Manager::add_notice( $notice );
+	}
+
 }

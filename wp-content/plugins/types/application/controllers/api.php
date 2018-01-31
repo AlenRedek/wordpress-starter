@@ -4,6 +4,7 @@
  * Public Types hook API.
  *
  * This should be the only point where other plugins (incl. Toolset) interact with Types directly.
+ * Always use as a singleton in production code.
  *
  * Note: Types_Api is initialized on after_setup_theme with priority 10.
  *
@@ -23,16 +24,12 @@ final class Types_Api {
 	private static $instance;
 
 	public static function get_instance() {
-		if( null == self::$instance ) {
+		if ( null == self::$instance ) {
 			self::$instance = new self();
 		}
+
 		return self::$instance;
 	}
-
-	private function __clone() { }
-
-	private function __construct() { }
-
 
 
 	public static function initialize() {
@@ -121,8 +118,12 @@ final class Types_Api {
 	);
 
 
+	/**
+	 * Add API filter hooks (if that wasn't done before).
+	 *
+	 * Reads self::$callbacks for hook definitions and adds older/special hooks.
+	 */
 	private function register_callbacks() {
-
 
 		if( $this->callbacks_registered ) {
 			return;
@@ -224,8 +225,8 @@ final class Types_Api {
 	 * @since 2.1
 	 */
 	public function query_field_definitions(
-		/** @noinspection PhpUnusedParameterInspection */ $ignored, $query )
-	{
+		/** @noinspection PhpUnusedParameterInspection */ $ignored, $query
+	) {
 		$domain = wpcf_getarr( $query, 'domain', 'all' );
 
 		if( 'all' == $domain ) {

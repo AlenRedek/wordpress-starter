@@ -2,17 +2,17 @@
 
 
 interface Toolset_User_Editors_Manager_Interface {
-	public function getEditors();
+	public function get_editors();
 
 	/**
 	 * @return Toolset_User_Editors_Editor_Interface
 	 */
-	public function getActiveEditor();
+	public function get_active_editor();
 	public function run();
-	public function addEditor( Toolset_User_Editors_Editor_Interface $editor );
+	public function add_editor( Toolset_User_Editors_Editor_Interface $editor );
 
 	/**
 	 * @return Toolset_User_Editors_Medium_Interface
 	 */
-	public function getMedium();
+	public function get_medium();
 }

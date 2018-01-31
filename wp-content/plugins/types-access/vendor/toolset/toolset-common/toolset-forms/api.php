@@ -39,7 +39,7 @@ function wptoolset_form_add_conditional( $form_id, $config ){
 }
 
 function wptoolset_form_filter_types_field( $field, $post_id = null, $_post_wpcf = array() ){
-	/** @var WPToolset_Forms_Bootstrap $wptoolset_forms */
+    /** @var WPToolset_Forms_Bootstrap $wptoolset_forms */
 	global $wptoolset_forms;
     return $wptoolset_forms->filterTypesField( $field, $post_id, $_post_wpcf );
 }

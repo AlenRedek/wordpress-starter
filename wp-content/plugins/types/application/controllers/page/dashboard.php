@@ -191,8 +191,10 @@ final class Types_Page_Dashboard extends Types_Page_Abstract {
 		if( $this->types_by_toolset !== null )
 			return $this->types_by_toolset;
 
+		$post_type_option = new Types_Utils_Post_Type_Option();
+
 		$cpts_raw = ! isset( $_GET['toolset-dashboard-simulate-no-custom-post-types'] )
-			? get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() )
+			? $post_type_option->get_post_types()
 			: array();
 
 		// remove buildin types

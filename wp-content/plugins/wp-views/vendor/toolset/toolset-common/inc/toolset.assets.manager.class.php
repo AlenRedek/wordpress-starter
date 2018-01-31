@@ -174,6 +174,7 @@ class Toolset_Assets_Manager {
 	const SCRIPT_ICL_MEDIA_MANAGER = 'icl_media-manager-js';
 
 	const SCRIPT_KNOCKOUT = 'knockout';
+	const SCRIPT_KNOCKOUT_MAPPING = 'knockout-mapping';
 	const SCRIPT_JSCROLLPANE = 'toolset-jscrollpane';
 	const SCRIPT_JSTORAGE = 'jstorage';
 	const SCRIPT_MOUSEWHEEL = 'toolset-mousewheel';
@@ -197,6 +198,8 @@ class Toolset_Assets_Manager {
 	 * we are using ACF handle to prevent unwanted overrides of window.wp.hooks namespace (******!)
 	 */
 	const SCRIPT_WP_EVENT_MANAGER = 'acf-input';
+	
+	const SCRIPT_TOOLSET_SHORTCODE = 'toolset-shortcode';
 
 	// Styles
 	//
@@ -278,8 +281,10 @@ class Toolset_Assets_Manager {
 		add_action( 'toolset_localize_script', array( $this, 'localize_script' ), 10, 3 );
 	}
 
+
 	/**
 	 * @return Toolset_Assets_Manager
+	 * @deprecated Use get_instance instead().
 	 */
 	final public static function getInstance() {
 		static $instances = array();
@@ -297,8 +302,13 @@ class Toolset_Assets_Manager {
 				return false;
 			}
 		}
-
 	}
+
+
+	public static function get_instance() {
+		return self::getInstance();
+	}
+
 
 
 	public function init() {
@@ -572,6 +582,13 @@ class Toolset_Assets_Manager {
 		);
 
 		$this->register_script(
+			self::SCRIPT_KNOCKOUT_MAPPING,
+			$this->assets_url . '/res/lib/knockout/knockout.mapping.js',
+			array( self::SCRIPT_KNOCKOUT ),
+			'1.0.0'
+		);
+
+		$this->register_script(
 			self::SCRIPT_WP_EVENT_MANAGER,
 			$this->assets_url . "/res/lib/events-manager/event-manager.min.js",
 			array(),
@@ -777,6 +794,47 @@ class Toolset_Assets_Manager {
 				'toolset_bootstrap_version_filter' => apply_filters( 'toolset-toolset_bootstrap_version_filter', false ),
 				'toolset_bootstrap_version_selected' => apply_filters( 'toolset-toolset_bootstrap_version_manually_selected', false ),
 				'toolset_theme_loads_own_bs' => __( 'This theme loads its own version of Bootstrap. You should select this option to avoid loading Bootstrap twice and causing display problems on the site\'s front-end', 'wpv-views' )
+			)
+		);
+		
+		$this->register_script(
+			self::SCRIPT_TOOLSET_SHORTCODE,
+			$this->assets_url . "/res/js/toolset-shortcode.js",
+			array( 
+				'jquery', 'jquery-ui-dialog', 'jquery-ui-tabs', 'suggest', 'shortcode', 'underscore', 'wp-util', 
+				self::SCRIPT_SELECT2, self::SCRIPT_ICL_EDITOR, self::SCRIPT_UTILS, self::SCRIPT_TOOLSET_EVENT_MANAGER ),
+			TOOLSET_COMMON_VERSION,
+			true
+		);
+		
+		global $pagenow;
+		
+		$this->localize_script(
+			self::SCRIPT_TOOLSET_SHORTCODE,
+			'toolset_shortcode_i18n',
+			array(
+				'action'	=> array(
+					'insert' => __( 'Insert shortcode', 'wpv-views' ),
+					'create' => __( 'Create shortcode', 'wpv-views' ),
+					'update' => __( 'Update shortcode', 'wpv-views' ),
+					'close' => __( 'Close', 'wpv-views' ),
+					'cancel' => __( 'Cancel', 'wpv-views' ),
+					'back' => __( 'Back', 'wpv-views' ),
+					'save' => __( 'Save settings', 'wpv-views' ),
+					'loading' => __( 'Loading...', 'wpv-views' ),
+				),
+				'title' => array(
+					'generated' => __( 'Generated shortcode', 'wpv-views' ),
+				),
+				'validation' => array(
+					'mandatory'		=> __( 'This option is mandatory ', 'wpv-views' ),
+					'number'		=> __( 'Please enter a valid number', 'wpv-views' ),
+					'numberlist'	=> __( 'Please enter a valid comma separated number list', 'wpv-views' ),
+					'url'			=> __( 'Please enter a valid URL', 'wpv-views' ),
+					
+				),
+				'ajaxurl'									=> admin_url( 'admin-ajax.php', ( is_ssl() ? 'https' : 'http' )  ),
+				'pagenow'									=> $pagenow
 			)
 		);
 

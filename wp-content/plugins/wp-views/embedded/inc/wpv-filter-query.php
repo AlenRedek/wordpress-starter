@@ -557,6 +557,16 @@ class WPV_View_Post_Query {
 		*/
 		
 		do_action( 'wpv_action_wpv_set_view_shortcodes_attributes', $attributes );
+
+		/**
+		 * By the time the "wpv_filter_wpv_get_pagination_permalinks" filter is called, the "current_view" property of
+		 * the global $WP_Views is set to NULL, as it only gets a proper value while the View is being rendered,
+		 * and the URL is generated slightly later.
+		 *
+		 * We are setting the current View property here, and we don't expect any side effects as the script execution is
+		 * terminated right after the AJAX call dies.
+		 */
+		do_action( 'wpv_action_wpv_set_current_view', $view_id );
 		
 		$pagination_permalinks	= apply_filters( 'wpv_filter_wpv_get_pagination_permalinks', array(), $view_settings, $view_id );
 		if ( $page == 1 ) {

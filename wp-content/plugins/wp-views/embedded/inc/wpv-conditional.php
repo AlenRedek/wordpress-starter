@@ -607,7 +607,8 @@ class WPV_Views_Conditional {
 		
 		$toolset_common_bootstrap = Toolset_Common_Bootstrap::getInstance();
 		$toolset_common_sections = array(
-			'toolset_parser'
+			'toolset_parser',
+            'toolset_forms'
 		);
 		$toolset_common_bootstrap->load_sections( $toolset_common_sections );
 		
@@ -742,9 +743,9 @@ class WPV_Views_Conditional {
 		) {
 			?>
 			<script type="text/javascript">
-				QTags.addButton('wpv_conditional', '<?php echo esc_attr( __( 'conditional output', 'wpv-views' ) ); ?>', wpv_add_conditional_quicktag_function, '', 'c', '<?php echo esc_attr( __( 'Views conditional output', 'wpv-views' ) ); ?>', 121, '', {
-					ariaLabel: '<?php echo esc_attr( __( 'Views conditional output', 'wpv-views' ) ); ?>',
-					ariaLabelClose: '<?php echo esc_attr( __( 'Close Views conditional output', 'wpv-views' ) ); ?>'
+				QTags.addButton('wpv_conditional', '<?php echo esc_js( __( 'conditional output', 'wpv-views' ) ); ?>', wpv_add_conditional_quicktag_function, '', 'c', '<?php echo esc_js( __( 'Views conditional output', 'wpv-views' ) ); ?>', 121, '', {
+					ariaLabel: '<?php echo esc_js( __( 'Views conditional output', 'wpv-views' ) ); ?>',
+					ariaLabelClose: '<?php echo esc_js( __( 'Close Views conditional output', 'wpv-views' ) ); ?>'
 				});
 			</script>
 			<?php
@@ -760,12 +761,6 @@ class WPV_Views_Conditional {
 			. "\n--------------------\nOriginal expression: "
 			. $condition
 			. "\n--------------------";
-
-		if ( ! defined( 'WPTOOLSET_COMMON_PATH' ) ) {
-			define( 'WPTOOLSET_COMMON_PATH', WPV_PATH_EMBEDDED . '/toolset/toolset-common' );
-		}
-		require_once TOOLSET_COMMON_PATH . '/toolset-forms/classes/class.types.php';
-		require_once TOOLSET_COMMON_PATH . '/toolset-forms/classes/class.cred.php';
 
 		/* resolve parent */
 		if ( strpos( $condition, ".id(" ) !== false ) {

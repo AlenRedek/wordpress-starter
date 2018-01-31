@@ -202,7 +202,8 @@ function wpcf_is_reserved_name($name, $context, $check_pages = true)
     }
 
     // Add custom types
-    $custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	$post_type_option = new Types_Utils_Post_Type_Option();
+    $custom_types = $post_type_option->get_post_types();
     $post_types = get_post_types();
     if ( !empty( $custom_types ) ) {
         $custom_types = array_keys( $custom_types );
@@ -262,91 +263,9 @@ function wpcf_is_reserved_name($name, $context, $check_pages = true)
  */
 function wpcf_reserved_names()
 {
-    $reserved = array(
-        'action',
-        'attachment',
-        'attachment_id',
-        'author',
-        'author_name',
-        'calendar',
-        'cat',
-        'category',
-        'category__and',
-        'category__in',
-        'category_name',
-        'category__not_in',
-        'comments_per_page',
-        'comments_popup',
-        'custom_css',
-        'customize_changeset',
-        'cpage',
-        'day',
-        'debug',
-        'error',
-        'exact',
-        'feed',
-        'field',
-        'fields',
-        'format',
-        'hour',
-        'lang',
-        'link_category',
-        'm',
-        'minute',
-        'mode',
-        'monthnum',
-        'more',
-        'name',
-        'nav_menu',
-        'nopaging',
-        'offset',
-        'order',
-        'orderby',
-        'p',
-        'page',
-        'paged',
-        'page_id',
-        'pagename',
-        'parent',
-        'pb',
-        'perm',
-        'post',
-        'post_format',
-        'post__in',
-        'post_mime_type',
-        'post__not_in',
-        'posts',
-        'posts_per_archive_page',
-        'posts_per_page',
-        'post_status',
-        'post_tag',
-        'post_type',
-        'preview',
-        'robots',
-        's',
-        'search',
-        'second',
-        'sentence',
-        'showposts',
-        'static',
-        'subpost',
-        'subpost_id',
-        'tag',
-        'tag__and',
-        'tag_id',
-        'tag__in',
-        'tag__not_in',
-        'tag_slug__and',
-        'tag_slug__in',
-        'taxonomy',
-        'tb',
-        'term',
-        'type',
-        'w',
-        'withcomments',
-        'withoutcomments',
-        'year',
-    );
+    $toolset_naming_helper = Toolset_Naming_Helper::get_instance();
+	$reserved = $toolset_naming_helper->get_reserved_terms();
+	$reserved[] = 'action';
 
     return apply_filters( 'wpcf_reserved_names', $reserved );
 }

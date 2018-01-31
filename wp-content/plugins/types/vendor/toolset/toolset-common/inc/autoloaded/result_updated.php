@@ -6,7 +6,7 @@
  * Compared to its superclass, this one adds the ability to hold the information about number of updated
  * records.
  *
- * @since 2.3 
+ * @since 2.3
  */
 class Toolset_Result_Updated extends Toolset_Result {
 
@@ -23,7 +23,7 @@ class Toolset_Result_Updated extends Toolset_Result {
 	 * @param bool|Exception|WP_Error $value Result value.
 	 * @param int $items_updated Nonnegative number of items updated in an operation.
 	 * @param null|string $display_message Optional display message for a boolean result value.
-	 * @since 2.3 
+	 * @since 2.3
 	 */
 	public function __construct( $value, $items_updated = 0, $display_message = null ) {
 		parent::__construct( $value, $display_message );

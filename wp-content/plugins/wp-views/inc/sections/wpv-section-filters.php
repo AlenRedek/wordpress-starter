@@ -720,7 +720,7 @@ class WPV_Filter_Item {
 			for ( $i = 1; $i < 13; $i = $i +1 ) {
 				$monthnum = zeroise( $i, 2 );
 				?>
-				<option value="<?php echo esc_attr( $monthnum ); ?>" <?php selected( $i, $mm ); ?>><?php echo $monthnum . ' - ';echo $wp_locale->get_month_abbrev( $wp_locale->get_month( $i ) ); ?></option>
+				<option value="<?php echo esc_attr( $monthnum ); ?>" <?php selected( $monthnum, $mm ); ?>><?php echo $monthnum . ' - ';echo $wp_locale->get_month_abbrev( $wp_locale->get_month( $i ) ); ?></option>
 				<?php
 			}
 			?>

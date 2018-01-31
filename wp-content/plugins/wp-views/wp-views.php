@@ -5,7 +5,7 @@ Plugin URI: http://wp-types.com/?utm_source=viewsplugin&utm_campaign=views&utm_m
 Description: When you need to create lists of items, Views is the solution. Views will query the content from the database, iterate through it and let you display it with flair. You can also enable pagination, search, filtering and sorting by site visitors.
 Author: OnTheGoSystems
 Author URI: http://www.onthegosystems.com
-Version: 2.4.1
+Version: 2.5.1
 */
 
 
@@ -22,7 +22,7 @@ if ( defined( 'WPV_VERSION' ) ) {
 	return;
 }
 
-define( 'WPV_VERSION', '2.4.1' );
+define( 'WPV_VERSION', '2.5.1' );
 
 /**
 * Set constants
@@ -57,10 +57,15 @@ if ( is_ssl() ) {
 define( 'WPV_PATH_EMBEDDED_TOOLSET', WPV_PATH . '/vendor/toolset' );
 define( 'WPV_URL_EMBEDDED_TOOLSET',	WPV_URL . '/vendor/toolset' );
 
+define('WPV_TOOLSET_THEME_SETTINGS_ABSPATH', WPV_PATH_EMBEDDED_TOOLSET . '/toolset-theme-settings');
+define('WPV_TOOLSET_THEME_SETTINGS_URL', WPV_URL_EMBEDDED_TOOLSET . '/toolset-theme-settings');
+
 require WPV_PATH_EMBEDDED_TOOLSET . '/onthego-resources/loader.php';
 onthego_initialize( WPV_PATH_EMBEDDED_TOOLSET . '/onthego-resources/', WPV_URL_EMBEDDED_TOOLSET . '/onthego-resources/' );
 require WPV_PATH_EMBEDDED_TOOLSET . '/toolset-common/loader.php';
 toolset_common_initialize( WPV_PATH_EMBEDDED_TOOLSET . '/toolset-common/', WPV_URL_EMBEDDED_TOOLSET . '/toolset-common/' );
+require_once WPV_TOOLSET_THEME_SETTINGS_ABSPATH . '/loader.php';
+toolset_theme_settings_initialize(WPV_TOOLSET_THEME_SETTINGS_ABSPATH, WPV_TOOLSET_THEME_SETTINGS_URL );
 
 /**
 * Initialize the Views Settings
@@ -267,10 +272,7 @@ require_once( WPV_PATH_EMBEDDED . '/inc/filters/wpv-filter-sticky-embedded.php' 
 /**
 * WPML integration
 */
-
-require WPV_PATH_EMBEDDED . '/inc/WPML/wpv_wpml.php';
-require WPV_PATH . '/inc/wpv-wpml.php';
-WPV_WPML_Integration::initialize();
+require WPV_PATH_EMBEDDED . '/inc/WPML/wpv_wpml_core.php';
 
 /**
  * CRED integration
@@ -424,3 +426,8 @@ if( did_action( 'inline_doc_help_viewlayoutmetahtml' )== 0){
 if( did_action( 'inline_doc_help_viewtemplate' )== 0){
 	do_action('inline_doc_help_viewtemplate', 'admin_screen_view_template_init');
 }
+
+/*
+ * Bootstrap Views
+ */
+require_once WPV_PATH . '/application/bootstrap.php';

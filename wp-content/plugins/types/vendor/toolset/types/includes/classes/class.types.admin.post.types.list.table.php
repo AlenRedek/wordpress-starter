@@ -43,10 +43,6 @@ class Types_Admin_Post_Types_List_Table extends WP_List_Table
     var $buildin_post_types;
     var $bulk_action_field_name = 'wpcf_cpt_ids';
 
-    /** ************************************************************************
-     * REQUIRED. Set up a constructor that references the parent constructor. We
-     * use the parent reference to set some default configs.
-     ***************************************************************************/
     function __construct()
     {
         //Set parent defaults
@@ -56,31 +52,12 @@ class Types_Admin_Post_Types_List_Table extends WP_List_Table
             'ajax'      => true        //does this table support ajax?
         ) );
 
-        $this->custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+	    $post_type_option = new Types_Utils_Post_Type_Option();
+        $this->custom_types = $post_type_option->get_post_types();
         $this->buildin_post_types = wpcf_get_builtin_in_post_types();
     }
 
-    /** ************************************************************************
-     * Recommended. This method is called when the parent class can't find a method
-     * specifically build for a given column. Generally, it's recommended to include
-     * one method for each column you want to render, keeping your package class
-     * neat and organized. For example, if the class needs to process a column
-     * named 'title', it would first see if a method named $this->column_title()
-     * exists - if it does, that method will be used. If it doesn't, this one will
-     * be used. Generally, you should try to use custom column methods as much as
-     * possible.
-     *
-     * Since we have defined a column_title() method later on, this method doesn't
-     * need to concern itself with any column with a name of 'title'. Instead, it
-     * needs to handle everything else.
-     *
-     * For more detailed insight into how columns are handled, take a look at
-     * WP_List_Table::single_row_columns()
-     *
-     * @param array $item A singular item (one full row's worth of data)
-     * @param array $column_name The name/slug of the column to be processed
-     * @return string Text or HTML to be placed inside the column <td>
-     **************************************************************************/
+
     function column_default($item, $column_name)
     {
         switch($column_name){

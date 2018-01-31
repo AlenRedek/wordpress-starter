@@ -415,7 +415,7 @@ class WPV_template{
 				&& isset( $_POST['views_template'][$pidd] )
 			) {
 				$template_selected = $_POST['views_template'][$pidd];
-				update_post_meta( $pidd, '_views_template', $template_selected );
+		        WPV_Content_Template_Embedded::assign_ct_to_post_object( $pidd, $template_selected );
 			}
 		} elseif ( isset( $_POST['wpcf_post_relationship'] ) ) {
 			// handle Types post relationships
@@ -439,7 +439,7 @@ class WPV_template{
 				global $WPV_settings;
 				if ( isset( $WPV_settings['views_template_for_' . $post_type] ) ) {
 					$template_selected = $WPV_settings['views_template_for_' . $post_type];
-					update_post_meta( $pidd, '_views_template', $template_selected );
+					WPV_Content_Template_Embedded::assign_ct_to_post_object( $pidd, $template_selected );
 				}
 			}
 		}
@@ -1004,7 +1004,7 @@ class WPV_template{
 			if ($template_selected == '') {
 				if ( isset( $WPV_settings['views_template_for_' . $post->post_type] ) ) {
                     $template_selected = $WPV_settings['views_template_for_' . $post->post_type];
-					update_post_meta($pidd, '_views_template', $template_selected);
+					WPV_Content_Template_Embedded::assign_ct_to_post_object( $pidd, $template_selected );
 				}
 			}
 
@@ -1021,11 +1021,11 @@ class WPV_template{
             if ( $template_selected == '' ) {
                 if ( isset( $WPV_settings['views_template_for_attachment'] ) ) {
                     $template_selected = $WPV_settings['views_template_for_attachment'];
-                    update_post_meta( $pidd, '_views_template', $template_selected );
+	                WPV_Content_Template_Embedded::assign_ct_to_post_object( $pidd, $template_selected );
                 }
             }
         } elseif ( isset( $_POST['views_template'][$pidd] ) ) {
-            update_post_meta( $pidd, '_views_template', $_POST['views_template'][$pidd] );
+	        WPV_Content_Template_Embedded::assign_ct_to_post_object( $pidd, $_POST['views_template'][$pidd] );
         }
     }
 
@@ -1038,6 +1038,17 @@ class WPV_template{
 		$cssout = '';
 		foreach ( $view_templates_ids as $view_template_id ) {
 			$extra_css = get_post_meta($view_template_id, '_wpv_view_template_extra_css', true);
+
+			/**
+			 * Get third party CSS code added inside a page builder or elsewhere.
+			 *
+			 * @since 2.5.0
+			 *
+			 * @param string   $extra_third_party_css   The third party CSS code.
+			 */
+			$extra_third_party_css = apply_filters( 'wpv_filter_wpv_get_third_party_css', '', $view_template_id );
+
+			$extra_css .= "\n" . $extra_third_party_css;
 			if ( 
 				isset( $extra_css ) 
 				&& '' != $extra_css

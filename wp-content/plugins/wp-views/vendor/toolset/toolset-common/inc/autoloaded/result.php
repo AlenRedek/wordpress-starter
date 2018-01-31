@@ -28,7 +28,7 @@ class Toolset_Result {
 	 * @param bool|WP_Error|Exception $value Result value. For boolean, true determines a success, false
 	 *     determines a failure. WP_Error and Exception are interpreted as failures.
 	 * @param string|null $display_message Optional display message that will be used if a boolean result is
-	 *     provided.
+	 *     provided. If an exception is provided, it will be used as a prefix of the message from the exception.
 	 * @throws InvalidArgumentException
 	 * @since 2.3
 	 */
@@ -44,7 +44,10 @@ class Toolset_Result {
 			$this->display_message = $value->get_error_message();
 		} else if( $value instanceof Exception ) {
 			$this->is_error = true;
-			$this->display_message = $value->getMessage();
+			$this->display_message = (
+				( is_string( $display_message ) ? $display_message . ': ' : '' )
+				. $value->getMessage()
+			);
 		} else {
 			throw new InvalidArgumentException( 'Unrecognized result value.' );
 		}

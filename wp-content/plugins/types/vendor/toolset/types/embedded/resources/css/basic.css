@@ -1451,3 +1451,12 @@ input#slug+p.wpcf-form-description {
 .ui-sortable-handle .description{
     font-weight: normal;
 }
+
+/* Part of removed file: ./dashicons.css */
+div.wpcf-types-menu-image {
+    float: left;
+    width: 36px;
+    height: 34px;
+    margin: 0;
+    text-align: center;
+}

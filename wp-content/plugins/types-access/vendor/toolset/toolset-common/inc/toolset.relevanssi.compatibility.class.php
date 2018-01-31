@@ -37,7 +37,7 @@ if ( ! class_exists( 'Toolset_Relevanssi_Compatibility' ) ) {
 				// Toolset Common
 				
 				$this->register_assets();
-				add_action( 'toolset_enqueue_scripts',										array( $this, 'toolset_enqueue_scripts' ) );
+				add_action( 'toolset_menu_admin_enqueue_scripts',							array( $this, 'enqueue_scripts' ) );
 				
 				add_filter( 'toolset_filter_toolset_register_settings_section',				array( $this, 'register_relevanssi_settings_section' ), 120 );
 				add_filter( 'toolset_filter_toolset_register_settings_relevanssi_section',	array( $this, 'toolset_relevanssi_settings' ), 10, 2 );
@@ -96,7 +96,7 @@ if ( ! class_exists( 'Toolset_Relevanssi_Compatibility' ) ) {
 			);
 		}
 		
-		function toolset_enqueue_scripts( $page ) {
+		function enqueue_scripts( $page ) {
 			if ( $page == 'toolset-settings' ) {
 				$toolset_bootstrap	= Toolset_Common_Bootstrap::getInstance();
 				$toolset_assets		= $toolset_bootstrap->assets_manager;

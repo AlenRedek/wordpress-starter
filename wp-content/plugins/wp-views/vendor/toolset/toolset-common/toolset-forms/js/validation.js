@@ -33,7 +33,7 @@ var wptValidation = (function ($) {
         $.validator.addMethod("hexadecimal", function (value, element, param) {
             return ( value == "" || /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(value) );
         });
-        
+
         /**
          * add equalto method
          */
@@ -98,7 +98,7 @@ var wptValidation = (function ($) {
                         }
                         return element.checked;
                     }
-                    
+
                     if (jQuery(element).hasClass("hasDatepicker")) {
                         if (wptValidationDebug) {
                             console.log("hasDatepicker");
@@ -189,11 +189,6 @@ var wptValidation = (function ($) {
                     $("#publishing-action #ajax-loading").css("visibility", "hidden");
                 }
             },
-//            submitHandler: function(form) {
-//                // Remove failed conditionals
-//                $('.js-wpt-remove-on-submit', $(form)).remove();
-//                form.submit();
-//            },
             errorElement: 'small',
             errorClass: 'wpt-form-error'
         });
@@ -210,112 +205,65 @@ var wptValidation = (function ($) {
                     console.log("submit " + $form.selector);
                 }
 
-                var myformid = formID.replace('#', '');
-                myformid = myformid.replace('-', '_');
-                var cred_settings = eval('cred_settings_' + myformid);
-
-                if (typeof grecaptcha !== 'undefined') {
-                    var $error_selector = jQuery(formID).find('div.recaptcha_error');
-                    if (_recaptcha_id != -1) {
-                        if (grecaptcha.getResponse(_recaptcha_id) == '') {
-                            $error_selector.show();
-                            setTimeout(function () {
-                                $error_selector.hide();
-                            }, 5000);
-                            return false;
-                        }
-                    }
-                    $error_selector.hide();
-                }
+                var currentFormId = formID.replace('#', '');
+                currentFormId = currentFormId.replace('-', '_');
+                var cred_settings = eval('cred_settings_' + currentFormId);
 
                 if (wptValidationDebug) {
                     console.log("validation...");
                 }
 
-                if ($form.valid()) {
-                    if (wptValidationDebug)
+                var isAjaxForm = (cred_settings.use_ajax && 1 == cred_settings.use_ajax);
+                var isValidForm = $form.valid();
+
+                if (isValidForm) {
+
+                    if (wptValidationDebug) {
                         console.log("form validated " + $form);
+                    }
 
                     $('.js-wpt-remove-on-submit', $(this)).remove();
 
-                    if (cred_settings.use_ajax && cred_settings.use_ajax == 1) {
-                        $('<input value="cred_ajax_form" name="action">').attr('type', 'hidden').appendTo(formID);
-                        $('<input value="true" name="form_submit">').attr('type', 'hidden').appendTo(formID);
+                    /**
+                     * toolset-form-onsubmit-validate-success
+                     *
+                     * Event triggered when a cred form on submit is validated
+                     *
+                     * @since 2.5.1
+                     */
+                    Toolset.hooks.doAction('toolset-form-onsubmit-validation-success', formID, isAjaxForm, cred_settings);
 
-                        $body = $("body");
-                        $body.addClass("wpt-loading");
-
-                        $.ajax({
-                            type: 'post',
-                            url: $(formID).attr('action'),
-                            data: $(formID).serialize(),
-                            dataType: 'json',
-                            complete: function (data) {
-                                $body.removeClass("wpt-loading");
-                            },
-                            success: function (data) {
-                                $body.removeClass("wpt-loading");
-                                if (data) {
-                                    $(formID).replaceWith(data.output);
-                                    reload_tinyMCE();
-
-                                    if (data.result == 'ok') {
-                                        alert(cred_settings.operation_ok);
-                                    }
-
-                                    try_to_reload_reCAPTCHA(formID);
-                                }
-
-                                //An event to indicate the completion of CRED form ajax with success
-                                jQuery(document).trigger('cred_form_ajax_completed');
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                alert(cred_settings.operation_ko);
-                            }
-                        });
-                    }
                 } else {
+
                     if (wptValidationDebug) {
                         console.log("form not valid!");
                     }
+
+                    /**
+                     * toolset-form-onsubmit-validate-error
+                     *
+                     * Event triggered when a cred form on submit is NOT validated
+                     *
+                     * @since 2.5.1
+                     */
+                    Toolset.hooks.doAction('toolset-form-onsubmit-validation-error', formID, isAjaxForm, cred_settings);
                 }
-                if (cred_settings.use_ajax && cred_settings.use_ajax == 1) {
+
+                //If form is an ajax form return false on submit
+                if (isAjaxForm) {
+
+                    /**
+                     * toolset-ajax-submit
+                     *
+                     * Event submit of ajax form, it is triggered ONLY when onsubmit belogns to a form that is ajax and it is valid as well
+                     *
+                     * @since 2.5.1
+                     */
+                    Toolset.hooks.doAction('toolset-ajax-submit', formID, isValidForm, cred_settings);
                     return false;
                 }
             });
         });
-    }
-
-    var _recaptcha_id = -1;
-
-    function try_to_reload_reCAPTCHA(formID) {
-        if (typeof grecaptcha !== 'undefined') {
-            var _sitekey = jQuery(formID).find('div.g-recaptcha').data('sitekey');
-            _recaptcha_id = grecaptcha.render($('.g-recaptcha')[0], {sitekey: _sitekey});
-        }
-    }
-
-    function reload_tinyMCE() {
-        jQuery('textarea.wpt-wysiwyg').each(function (index) {
-            var $area = jQuery(this),
-                area_id = $area.prop('id');
-            if (typeof area_id !== 'undefined') {
-                if (typeof tinyMCE !== 'undefined') {
-					// @bug This is broken when AJAX subitting a CRED form that is set to keep displaying the form,
-					// when the WYSIWYG field was submitted in the Text mode
-                    tinyMCE.get(area_id).remove();
-                }
-                tinyMCE.init(tinyMCEPreInit.mceInit[area_id]);
-				// @bug This Quicktags initialization is broken by design
-				// since WPV_Toolset.add_qt_editor_buttons expects as second parameter a Codemirror editor instace
-				// and here we are passing just a textarea ID.
-                var quick = quicktags(tinyMCEPreInit.qtInit[area_id]);
-                WPV_Toolset.add_qt_editor_buttons(quick, area_id);
-            }
-        });
-
-        jQuery("button.wp-switch-editor").click();
-        jQuery("button.switch-tmce").click();
     }
 
 	// @bug This event callback is defined in a limbo never executed, hence the callback will never be fired
@@ -349,7 +297,9 @@ var wptValidation = (function ($) {
             jQuery('.wpt-suggest-taxonomy-term').hide();
         }
 
-        reload_tinyMCE();
+        if (typeof credFrontEndViewModel !== 'undefined') {
+            credFrontEndViewModel.reloadTinyMCE();
+        }
     });
 
     function isIgnored($el) {
@@ -394,8 +344,8 @@ var wptValidation = (function ($) {
 })(jQuery);
 
 //cred_form_ready will fire when a CRED form is ready, so we init it's validation rules then
-jQuery(document).on('cred_form_ready', function(evt, data){
-    if(initialisedCREDForms.indexOf(data.form_id) == -1){
+jQuery(document).on('cred_form_ready', function (evt, data) {
+    if (initialisedCREDForms.indexOf(data.form_id) == -1) {
         wptValidation._initValidation('#' + data.form_id);
         wptValidation.applyRules('#' + data.form_id);
         initialisedCREDForms.push(data.form_id);

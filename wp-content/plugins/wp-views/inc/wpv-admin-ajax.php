@@ -1361,7 +1361,7 @@ function wpv_clear_cpt_from_ct_callback() {
 		$count = sizeof( $posts );
 		if ( $count > 0 ) {
 			foreach( $posts as $post_id ) {
-				update_post_meta( $post_id, '_views_template', 0 );
+				WPV_Content_Template_Embedded::remove_ct_assignment_from_post_object( $post_id );
 			}
 		}
 		wp_send_json_success();

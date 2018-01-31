@@ -230,7 +230,7 @@ final class WPV_Content_Template extends WPV_Content_Template_Embedded {
         foreach ( $post_ids as $post_id ) {
             $current_content_template = get_post_meta( $post_id, WPV_Content_Template_Embedded::POST_TEMPLATE_BINDING_POSTMETA_KEY, true );
             if ( $current_content_template != $this->id ) {
-                update_post_meta( $post_id, WPV_Content_Template_Embedded::POST_TEMPLATE_BINDING_POSTMETA_KEY, $this->id );
+	            WPV_Content_Template_Embedded::assign_ct_to_post_object( $post_id, $this->id, $current_content_template );
                 ++$updated_count;
             }
         }

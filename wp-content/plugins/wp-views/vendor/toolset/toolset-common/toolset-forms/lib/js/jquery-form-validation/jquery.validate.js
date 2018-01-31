@@ -385,19 +385,24 @@
                 if (typeof message !== 'undefined') {
 
                     $('.wpt-form-error').each(function () {
-                        formId = $(this).closest("form").find('input[name=_cred_cred_prefix_form_id]').val();
+                        var $this = $(this);
+                        formId = $this.closest("form").find('input[name=_cred_cred_prefix_form_id]').val();
                         var $wpt_form_message = $('#wpt-form-message-' + formId);
-                        if ( $(this).css('display') == 'block'
-                            && $(this).attr('id') !== 'wpt-form-message-' + formId
-                            && $(this).attr('id') !== 'lbl_generic' )
+
+                        if ( $this.css('display') == 'block'
+                            && $this.attr('id') !== 'wpt-form-message-' + formId
+                            && $this.attr('id') !== 'lbl_generic' )
                         {
                             total_errors += 1;
                         }
 
+                        var message = "";
                         if (total_errors > 0) {
-                            message = $(this).closest("form").find('.wpt-form-error').data('message-single');
+
                             if (total_errors > 1) {
                                 message = $(this).closest("form").find('.wpt-form-error').data('message-plural');
+                            } else {
+                                message = $(this).closest("form").find('.wpt-form-error').data('message-single');
                             }
                             message = message.replace('%NN', total_errors);
 
@@ -406,6 +411,7 @@
                                 $wpt_form_message.show();
                             }
                         } else {
+                            $this.hide();
                             $wpt_form_message.html('');
                             if (_form_submitted) {
                                 $wpt_form_message.hide();

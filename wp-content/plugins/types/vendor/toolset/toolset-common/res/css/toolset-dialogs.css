@@ -1,6 +1,6 @@
-/*
-* Css with rules that will prevent other plugins to make changes on our dialogs
-*/
+/**
+ * CSS with rules that will prevent other plugins to make changes on our dialogs
+ */
 
 .toolset-ui-dialog.ui-dialog {
     z-index: 100102 !important;
@@ -165,4 +165,148 @@
 	line-height: 22px !important;
 	font-size: 11px !important;
 	letter-spacing: normal;
+}
+/**
+ * Shortcodes dialogs styles: listing dialog.
+ */
+.toolset-shortcode-gui-group-list .item {
+    margin: 0 5px 5px 0;
+    white-space: nowrap;
+    display: inline-block;
+    cursor: pointer;
+}
+/**
+ * Shortcodes dialogs styles: shortcodes dialog.
+ */
+.toolset-shortcode-gui-dialog-container .ui-tabs-nav {
+    padding: .2em .1em .2em .2em;
+    border: none;
+	background: none;
+    box-shadow: none;
+    width: 30%;
+	max-width: 250px;
+    display: block;
+	float: left;
+}
+
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-nav li { 
+	clear: left;
+	width: 100%;
+	border: none;
+	margin: 0 -1px .2em 0;
+	-webkit-transition: all 0.05s linear;
+	-moz-transition: all 0.05s linear;
+	-o-transition: all 0.05s linear;
+	-ms-transition: all 0.05s linear;
+	transition: all 0.05s linear;
+}
+
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-nav li a {
+	display:block;
+}
+
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+	padding-bottom: 0; 
+	padding-right: .1em;
+	border: none;
+	background: #ededed;
+}
+
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-nav li.toolset-shortcode-gui-tabs-incomplete {
+	background: #b94a48 !important;
+}
+
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-panel {
+    display: block;
+	float: left;
+	width: 60%;
+    padding-left: 5%;
+	border-left: 1px solid #ccc;
+}
+
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical label {
+    display: block;
+}
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-nav .ui-tabs-active a {
+    color: #333;
+    font-weight: 700;
+}
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-nav .toolset-shortcode-gui-tabs-incomplete a {
+	color: #f9f9f9;
+}
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical .ui-tabs-nav a {
+    display: block;
+    padding: 4px 20px;
+    line-height: 18px;
+    font-size: 14px;
+    text-shadow: none;
+    text-decoration: none;
+	color: grey;
+}
+.toolset-shortcode-gui-dialog-container .ui-tabs-vertical  [class*=" icon-"] {
+    padding-left: 2em;
+}
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-attribute-wrapper,
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-content-wrapper {
+	position: relative;
+    /*padding-bottom: 1em;*/
+}
+.toolset-shortcode-gui-dialog-container h2 {
+    margin-top: 5px;
+}
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-dialog-item-grouped {
+	overflow: hidden;
+	clear: left;
+	margin: 0;
+	padding: 0;
+}
+	.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-dialog-item-grouped > li {
+		display: block;
+		float: left;
+		margin: 0;
+		padding: 0;
+	}
+	.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-attribute-group .toolset-shortcode-gui-attribute-wrapper {
+		margin: 0;
+		padding: 0 10px 0 0;
+	}
+		.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-dialog-item-grouped > li:last-child .toolset-shortcode-gui-attribute-wrapper {
+			padding-right: 0;
+		}
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-attribute-wrapper h3,
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-attribute-group h3,
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-content-wrapper h3 {
+	color: #333;
+	background: #ededed;
+	padding: 1px 5px;
+	font-size: 13px;
+}
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-attribute-wrapper label {
+    display: block;
+}
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-attribute-wrapper span.toolset-shortcode-gui-attribute-pseudolabel, 
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-attribute-group span.toolset-shortcode-gui-attribute-pseudolabel {
+	display: block;
+	margin: 3px 5px;
+}
+.toolset-shortcode-gui-dialog-container .toolset-shortcode-gui-invalid-attr {
+	border-color: #B94A48;
+	background-color: #F2DEDE;
+	color: #B94A48;
+}
+.toolset-shortcode-gui-dialog-container + .ui-dialog-buttonpane .ui-dialog-buttonset {
+	float: none;
+	overflow: hidden;
+	padding: 2px 0;
+}
+
+.toolset-shortcode-gui-dialog-container + .ui-dialog-buttonpane button {
+	float: left;
+	margin-right: 10px;
+}
+
+.toolset-shortcode-gui-dialog-container + .ui-dialog-buttonpane .toolset-shortcode-gui-dialog-button-align-right {
+	float: right;
+	margin-left: 10px;
+	margin-right: 0
 }

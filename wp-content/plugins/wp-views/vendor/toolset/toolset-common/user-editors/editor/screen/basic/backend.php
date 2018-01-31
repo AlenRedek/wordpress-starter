@@ -1,30 +1,46 @@
 <?php
 
-if( ! class_exists( 'Toolset_User_Editors_Editor_Screen_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/screen/abstract.php' );
-
 class Toolset_User_Editors_Editor_Screen_Basic_Backend
 	extends Toolset_User_Editors_Editor_Screen_Abstract {
-		
-		public function __construct() {		
-		
-		add_action( 'init',												array( $this, 'register_assets' ), 50 );
-		add_action( 'admin_enqueue_scripts',							array( $this, 'admin_enqueue_assets' ), 50 );
-		
-		add_filter( 'toolset_filter_toolset_registered_user_editors',	array( $this, 'register_user_editor' ) );
-		add_filter( 'wpv_filter_wpv_layout_template_extra_attributes',	array( $this, 'layout_template_attribute' ), 10, 3 );
-		
-		add_action( 'wp_ajax_toolset_set_layout_template_user_editor',	array( $this, 'set_layout_template_user_editor' ) );
+
+	/**
+	 * @var Toolset_Constants
+	 */
+	protected $constants;
+
+	/**
+	 * Toolset_User_Editors_Editor_Screen_Basic_Backend constructor.
+	 *
+	 * @param Toolset_Constants|null $constants
+	 */
+	public function __construct( Toolset_Constants $constants = null ) {
+		$this->constants = $constants
+			? $constants
+			: new Toolset_Constants();
+
+		$this->constants->define( 'BASIC_SCREEN_ID', 'basic' );
 	}
 
-	public function isActive() {
+	public function initialize() {
+		add_action( 'init', array( $this, 'register_assets' ), 50 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_assets' ), 50 );
+
+		add_filter( 'toolset_filter_toolset_registered_user_editors', array( $this, 'register_user_editor' ) );
+		add_filter( 'wpv_filter_wpv_layout_template_extra_attributes', array( $this, 'layout_template_attribute' ), 10, 3 );
+
+		add_action( 'wp_ajax_toolset_set_layout_template_user_editor', array( $this, 'set_layout_template_user_editor' ) );
+
+		add_action( 'admin_footer', array( $this, 'load_template' ) );
+	}
+
+	public function is_active() {
 		$this->action();
 		return true;
 	}
 
 	private function action() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_assets' ) );
-		$this->medium->setHtmlEditorBackend( array( $this, 'html_output' ) );
+		$this->medium->set_html_editor_backend( array( $this, 'html_output' ) );
 	}
 
 	public function html_output() {
@@ -82,14 +98,8 @@ class Toolset_User_Editors_Editor_Screen_Basic_Backend
 	}
 	
 	public function admin_enqueue_assets() {
-		$page = toolset_getget( 'page' );
-		if ( 
-			'views-editor' == $page 
-			|| 'view-archives-editor' == $page 
-		) {
-			
+		if ( $this->is_views_or_wpa_edit_page() ) {
 			do_action( 'toolset_enqueue_scripts', array( 'toolset-user-editors-basic-layout-template-script' ) );
-			
 		}
 	}
 	
@@ -100,7 +110,7 @@ class Toolset_User_Editors_Editor_Screen_Basic_Backend
 	}
 	
 	public function register_user_editor( $editors ) {
-		$editors[ $this->editor->getId() ] = $this->editor->getName();
+		$editors[ $this->editor->get_id() ] = $this->editor->get_name();
 		return $editors;
 	}
 	
@@ -114,9 +124,9 @@ class Toolset_User_Editors_Editor_Screen_Basic_Backend
 	*/
 	
 	public function layout_template_attribute( $attributes, $content_template, $view_id ) {
-		$content_template_has_basic = ( in_array( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ), array( '', 'basic' ) ) );
+		$content_template_has_basic = ( in_array( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ), array( '', $this->constants->constant( 'BASIC_SCREEN_ID' ) ) ) );
 		if ( $content_template_has_basic ) {
-			$attributes['builder'] = $this->editor->getId();
+			$attributes['builder'] = $this->editor->get_id();
 		}
 		return $attributes;
 	}
@@ -153,10 +163,16 @@ class Toolset_User_Editors_Editor_Screen_Basic_Backend
 		}
 		
 		$ct_id = (int) $_POST['ct_id'];
-		$editor = isset( $_POST['editor'] ) ? sanitize_text_field( $_POST['editor'] ) : 'basic';
+		$editor = isset( $_POST['editor'] ) ? sanitize_text_field( $_POST['editor'] ) : $this->constants->constant( 'BASIC_SCREEN_ID' );
 		update_post_meta( $ct_id, '_toolset_user_editors_editor_choice', $editor );
+
+		do_action( 'toolset_set_layout_template_user_editor_' . $editor );
 		
 		wp_send_json_success();
-		
+	}
+
+	public function load_template() {
+		require_once $this->constants->constant( 'TOOLSET_COMMON_PATH' ) . '/user-editors/editor/templates/inline-ct-overlay.tpl.php';
+		require_once $this->constants->constant( 'TOOLSET_COMMON_PATH' ) . '/user-editors/editor/templates/inline-ct-saving-overlay.tpl.php';
 	}
 }

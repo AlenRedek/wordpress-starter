@@ -278,8 +278,10 @@ class Toolset_Assets_Manager {
 		add_action( 'toolset_localize_script', array( $this, 'localize_script' ), 10, 3 );
 	}
 
+
 	/**
 	 * @return Toolset_Assets_Manager
+	 * @deprecated Use get_instance instead().
 	 */
 	final public static function getInstance() {
 		static $instances = array();
@@ -297,8 +299,13 @@ class Toolset_Assets_Manager {
 				return false;
 			}
 		}
-
 	}
+
+
+	public static function get_instance() {
+		return self::getInstance();
+	}
+
 
 
 	public function init() {

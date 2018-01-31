@@ -500,7 +500,7 @@ class FormFactory extends FormAbstract {
         }
 
         if ( !class_exists($class) ) {
-            $file = WPTOOLSET_FORMS_ABSPATH . "/classes/class.{$type}.php";
+            $file = apply_filters('wptoolset_load_field_class_file', WPTOOLSET_FORMS_ABSPATH . "/classes/class.{$type}.php", $type);
             if ( file_exists($file) ) {
                 require_once $file;
                 return $class;

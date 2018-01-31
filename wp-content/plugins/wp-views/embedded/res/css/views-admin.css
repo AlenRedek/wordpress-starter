@@ -867,6 +867,11 @@
 								text-align: center;
 								cursor: pointer;
 							}
+
+							.wpv-setting .code-editor-toolbar>ul>li>a,
+							.wpv-setting .code-editor-toolbar>ul>li>button {
+								margin: 0 2px 5px 2px;
+							}
 							
 							.wpv-setting .code-editor-toolbar button {
 								position: relative;

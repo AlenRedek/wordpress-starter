@@ -365,7 +365,8 @@ class Types_Admin_Taxonomies_List_Table extends WP_List_Table
              * update post types
              */
             if ( count($slugs_to_delete) ) {
-                $custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+	            $post_type_option = new Types_Utils_Post_Type_Option();
+                $custom_types = $post_type_option->get_post_types();
                 if ( !empty($custom_types) ) {
                     foreach ( $slugs_to_delete as $slug ) {
                         foreach ( $custom_types as $custom_key => $data ) {

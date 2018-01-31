@@ -1,8 +1,5 @@
 <?php
 
-if( ! class_exists( 'Toolset_User_Editors_Editor_Screen_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/screen/abstract.php' );
-
 class Toolset_User_Editors_Editor_Screen_Beaver_Frontend_Editor
 	extends Toolset_User_Editors_Editor_Screen_Abstract {
 
@@ -10,9 +7,10 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend_Editor
 	 * Let's activate "Views and Fields" button for any frontend-editor
 	 * Not only for our defined 'mediums' like Content Template
 	 */
-	public function __construct() {
-		if( ! array_key_exists( 'fl_builder', $_REQUEST ) )
+	public function initialize() {
+		if ( ! array_key_exists( 'fl_builder', $_REQUEST ) ) {
 			return;
+		}
 
 		/* disable Toolset Starters "No Content Template assigned" message */
 		add_filter( 'toolset_starter_show_msg_no_content_template', '__return_false' );
@@ -20,7 +18,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend_Editor
 		add_filter( 'wpv_filter_wpv_shortcodes_gui_localize_script', array( $this, 'add_beaver_inputs_to_dialog_for_any_input' ) );
 	}
 
-	public function isActive() {
+	public function is_active() {
 		if ( ! array_key_exists( 'fl_builder', $_REQUEST ) ) {
 			return false;
 		}
@@ -47,7 +45,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend_Editor
 	public function frontend_editor_template_file( $template_file ) {
 		global $post;
 
-		if( $post->post_type != $this->medium->getSlug() ) {
+		if( $post->post_type != $this->medium->get_slug() ) {
 			return $template_file;
 		}
 
@@ -68,7 +66,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend_Editor
 	}
 
 	private function get_frontend_editor_template_file( $ct_id ) {
-		$stored_template = get_post_meta( $ct_id, $this->editor->getOptionName(), true );
+		$stored_template = get_post_meta( $ct_id, $this->editor->get_option_name(), true );
 		$stored_template = array_key_exists( 'template_path', $stored_template )
 			? $stored_template['template_path']
 			: false;

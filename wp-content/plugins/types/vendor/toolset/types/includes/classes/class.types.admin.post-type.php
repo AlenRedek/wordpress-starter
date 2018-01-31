@@ -66,8 +66,8 @@ class Types_Admin_Post_Type extends Types_Admin_Page
         if ( empty($post_type_slug) ) {
             return wpcf_custom_types_default();
         }
-        $post_type = array();
-        $custom_types = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	    $post_type_option = new Types_Utils_Post_Type_Option();
+        $custom_types = $post_type_option->get_post_types();
         if ( isset( $custom_types[$post_type_slug] ) ) {
             $post_type = $custom_types[$post_type_slug];
             $post_type['update'] = true;

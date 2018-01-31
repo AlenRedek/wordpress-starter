@@ -148,7 +148,7 @@ class WPToolset_Field_Date extends FieldFactory
             'class' => $def_class . " " . $shortcode_class,
             'style' => 'display:inline;width:150px;position:relative;',
             'readonly' => 'readonly',
-            'title' => esc_attr( __( 'Select', 'wpv-views' ) ) . " Date"
+            'title' => esc_attr( __( 'Select date', 'wpv-views' ) )
         );
 
         if ( $output == 'bootstrap' ) {
@@ -242,7 +242,7 @@ class WPToolset_Field_Date extends FieldFactory
                     '#default_value' => $hour,
                     '#name' => '_' . $this->getName() . '[hour]',
                     '#attributes' => array(
-                        'title' => esc_attr(__('Select', 'wpv-views')) . " Date"
+                        'title' => esc_attr( __( 'Select hour', 'wpv-views' ) )
                     )
                 );
             } else {
@@ -254,7 +254,7 @@ class WPToolset_Field_Date extends FieldFactory
 			            '#default_value' => $hour,
 			            '#name' => $this->getName() . '[hour]',
 			            '#attributes' => array(
-				            'title' => esc_attr( __( 'Select', 'wpv-views' ) ) . " Date",
+				            'title' => esc_attr( __( 'Select hour', 'wpv-views' ) ),
 				            'class' => 'form-control',
 			            ),
 		            );
@@ -267,7 +267,7 @@ class WPToolset_Field_Date extends FieldFactory
 			            '#name' => $this->getName() . '[hour]',
 			            '#inline' => true,
 			            '#attributes' => array(
-				            'title' => esc_attr( __( 'Select', 'wpv-views' ) ) . " Date",
+				            'title' => esc_attr( __( 'Select hour', 'wpv-views' ) )
 			            ),
 		            );
 	            }
@@ -369,7 +369,7 @@ class WPToolset_Field_Date extends FieldFactory
                 '#type' => 'markup',
                 '#inline' => true,
                 '#markup' => sprintf(
-                    '<input type="button" class="button button-secondary js-wpt-date-clear wpt-date-clear" value="%s" %s/>', esc_attr(__('Clear', 'wpv-views')) . " Date",
+                    '<input type="button" class="button button-secondary js-wpt-date-clear wpt-date-clear" value="%s" %s/>', esc_attr( __( 'Clear', 'wpv-views' ) ),
                     /**
                      * show button if array is empty or timestamp in array is
                      * empty

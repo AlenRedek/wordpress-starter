@@ -4,7 +4,8 @@
  */
 
 function wpcf_admin_ctt_list_header() {
-	$custom_types = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	$post_type_option = new Types_Utils_Post_Type_Option();
+	$custom_types = $post_type_option->get_post_types();
 	$custom_taxonomies = get_option( WPCF_OPTION_NAME_CUSTOM_TAXONOMIES, array() );
 
 	if ( empty( $custom_types ) && empty( $custom_taxonomies ) ) {

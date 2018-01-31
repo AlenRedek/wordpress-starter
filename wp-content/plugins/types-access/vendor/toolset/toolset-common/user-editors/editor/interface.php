@@ -1,20 +1,23 @@
 <?php
 
-if( ! interface_exists( 'Toolset_User_Editors_Editor_Screen_Interface', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/screen/interface.php' );
+/**
+ * Editor class interface.
+ *
+ * @since 2.5.0
+ */
 
 interface Toolset_User_Editors_Editor_Interface {
-	public function requiredPluginActive();
-	public function addScreen( $id, Toolset_User_Editors_Editor_Screen_Interface $screen );
+	public function required_plugin_active();
+	public function add_screen( $id, Toolset_User_Editors_Editor_Screen_Interface $screen );
 	public function run();
 
 	/**
 	 * @return false|Toolset_User_Editors_Editor_Screen_Interface
 	 */
-	public function getScreenById( $id );
+	public function get_screen_by_id( $id );
 
-	public function getId();
-	public function getName();
-	public function getOptionName();
+	public function get_id();
+	public function get_name();
+	public function get_option_name();
 }
 

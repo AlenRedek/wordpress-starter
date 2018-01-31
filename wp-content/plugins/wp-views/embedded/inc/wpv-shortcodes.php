@@ -752,7 +752,7 @@ function wpv_login_form( $args = array() ) {
 		'redirect'			=> ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
 		'redirect_fail'		=> '',
 		'form_id'			=> 'loginform',
-		'label_username'	=> __( 'Username or Email' ),
+		'label_username'	=> __( 'Username or Email', 'wpv-views' ),
 		'label_password'	=> __( 'Password' ),
 		'label_remember'	=> __( 'Remember Me' ),
 		'label_log_in'		=> __( 'Log In' ),
@@ -914,7 +914,7 @@ function wpv_authenticate_errors ( $content, $args ) {
 		isset( $_REQUEST['fail_reason'] )
 		&& $_REQUEST['fail_reason'] != ''
 	) {
-		$error_string = __( '<strong>ERROR</strong>: ', 'wpv-views' );
+		$error_string = '<strong>' . __( 'ERROR', 'wpv-views' ) . '</strong>: ';
 
 		switch( $_REQUEST['fail_reason'] ) {
 			case 'invalid_username':
@@ -922,7 +922,7 @@ function wpv_authenticate_errors ( $content, $args ) {
 				break;
 
 			case 'incorrect_password':
-				$error_string .= __( 'The password you entered for the username <strong>' . $args['value_username'] . '</strong> is incorrect.', 'wpv-views' );
+				$error_string .= sprintf( __( 'The password you entered for the username %s is incorrect.', 'wpv-views' ), '<strong>' . $args['value_username'] . '</strong>' );
 				break;
 
 			case 'empty_password':
@@ -7239,6 +7239,13 @@ function wpv_filter_search_box_shortcode_register_gui_data( $views_shortcodes ) 
 }
 
 function wpv_filter_search_box_shortcode_get_gui_data( $parameters = array(), $overrides = array() ) {
+	
+	$post_search_content_options = WPV_Search_Frontend_Filter::get_post_search_content_options();
+	$post_search_content_options_gui = array();
+	foreach ( $post_search_content_options as $post_search_content_options_key => $post_search_content_options_data ) {
+		$post_search_content_options_gui[ $post_search_content_options_key ] = $post_search_content_options_data['label'];
+	}
+	
 	$data = array(
 		'attributes' => array(
 			'target-options' => array(
@@ -7249,10 +7256,7 @@ function wpv_filter_search_box_shortcode_get_gui_data( $parameters = array(), $o
 						'label'		=> __( 'Where to search', 'wpv-views'),
 						'type'		=> 'radio',
 						'default'	=> 'full_content',
-						'options'	=> array(
-							'full_content'	=> __( 'Post content and title' ),
-							'just_title'	=> __( 'Just post title', 'wpv-views' )
-						),
+						'options'	=> $post_search_content_options_gui,
 						'description' => __( 'Adjust whether you want to search only in post titles or also in posts content.', 'wpv-views' ),
 					),
 					'value_label' => array(

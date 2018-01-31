@@ -1,16 +1,27 @@
 <?php
 
-if( ! class_exists( 'Toolset_User_Editors_Medium_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/medium/abstract.php' );
-
 class Toolset_User_Editors_Medium_Content_Template
 	extends Toolset_User_Editors_Medium_Abstract {
+
+	/**
+	 * @var Toolset_Constants
+	 */
+	protected $constants;
 
 	protected $slug = 'view-template';
 	protected $allowed_templates;
 	protected $option_name_editor_choice = '_toolset_user_editors_editor_choice';
 
-	public function __construct() {
+	/**
+	 * Toolset_User_Editors_Medium_Content_Template constructor.
+	 *
+	 * @param Toolset_Constants|null $constants
+	 */
+	public function __construct( Toolset_Constants $constants = null ) {
+		$this->constants = $constants
+			? $constants
+			: new Toolset_Constants();
+
 		if( array_key_exists( 'ct_id', $_REQUEST ) )
 			$this->id  = (int) $_REQUEST['ct_id'];
 
@@ -20,11 +31,11 @@ class Toolset_User_Editors_Medium_Content_Template
 		add_filter( 'toolset_user_editors_backend_html_editor_select', array( $this, 'editor_selection' ) );
 	}
 
-	public function userEditorChoice() {
+	public function user_editor_choice() {
 		if( $this->user_editor_choice !== null )
 			return $this->user_editor_choice;
 
-		if( ! $this->getId() )
+		if( ! $this->get_id() )
 			return false;
 		
 		$content_template_id  = wpv_getget( 'ct_id' );
@@ -52,12 +63,12 @@ class Toolset_User_Editors_Medium_Content_Template
 	 * @since unknown
 	 * @since 2.3.0 Covers the frontend PHP templates for Content Templates assigned to single pages.
 	 */
-	public function getFrontendTemplates() {
+	public function get_frontend_templates() {
 		
 		if( $this->allowed_templates !== null )
 			return $this->allowed_templates;
 
-		$content_template_usages = $this->getUsages();
+		$content_template_usages = $this->get_usages();
 		$theme_template_files    = (array) wp_get_theme()->get_files( 'php', 1, true );
 
 		$wpv_options_patterns = array(
@@ -176,7 +187,7 @@ class Toolset_User_Editors_Medium_Content_Template
 		
 		// Make sure that the stored template path is in the allowed ones, or force it otherwise
 		$allowed_paths = wp_list_pluck( $this->allowed_templates, 'path' );
-		$current_template = get_post_meta( (int) $_GET['ct_id'], $this->manager->getActiveEditor()->getOptionName(), true );
+		$current_template = get_post_meta( (int) $_GET['ct_id'], $this->manager->get_active_editor()->get_option_name(), true );
 		
 		if ( isset( $_GET['ct_id'] ) ) {
 			if ( empty( $allowed_paths ) ) {
@@ -186,7 +197,7 @@ class Toolset_User_Editors_Medium_Content_Template
 					'preview_slug' => ''
 				);
 
-				update_post_meta( (int) $_GET['ct_id'], $this->manager->getActiveEditor()->getOptionName(), $settings_to_store );
+				update_post_meta( (int) $_GET['ct_id'], $this->manager->get_active_editor()->get_option_name(), $settings_to_store );
 			} else {
 				if (
 					! isset( $current_template['template_path'] ) 
@@ -200,7 +211,7 @@ class Toolset_User_Editors_Medium_Content_Template
 						'preview_slug' => $first_allowed_template['slug']
 					);
 
-				update_post_meta( (int) $_GET['ct_id'], $this->manager->getActiveEditor()->getOptionName(), $settings_to_store );
+				update_post_meta( (int) $_GET['ct_id'], $this->manager->get_active_editor()->get_option_name(), $settings_to_store );
 				}
 			}
 		
@@ -209,7 +220,7 @@ class Toolset_User_Editors_Medium_Content_Template
 		return $this->allowed_templates;
 	}
 
-	private function getUsages() {
+	private function get_usages() {
 		$views_settings	= WPV_Settings::get_instance();
 		$views_options	= $views_settings->get();
 		$views_options	= array_filter( $views_options, array( $this, 'filter_templates_by_template_id' ) );
@@ -266,14 +277,14 @@ class Toolset_User_Editors_Medium_Content_Template
 	/**
 	 * @param $content_function callable
 	 */
-	public function setHtmlEditorBackend( $content_function ) {
+	public function set_html_editor_backend( $content_function ) {
 		add_filter( 'toolset_user_editors_backend_html_active_editor', $content_function );
 	}
 
 
 	public function editor_selection() {
 		$control_editor_select = '';
-		$editors = $this->manager->getEditors();
+		$editors = $this->manager->get_editors();
 
 		if( count( $editors ) > 1 ) {
 			$admin_url = admin_url( 'admin.php?page=ct-editor&ct_id='. (int) $_GET['ct_id'] );
@@ -281,8 +292,14 @@ class Toolset_User_Editors_Medium_Content_Template
 			$editor_switch_buttons = array();
 
 			foreach( $editors as $editor ) {
-				if ( $editor->getId() != $this->manager->getActiveEditor()->getId() ) {
-					$editor_switch_buttons[] = '<a class="button button-secondary js-wpv-ct-apply-user-editor" href="'.$admin_url.'&ct_editor_choice='.$editor->getId().'">'.sprintf( __( 'Edit with %1$s', 'wpv-views' ), $editor->getName() ).'</a>';
+				if ( $editor->get_id() != $this->manager->get_active_editor()->get_id() ) {
+					if (
+						'native' == $editor->get_id()
+						&& ! $this->constants->defined( 'TOOLSET_SHOW_NATIVE_EDITOR_BUTTON_FOR_CT' )
+					) {
+						continue;
+					}
+					$editor_switch_buttons[] = '<a class="button button-secondary js-wpv-ct-apply-user-editor" href="'.$admin_url.'&ct_editor_choice='.$editor->get_id().'">'.sprintf( __( 'Edit with %1$s', 'wpv-views' ), $editor->get_name() ).'</a>';
 				}
 			}
 
@@ -295,8 +312,8 @@ class Toolset_User_Editors_Medium_Content_Template
 		return $control_editor_select;
 	}
 
-	public function pageReloadAfterBackendSave() {
-		add_action( 'admin_print_footer_scripts', array( $this, '_actionPageReloadAfterBackendSave' ) );
+	public function page_reload_after_backend_save() {
+		add_action( 'admin_print_footer_scripts', array( $this, '_action_page_reload_after_backend_save' ) );
 	}
 	
 	/**
@@ -304,7 +321,7 @@ class Toolset_User_Editors_Medium_Content_Template
 	* ALso, this should NOT happen any time a CT setting is saved, just when a CT usage chnage is...
 	*/
 	
-	public function _actionPageReloadAfterBackendSave() {
+	public function _action_page_reload_after_backend_save() {
 		echo "<script>jQuery( document ).on('ct_saved', function() { location.reload(); });</script>";
 	}
 }

@@ -1,5 +1,5 @@
 jQuery(document).ready(function(){
-    jQuery('.wpcf-collapsible-button').live('click', function() {
+    jQuery( 'body' ).on( 'click', '.wpcf-collapsible-button', function() {
         var toggleButton = jQuery(this);
         var toggleDiv = jQuery('#'+jQuery(this).attr('id')+'-toggle');
         toggleDiv.slideToggle(function(){

@@ -1,23 +1,27 @@
 <?php
 
-
-if( ! class_exists( 'Toolset_User_Editors_Editor_Screen_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/screen/abstract.php' );
-
 class Toolset_User_Editors_Editor_Screen_Visual_Composer_Frontend
 	extends Toolset_User_Editors_Editor_Screen_Abstract {
 
-
-	public function __construct() {
-		// make sure all vc shortcodes are loaded (needed for ajax pagination)
-		if ( method_exists( 'WPBMap', 'addAllMappedShortcodes' ) )
-			WPBMap::addAllMappedShortcodes();
+	public function initialize() {
+		add_action( 'init', array( $this, 'map_all_vc_shortcodes' ) );
 
 		add_action( 'the_content', array( $this, 'render_custom_css' ) );
 
 		// this adds the [Fields and Views] to editor of visual composers text element
 		if( array_key_exists( 'action', $_POST ) && $_POST['action'] == 'vc_edit_form' ) {
 			add_filter( 'wpv_filter_dialog_for_editors_requires_post', '__return_false' );
+		}
+	}
+
+	/**
+	 * We need to force the registration of all the Visual Composer shortcodes in order to be rendered properly upon CT
+	 * rendering.
+	 */
+	public function map_all_vc_shortcodes() {
+		// make sure all vc shortcodes are loaded (needed for ajax pagination)
+		if ( method_exists( 'WPBMap', 'addAllMappedShortcodes' ) ) {
+			WPBMap::addAllMappedShortcodes();
 		}
 	}
 

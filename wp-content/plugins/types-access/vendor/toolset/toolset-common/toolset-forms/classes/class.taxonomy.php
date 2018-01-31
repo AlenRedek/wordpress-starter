@@ -18,7 +18,6 @@ class WPToolset_Field_Taxonomy extends WPToolset_Field_Textfield {
         static $script_localization;
         $static_localization_script = &$script_localization;
         unset( $script_localization );
-
         $this->objValues = array();
 
         // Compatibility with CRED 1.8.4 and above
@@ -31,10 +30,10 @@ class WPToolset_Field_Taxonomy extends WPToolset_Field_Textfield {
 
         /**
          * toolset_filter_taxonomy_terms
-         * 
+         *
          * Terms with all fields as they are returned from wp_get_post_terms()
          * @since 1.8.8
-         * 
+         *
          * @param array terms
          * @param string name field
          */

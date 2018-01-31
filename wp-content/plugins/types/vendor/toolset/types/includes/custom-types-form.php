@@ -66,7 +66,8 @@ function wpcf_admin_custom_types_form_submit($form)
     }
 
     $data['slug'] = $post_type;
-    $custom_types = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	$post_type_option = new Types_Utils_Post_Type_Option();
+    $custom_types = $post_type_option->get_post_types();
     $protected_data_check = array();
 
     if ( wpcf_is_builtin_post_types($data['slug']) ) {

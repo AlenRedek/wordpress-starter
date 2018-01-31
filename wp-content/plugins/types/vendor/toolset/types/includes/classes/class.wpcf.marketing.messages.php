@@ -117,7 +117,8 @@ class WPCF_Types_Marketing_Messages extends WPCF_Types_Marketing
                 is_array($_GET)
                 && array_key_exists('wpcf-post-type', $_GET)
             ) {
-                $types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+            	$post_type_option = new Types_Utils_Post_Type_Option();
+                $types = $post_type_option->get_post_types();
                 $candidate_key = sanitize_text_field( $_GET['wpcf-post-type'] );
                 if ( array_key_exists($candidate_key, $types ) ) {
                     $text = preg_replace( '/PPP/', $types[$candidate_key]['labels']['name'], $text);
@@ -151,7 +152,6 @@ class WPCF_Types_Marketing_Messages extends WPCF_Types_Marketing
                     }
                     $text = preg_replace( '/TTT/', $ttt, $text);
                     if ( array_key_exists('supports', $taxonomies[$candidate_key]) ) {
-                        $types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
                         $post_type = array_keys($taxonomies[$candidate_key]['supports']);
                         if ( !empty($post_type) ) {
                             $post_type = $post_type[array_rand($post_type)];

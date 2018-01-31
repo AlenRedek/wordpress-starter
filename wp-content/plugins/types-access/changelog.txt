@@ -1,3 +1,12 @@
+2.4.3.2
+* Fixed an issue with editor permissions to create new post
+* Added next and previous post links when Access permissions are applied
+* Added dashes into the list of allowed symbols in custom capabilities
+* Fixed issue when default custom error for no read permission is set
+
+2.4.3.1
+* Added ability to use theme settings in layout that is set as custom error
+
 2.4.3
 * Fixed an issue with removing level capabilities from custom roles
 * Fixed a caching issue when detecting the current page ID

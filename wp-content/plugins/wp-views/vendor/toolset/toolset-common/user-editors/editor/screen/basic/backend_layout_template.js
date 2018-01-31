@@ -15,19 +15,25 @@
 
 var WPViews = WPViews || {};
 
+if( typeof _ !== 'undefined' && _.templateSettings )
+{
+    _.templateSettings = {
+        escape: /\{\{([^\}]+?)\}\}(?!\})/g,
+        evaluate: /<#([\s\S]+?)#>/g,
+        interpolate: /\{\{\{([\s\S]+?)\}\}\}/g
+    };
+}
+
 WPViews.ViewEditScreenUserEditorBasic = function( $ ) {
 	
 	var self = this;
 	
 	self.selector = '.js-wpv-ct-listing';
-	
-	self.overlay			= "<div class='wpv-setting-overlay js-wpv-layout-template-overlay' style='top:36px'>";
-	self.overlay				+= "<div class='wpv-transparency' style='opacity:0.9'></div>";
-	self.overlay				+= "<div class='wpv-layout-template-overlay-info toolset-alert toolset-alert-info'>";
-	self.overlay					+= "<p style='font-size:2.4em;text-align:center;line-height:1.8em;'><i class='fa fa-cog fa-spin'></i> " + toolset_user_editors_basic_layout_template_i18n.template_overlay.title + "</p>";
-	self.overlay				+= "</div>";
-	self.overlay			+= "</div>";
-	self.overlayContainer	= $( self.overlay );
+    self.template_selector = '#js-wpv-layout-template-saving-overlay-template';
+    self.overlayContainer = _.template( jQuery( self.template_selector ).html() );
+    self.i18n_data = {
+        title: toolset_user_editors_basic_layout_template_i18n.template_overlay.title,
+    };
 	
 	self.initBasicEditors = function() {
 		$( self.selector ).each( function() {
@@ -90,7 +96,7 @@ WPViews.ViewEditScreenUserEditorBasic = function( $ ) {
 		item.find( '.js-wpv-ct-apply-user-editor' ).prop( 'disabled', true );
 		item.removeClass( 'js-wpv-ct-listing-user-editor-inited' );
 		item.find( '.js-wpv-layout-template-overlay' ).remove();
-		item.prepend( self.overlayContainer.clone() );
+        item.prepend( self.overlayContainer( self.i18n_data ) );
 		item.find( '.CodeMirror' ).css( { 'height' : '0px'} );
 	};
 	
@@ -177,5 +183,5 @@ WPViews.ViewEditScreenUserEditorBasic = function( $ ) {
 };
 
 jQuery( document ).ready( function( $ ) {
-    WPViews.ViewEditScreenUserEditorBasicInstance = new WPViews.ViewEditScreenUserEditorBasic( $ );
+	WPViews.ViewEditScreenUserEditorBasicInstance = new WPViews.ViewEditScreenUserEditorBasic( $ );
 });

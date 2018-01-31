@@ -11,12 +11,12 @@ var OTGAccess = OTGAccess || {};
 OTGAccess.AccessSettings = function( $ ) {
 
 	// @todo add proper mesage management
-
+	
 	var self = this;
 	var myHistory = [];
 	self.spinner = '<span class="wpcf-loading ajax-loader js-otg-access-spinner"></span>';
 	self.section_status = '';
-
+	
 	self.spinner_placeholder = $(
 		'<div style="min-height: 150px;">' +
 		'<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; ">' +
@@ -49,13 +49,13 @@ OTGAccess.AccessSettings = function( $ ) {
 			$( container ).removeClass( reason );
 		}, 500 );
 	};
-
+	
 	/**
 	* Tab management
 	*
 	* @since 2.0
 	*/
-
+		
 	$( document ).on( 'click', '.js-otg-access-nav-tab', function( e ) {
 		e.preventDefault();
 		var thiz = $( this ),
@@ -127,14 +127,14 @@ OTGAccess.AccessSettings = function( $ ) {
 		});
 	}
 	toolset_access_fix_cred_permission_tables();
-
+	
 	$( document ).on( 'click', '.js-otg-access-manual-tab', function( e ) {
 		e.preventDefault();
 		var target = $( this ).data( 'target' ),
 		target_tab = $( '.js-otg-access-nav-tab[data-target=' + target + ']' );
 		target_tab.trigger( 'click' );
 	});
-
+	
 	/**
 	* load_permission_tables
 	*
@@ -145,7 +145,7 @@ OTGAccess.AccessSettings = function( $ ) {
 	* @since unknown
 	* @since 2.1		Renamed from otg_access_load_permission_tables and moved to a module method
 	*/
-
+	
 	self.load_permission_tables = function( section ) {
 		var data = {
 			action: 'wpcf_access_load_permission_table',
@@ -168,17 +168,17 @@ OTGAccess.AccessSettings = function( $ ) {
 			}
 		});
 	}
-
+	
 	/**
 	* Invalidate tabs
 	*
 	* @since 2.1
 	*/
-
+		
 	self.available_tabs = $( '.js-otg-access-nav-tab' ).map( function() {
 		return $( this ).data( 'target' );
 	}).get();
-
+	
 	$( document ).on( 'js_event_otg_access_settings_section_saved', function( event, section, tab ) {
 		var tabs_to_invalidate = [];
 		switch ( tab ) {
@@ -192,30 +192,30 @@ OTGAccess.AccessSettings = function( $ ) {
 		}
 		self.invalidate_tabs( tabs_to_invalidate );
 	});
-
+	
 	$( document ).on( 'js_event_types_access_custom_group_updated js_event_types_access_wpml_group_updated', function() {
 		var tabs_to_invalidate = [];
 		tabs_to_invalidate.push( 'post-type' );
 		self.invalidate_tabs( tabs_to_invalidate );
 	});
-
+	
 	$( document ).on( 'js_event_types_access_custom_roles_updated', function() {
 		var tabs_to_invalidate = _.without( self.available_tabs, 'custom-roles' );
 		self.invalidate_tabs( tabs_to_invalidate );
 	});
-
+	
 	self.invalidate_tabs = function( tabs ) {
 		$.each( tabs, function( index, value ) {
 			$( '.js-otg-access-content .js-otg-access-settings-section-for-' + value ).remove();
 		});
 	};
-
+	
 	/**
 	* Sections toggle
 	*
 	* @since 2.0
 	*/
-
+	
 	$( document ).on( 'click', '.js-otg-access-settings-section-item-toggle', function() {
 		var thiz = $( this ),
 		target = thiz.data( 'target' );
@@ -244,13 +244,13 @@ OTGAccess.AccessSettings = function( $ ) {
             success:	function( response ) {}
         });
 	}
-
+	
 	/**
-	* Save settings section
+	* Save settings section 
 	*
 	* @since 2.0
 	*/
-
+	
 	$( document ).on( 'click', '.js-otg-access-settings-section-save', function( e ) {
         e.preventDefault();
 		var thiz			= $( this );
@@ -287,7 +287,7 @@ OTGAccess.AccessSettings = function( $ ) {
         });
         return false;
     });
-
+	
 	$( document ).on( 'js_event_otg_access_settings_section_saved', function( event, section, tab ) {
 		self.glow_container( section, 'otg-access-settings-section-item-saved' );
 		var has_enable = section.find( '.js-wpcf-enable-access' );
@@ -306,13 +306,13 @@ OTGAccess.AccessSettings = function( $ ) {
 			}
 		}
 	});
-
+	
 	/**
 	* Custom Roles management
 	*
 	* @since 2.0
 	*/
-
+	
 	$( document ).on( 'click', '.js-otg-access-add-new-role', function( e ) {
 		e.preventDefault();
 
@@ -386,13 +386,13 @@ OTGAccess.AccessSettings = function( $ ) {
     $( document ).on( 'click', '#wpcf-access-delete-role', function() {
         $(this).next().show();
     });
-
+	
 	/**
 	* Initialize some data on tab load, like administrators checkboxes and taxonomies special inputs.
 	*
 	* @since 2.0
 	*/
-
+	
 	self.init_inputs = function( container ) {
 		// ADD DEPENDENCY MESSAGE - to review
 		$( '.wpcf-access-type-item', container )
@@ -435,14 +435,14 @@ OTGAccess.AccessSettings = function( $ ) {
 			}
 		});
 	};
-
+	
 	$( document ).on( 'js_event_types_access_permission_table_loaded', function( event, data ) {
 		self.init_inputs( $( '.js-otg-access-settings-section-for-' + data.section ) );
 		if ( self.access_control_dialog.dialog( 'isOpen' ) === true ) {
 			self.access_control_dialog.dialog('close');
 		}
 	});
-
+	
 	/**
 	* init_dialogs
 	*
@@ -450,7 +450,7 @@ OTGAccess.AccessSettings = function( $ ) {
 	*
 	* @since 2.1
 	*/
-
+	
 	self.init_dialogs = function() {
 		$('body').append('<div id="js-wpcf-access-dialog-container" class="toolset-shortcode-gui-dialog-container wpcf-access-dialog-container js-wpcf-access-dialog-container"></div>');
 		self.dialog_callback = '';
@@ -470,7 +470,7 @@ OTGAccess.AccessSettings = function( $ ) {
 						.addClass('button-secondary')
 						.removeClass('button-primary ui-button-disabled ui-state-disabled')
 						.prop('disabled', true)
-						.css({'marginLeft': '15px', 'display': 'inline'});
+						.css({'marginLeft': '15px', 'marginRight': '0px', 'display': 'inline', 'float': 'right'});
 				$('.js-wpcf-access-gui-close').css('display', 'inline');
 				$('.js-wpcf-access-process-button').removeClass('js-wpcf-access-process-button-red');
 				$('.js-otg-access-spinner').remove();
@@ -500,14 +500,14 @@ OTGAccess.AccessSettings = function( $ ) {
 			]
 		});
 	};
-
+	
 	self.init = function() {
 		self.init_inputs( $( '.js-otg-access-content' ) );
 		self.init_dialogs();
     };
-
+	
 	self.init();
-
+	
 };
 
 jQuery( document ).ready( function( $ ) {
@@ -864,7 +864,7 @@ jQuery( document ).ready( function( $ ) {
 
 
         $(document).on('click', '.js-wpcf-new-cap-add', function (e) {
-            var test_cap_name = /^[a-z0-9_]*$/.test($('#js-wpcf-new-cap-slug').val());
+            var test_cap_name = /^[a-z0-9_-]*$/.test($('#js-wpcf-new-cap-slug').val());
             $('.js-wpcf-create-new-cap-form').find('.toolset-alert').remove();
             if (test_cap_name === false) {
                 $('.js-wpcf-create-new-cap-form').append('<p class="toolset-alert toolset-alert-error" style="display: block; opacity: 1;">' + $(this).data('error') + '</p>');

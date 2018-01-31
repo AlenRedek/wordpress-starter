@@ -1,8 +1,4 @@
 <?php
-
-if( ! class_exists( 'Toolset_User_Editors_Editor_Screen_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/screen/abstract.php' );
-
 class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 	extends Toolset_User_Editors_Editor_Screen_Abstract {
 
@@ -11,15 +7,15 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 	private $beaver_post_id_stack;
 	private $beaver_post_id_assets_rendered;
 
-	public function __construct() {
+	public function initialize() {
 		
 		// Pre-process Views shortcodes in the frontend editor and its AJAX update, as well as in the frontend rendering
 		// Make sure the $authordata global is correctly set
 		add_filter( 'fl_builder_before_render_shortcodes',		array( $this, 'before_render_shortcodes' ) );
 		
 		// Do nothing else in an admin, frontend editing and frontend editing AJAX refresh
-		if ( 
-			is_admin() 
+		if (
+			( is_admin() && ! wp_doing_ajax() )
 			|| isset( $_GET['fl-builder'] ) 
 			|| isset( $_POST['fl_builder_data'] ) 
 		) {
@@ -47,7 +43,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 
 	}
 
-	public function isActive() {
+	public function is_active() {
 		return true;
 	}
 	
@@ -73,9 +69,9 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 	
 	public function filter_support_medium( $allowed_types ) {
 		if( ! is_array( $allowed_types ) ) {
-			return array( $this->medium->getSlug() );
+			return array( $this->medium->get_slug() );
 		}
-		$medium_slug = $this->medium->getSlug();
+		$medium_slug = $this->medium->get_slug();
 		if ( ! in_array( $medium_slug, $allowed_types ) ) {
 			$allowed_types[] = $medium_slug;
 		}
@@ -108,18 +104,35 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 			// There is a CT applied, either on single/archive pages or on a wpv-post-body shortcode
 			// Render the BB content of the CT, if any, and prevent Beaver from overwriting it
 			
-			$editor_choice = get_post_meta( $template_selected, $this->medium->getOptionNameEditorChoice(), true );
+			$editor_choice = get_post_meta( $template_selected, $this->medium->get_option_name_editor_choice(), true );
 			
 			if (
 				$editor_choice
-				&& $editor_choice == $this->editor->getId()
+				&& $editor_choice == $this->editor->get_id()
 			) {
 				
 				FLBuilderModel::update_post_data( 'post_id', $template_selected );
 				
 				$this->beaver_post_id_stack[] = $template_selected;
+
+				// In order to render the content template output, Beaver Builder checks, among others, the output of the "in_the_loop" function.
+				// When we try to render the content template output but have the "$wp_query->in_the_loop" set to false, the content template
+				// output won't get the Beaver Builder touch.
+				// Here we are faking being in the loop and reverting the setting back to it's previous state right after the content template output
+				// is produced.
+				global $wp_query;
+				$revert_in_the_loop = false;
+				if ( ! $wp_query->in_the_loop ) {
+					$revert_in_the_loop = true;
+					// Fake being in the loop.
+					$wp_query->in_the_loop = true;
+				}
 				
 				$content = FLBuilder::render_content( $content );
+
+				if ( $revert_in_the_loop ) {
+					$wp_query->in_the_loop = false;
+				}
 				
 				if ( ! in_array( $template_selected, $this->beaver_post_id_assets_rendered ) ) {
 					FLBuilder::enqueue_layout_styles_scripts();
@@ -151,7 +164,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 				
 				$content = FLBuilder::render_content( $content );
 				
-				if ( ! in_array( $template_selected, $this->beaver_post_id_assets_rendered ) ) {
+				if ( isset( $template_selected ) && ! in_array( $template_selected, $this->beaver_post_id_assets_rendered ) ) {
 					//FLBuilder::enqueue_layout_styles_scripts();
 					$this->beaver_post_id_assets_rendered[] = $this_id;
 				}
@@ -204,13 +217,13 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 	}
 
 	private function fetch_active_medium_id() {
-		$medium_id = $this->medium->getId();
+		$medium_id = $this->medium->get_id();
 
-		$editor_choice = get_post_meta( $medium_id, $this->medium->getOptionNameEditorChoice(), true );
+		$editor_choice = get_post_meta( $medium_id, $this->medium->get_option_name_editor_choice(), true );
 
 		if(
 			$editor_choice
-		    && $editor_choice == $this->editor->getId()
+		    && $editor_choice == $this->editor->get_id()
 		    && isset( $medium_id ) && $medium_id
 		)
 			return $medium_id;

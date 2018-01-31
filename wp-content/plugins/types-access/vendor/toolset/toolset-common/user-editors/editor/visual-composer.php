@@ -1,7 +1,11 @@
 <?php
-
-if( ! class_exists( 'Toolset_User_Editors_Editor_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/abstract.php' );
+/**
+ * Editor class for the Visual Composer.
+ *
+ * Handles all the functionality needed to allow the Visual Composer to work with Content Template editing.
+ *
+ * @since 2.5.0
+ */
 
 class Toolset_User_Editors_Editor_Visual_Composer
 	extends Toolset_User_Editors_Editor_Abstract {
@@ -16,7 +20,7 @@ class Toolset_User_Editors_Editor_Visual_Composer
 	 */
 	protected $minimum_version = '4.11';
 
-	public function requiredPluginActive() {
+	public function required_plugin_active() {
 		
 		if ( ! apply_filters( 'toolset_is_views_available', false ) ) {
 			return false;
@@ -63,7 +67,7 @@ class Toolset_User_Editors_Editor_Visual_Composer
 	 * @return bool
 	 */
 	public function support_medium( $default, $type ) {
-		if( $type == $this->medium->getSlug() )
+		if( $type == $this->medium->get_slug() )
 			return true;
 
 		return $default;

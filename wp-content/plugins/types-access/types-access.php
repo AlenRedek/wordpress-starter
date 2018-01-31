@@ -5,12 +5,12 @@ Plugin URI: http://wp-types.com/home/types-access/?utm_source=accessplugin&utm_c
 Description: User access control and roles management
 Author: OnTheGoSystems
 Author URI: http://www.onthegosystems.com/
-Version: 2.4.3
+Version: 2.4.3.2
 */
 
 
 // current version
-define( 'TACCESS_VERSION', '2.4.3' );
+define( 'TACCESS_VERSION', '2.4.3.2' );
 
 if ( function_exists('realpath') ) {
 	define( 'TACCESS_PLUGIN_PATH', realpath( dirname( __FILE__ ) ) );
@@ -403,8 +403,8 @@ function otg_access_plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $
 	if ( $plugin_file == $this_plugin ) {
 		$plugin_meta[] = sprintf(
 				'<a href="%s" target="_blank">%s</a>',
-				'https://wp-types.com/version/access-2-4-3/?utm_source=accessplugin&utm_campaign=access&utm_medium=release-notes-plugins-list&utm_term=Access 2.4.3 release notes',
-				__( 'Access 2.4.3 release notes', 'wpcf-access' )
+				'https://wp-types.com/version/access-2-4-3-2/?utm_source=accessplugin&utm_campaign=access&utm_medium=release-notes-plugins-list&utm_term=Access 2.4.3.2 release notes',
+				__( 'Access 2.4.3.2 release notes', 'wpcf-access' )
 			);
 	}
 	return $plugin_meta;

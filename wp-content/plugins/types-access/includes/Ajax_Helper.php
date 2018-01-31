@@ -357,7 +357,7 @@ final class Access_Ajax_Helper
 		$model->updateAccessTypes( $settings_access );
         $_post_types=Access_Helper::wpcf_object_to_array( $model->getPostTypes() );
         $wpml_active_languages = apply_filters( 'wpml_active_languages', '', array('skip_missing' => 0) );
-        $languages_list = '';
+        $languages_list = array();
         foreach( $languages as $lang => $lang_data ){
                     $languages_list[] = $wpml_active_languages[$lang]['native_name'];
         }
@@ -2480,7 +2480,7 @@ final class Access_Ajax_Helper
 				<p class="wpcf-access-buttons-wrap wpcf-access-buttons-wrap-left">
 					<button class="button js-wpcf-new-cap-cancel"><?php _e( 'Cancel', 'wpcf-access' ) ?></button>
 					<button class="button button-primary js-wpcf-new-cap-add" disabled="disabled"
-					data-error="<?php echo esc_attr( __( 'Only lowercase letters, numbers and _ allowed in capability name', 'wpcf-access' ) ) ?>">
+					data-error="<?php echo esc_attr( __( 'Only lowercase letters, numbers, _ and - allowed in capability name', 'wpcf-access' ) ) ?>">
 					<?php _e( 'Add', 'wpcf-access' ) ?></button>
 					<span class="ajax-loading spinner js-new-cap-spinner"></span>
 				</p>

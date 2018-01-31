@@ -211,12 +211,6 @@ class WPV_Compatibility_CRED {
 			// However, if using the id attribute, we might need to adjust it to the translated post for the given ID
 			$post_id = apply_filters( 'translate_object_id', $post_orig_id, $post->post_type, true, null );
 			
-			$post_status = ( $post_orig_id == $post_id ) ? $post->post_status : get_post_status( $post_id );
-			
-			if ( 'publish' != $post_status ) {
-				return $out;
-			}
-			
 			$post_type = ( $post_orig_id == $post_id ) ? $post->post_type : get_post_type( $post_id );
 			
 			if ( $post_type != $form_settings['post']['post_type'] ) {
@@ -237,8 +231,39 @@ class WPV_Compatibility_CRED {
 			) {
 				return $out;
 			}
+			
+			$post_status = ( $post_orig_id == $post_id ) ? $post->post_status : get_post_status( $post_id );
+			$supported_extra_post_statuses = array( 'future', 'draft', 'pending', 'private' );
+			/**
+			 * Filter the array of allowed post statuses to be supported by the Toolst edit post links.
+			 *
+			 * By default, we display edit links for published posts, as well as for posts that are not published but:
+			 * - belong to any of those supported statuses, and
+			 * - are editable by the current user.
+			 *
+			 * @param array $supported_extra_post_statuses List of supported statuses
+			 * @param int   $form_id                       ID of the form that this link is supposed to use
+			 *
+			 * @since 2.5
+			 */
+			$supported_extra_post_statuses = apply_filters( 'toolset_filter_edit_post_link_extra_statuses_allowed', $supported_extra_post_statuses, $form_id );
+			$link = false;
+			
+			if ( 'publish' == $post_status ) {
+				$link = get_permalink( $post_id );
+			} else if ( 
+				in_array( $post_status, $supported_extra_post_statuses ) 
+				&& current_user_can( 'edit_post', $post_id ) 
+				&& function_exists( 'get_preview_post_link' )
+				
+			) {
+				$link = get_preview_post_link( $post_id );
+			}
 
-			$link = get_permalink( $post_id );
+			if ( ! $link ) {
+				return $out;
+			}
+			
 			$link = add_query_arg( $link_attributes, $link );
 			
 			$target = in_array( $atts['target'], array( 'top', 'blank' ) ) ? ( '_' . $atts['target'] ) : '';

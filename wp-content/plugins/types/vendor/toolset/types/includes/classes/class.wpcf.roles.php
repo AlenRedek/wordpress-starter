@@ -342,7 +342,8 @@ class WPCF_Roles
 
     public static function user_can_edit_custom_post_by_slug($slug)
     {
-        $entries = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array());
+	    $post_type_option = new Types_Utils_Post_Type_Option();
+        $entries = $post_type_option->get_post_types();
         if (isset($entries[$slug])) {
             return self::user_can_edit('custom-post-type', $entries[$slug]);
         }

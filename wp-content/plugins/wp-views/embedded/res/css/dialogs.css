@@ -620,7 +620,7 @@
 	margin-top: 5px;
 }
 
-.toolset-shortcode-gui-dialog-container.ui-dialog-content {
+.toolset-shortcode-gui-dialog-container.wpv-shortcode-gui-dialog-container.ui-dialog-content {
 	padding: 0;
 }
 

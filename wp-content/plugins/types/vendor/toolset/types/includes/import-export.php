@@ -649,11 +649,14 @@ function wpcf_admin_import_export_settings($data)
         '#after' => '<br />',
     );
     libxml_use_internal_errors( true );
+
+    // remove any non UTF-8 characters (see types-596)
+    $data = preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', '', $data);
     $data = simplexml_load_string( $data );
     if ( !$data ) {
         echo '<div class="message error"><p>' . __( 'Error parsing XML', 'wpcf' ) . '</p></div>';
         foreach ( libxml_get_errors() as $error ) {
-            echo '<div class="message error"><p>' . $error->message . '</p></div>';
+            echo '<div class="message error"><p> ' . sprintf( __( 'Error on line %s', 'wpcf' ), $error->line ) . ': '. $error->message . '</p></div>';
         }
         libxml_clear_errors();
         return false;
@@ -888,7 +891,8 @@ function wpcf_admin_import_export_settings($data)
             '#type' => 'markup',
             '#markup' => '<h2>' . __( 'Post Types to be added/updated', 'wpcf' ) . '</h2>',
         );
-        $types_existing = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	    $post_type_option = new Types_Utils_Post_Type_Option();
+        $types_existing = $post_type_option->get_post_types();
         $types_check = array();
         $types_to_be_deleted = array();
         foreach ( $data->types->type as $type ) {

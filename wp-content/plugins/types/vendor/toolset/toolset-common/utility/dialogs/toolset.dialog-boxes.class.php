@@ -4,11 +4,13 @@ if ( ! class_exists( 'Toolset_DialogBoxes', false ) ) {
 
 	/**
 	 * Class Toolset_DialogBoxes
-	 * 
+	 *
 	 * Note: Consider using Toolset_Twig_Dialog_Box if you're using the new Toolset GUI base.
 	 */
 	class Toolset_DialogBoxes
 	{
+
+		const SCRIPT_DIALOG_BOXES = 'ddl-dialog-boxes';
 
 		private $screens;
 
@@ -36,7 +38,13 @@ if ( ! class_exists( 'Toolset_DialogBoxes', false ) ) {
 
 		function register_scripts( $scripts ) {
 			$scripts['ddl-abstract-dialog']	= new Toolset_Script( 'ddl-abstract-dialog', TOOLSET_COMMON_URL . '/utility/dialogs/js/views/abstract/ddl-abstract-dialog.js', array( 'jquery', 'wpdialogs', Toolset_Assets_Manager::SCRIPT_UTILS ), '0.1', false );
-			$scripts['ddl-dialog-boxes']	= new Toolset_Script( 'ddl-dialog-boxes', TOOLSET_COMMON_URL . '/utility/dialogs/js/views/abstract/dialog-view.js', array('jquery','ddl-abstract-dialog', 'underscore', 'backbone'), '0.1', false );
+			$scripts[ self::SCRIPT_DIALOG_BOXES ] = new Toolset_Script(
+				self::SCRIPT_DIALOG_BOXES,
+				TOOLSET_COMMON_URL . '/utility/dialogs/js/views/abstract/dialog-view.js',
+				array('jquery', 'ddl-abstract-dialog', 'underscore', 'backbone'),
+				'0.1',
+				false
+			);
 
 			return $scripts;
 		}
@@ -55,7 +63,7 @@ if ( ! class_exists( 'Toolset_DialogBoxes', false ) ) {
 				)
 			);
 
-			do_action(	'toolset_enqueue_scripts', apply_filters( 'ddl-dialog-boxes_enqueue_scripts',array( 'ddl-dialog-boxes' ) ) );
+			do_action( 'toolset_enqueue_scripts', apply_filters( 'ddl-dialog-boxes_enqueue_scripts', array( self::SCRIPT_DIALOG_BOXES ) ) );
 		}
 
 		public function template() {

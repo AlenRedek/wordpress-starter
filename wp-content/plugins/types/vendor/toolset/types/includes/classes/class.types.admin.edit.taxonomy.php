@@ -914,7 +914,8 @@ class Types_Admin_Edit_Taxonomy extends Types_Admin_Page
         /**
          * Sync with post types
          */
-        $post_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	    $post_type_option = new Types_Utils_Post_Type_Option();
+        $post_types = $post_type_option->get_post_types();
         foreach ( $post_types as $id => $type ) {
             if ( !empty( $data['supports'] ) && array_key_exists( $id, $data['supports'] ) ) {
                 if ( empty($post_types[$id]['taxonomies'][$data['slug']]) ) {

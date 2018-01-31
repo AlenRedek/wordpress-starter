@@ -165,18 +165,21 @@ WP_Toolset.HelpVideoView = Backbone.View.extend({
     handle_video:function(){
         var self = this;
         var video = jQuery('.js-video-player');
-        self.player = new MediaElementPlayer( video, {
+        if( video.length === 0 ) return; // if no player instances in DOM then do nothing
+        self.player = new MediaElementPlayer( video[0], {
             alwaysShowHours: false,
             width:self.model.get('width'),
             height:self.model.get('height'),
-            success: function (mediaElement, domObject) {
-                mediaElement.addEventListener('loadeddata', function(e) {
+            success: function (mediaElement, domObject, instance) {
+                var playerContainer = instance.getElement(instance.container);
+                var startPlayer = function(e) {
                     mediaElement.pause();
                     self.hidden_wrap.fadeIn(self.DELAY, function(event){
                         self.setPlay( mediaElement );
-
+                        e.target.removeEventListener( 'controlsshown', startPlayer, false );
                     });
-                }, false);
+                };
+                playerContainer.addEventListener('controlsshown', startPlayer, false);
 
                 mediaElement.addEventListener('ended', function(e) {
                     self.setPlay( mediaElement, true );
@@ -187,7 +190,7 @@ WP_Toolset.HelpVideoView = Backbone.View.extend({
             },
             // fires when a problem is detected
             error: function () {
-
+                console.log( 'error', arguments );
             }
         } );
     },
@@ -215,9 +218,7 @@ WP_Toolset.HelpVideoView = Backbone.View.extend({
             event.stopImmediatePropagation();
             event.preventDefault();
             jQuery('.mejs-mediaelement').loaderOverlay('hide',{onRemove:function(){
-
                 mediaElement.play();
-
             }});
         });
 

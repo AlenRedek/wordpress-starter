@@ -74,7 +74,15 @@ class WPToolset_Field_Wysiwyg extends WPToolset_Field_Textarea {
         global $wp_styles;
         $wp_styles->do_concat = TRUE;
         ob_start();
-        wp_editor( $this->getValue(), $this->getId(), array(
+        // In some cases (related content metaboxes) the same wysiwyg editor could be displayed several times in the same page,
+        // it makes the tinymce fail, so a different ID must be used.
+        // In order to use it, you need to add a new filter 'toolset_field_factory_get_attributes' which adds the following item:
+        // $attributes['types-related-content'] = true;
+        $id = $this->getId();
+        if ( true === toolset_getarr( $attributes, 'types-related-content' ) ) {
+          $id .= '_' . rand( 10000, 99999 );
+        }
+        wp_editor( $this->getValue(), $id, array(
             'wpautop' => true, // use wpautop?
             'media_buttons' => $media_buttons, // show insert/upload button(s)
             'textarea_name' => $this->getName(), // set the textarea name to something different, square brackets [] can be used here

@@ -58,6 +58,20 @@ if ( ! class_exists( 'Toolset_Shortcode_Generator' ) ) {
 				$register_section = $this->is_admin_editor_page();
 				break;
 		}
+
+		/**
+		 * Filters whether to forcibly show or hide the Toolset Shortcodes menu on the admin bar.
+		 *
+		 * Returning true to this hook will forcibly show the Toolset Shortcodes menu on the admin bar, ignoring
+		 * the value of the relevant Toolset setting. Returning false to this hook will forcibly hide the Toolset
+		 * Shortcodes menu on the admin bar, ignoring the value of the relevant Toolset setting.
+		 *
+		 * @since 2.5.0
+		 *
+		 * @param bool $register_section Whether the Toolset Shortcodes menu on the admin bar should be forcibly shown or hidden.
+		 */
+		$register_section = apply_filters( 'toolset_filter_force_shortcode_generator_display', $register_section );
+		
 		if ( ! $register_section ) {
 			return;
 		}

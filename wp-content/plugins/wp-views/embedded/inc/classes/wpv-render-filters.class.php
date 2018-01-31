@@ -21,13 +21,17 @@ WPV_Frontend_Render_Filters::on_load();
 class WPV_Frontend_Render_Filters {
 	
 	static function on_load() {
+		add_filter( 'the_content', array( 'WPV_Frontend_Render_Filters', 'replace_shortcode_placeholders_with_brackets' ), 4 );
 		add_filter( 'the_content',								array( 'WPV_Frontend_Render_Filters', 'pre_process_shortcodes' ), 5 );
 		add_filter( 'wpv_filter_wpv_the_content_suppressed',	array( 'WPV_Frontend_Render_Filters', 'pre_process_shortcodes' ), 5 );
 		add_filter( 'wpv-pre-do-shortcode',						array( 'WPV_Frontend_Render_Filters', 'wpv_pre_do_shortcode' ), 5 );
+		add_filter( 'wpv-pre-process-shortcodes',       		array( 'WPV_Frontend_Render_Filters', 'pre_process_shortcodes' ), 5 );
 	}
 	
 	static function pre_process_shortcodes( $content ) {
-		
+
+		$content = WPV_Frontend_Render_Filters::replace_shortcode_placeholders_with_brackets( $content );
+
 		$content = WPV_Formatting_Embedded::resolve_wpv_noautop_shortcodes( $content );
 		
 		$content = wpv_preprocess_foreach_shortcodes( $content );
@@ -44,6 +48,8 @@ class WPV_Frontend_Render_Filters {
 	}
 	
 	static function wpv_pre_do_shortcode( $content ) {
+
+		$content = WPV_Frontend_Render_Filters::replace_shortcode_placeholders_with_brackets( $content );
 		
 		$content = WPV_Formatting_Embedded::resolve_wpv_noautop_shortcodes( $content );
 		
@@ -59,7 +65,25 @@ class WPV_Frontend_Render_Filters {
 		
 		return $content;
 	}
-	
+
+	/**
+	 * In Views 2.5.0, we introduced support for shortcodes using placeholders instead of bracket. The selected placeholder
+	 * for the left bracket "[" was chosen to be the "{!{" and the selected placeholder for the right bracket "]" was chosen
+	 * to be the "}!}". This was done to allow the use of Toolset shortcodes inside the various page builder modules fields.
+	 * Here, we are replacing early the instances of the placeholders with the normal brackets, in order for them to be
+	 * treated as normal shortcodes.
+	 *
+	 * @param $content
+	 *
+	 * @return mixed
+	 *
+	 * @since 2.5.0
+	 */
+	static function replace_shortcode_placeholders_with_brackets( $content ) {
+		$content = str_replace( '{!{', '[', $content );
+		$content = str_replace( '}!}', ']', $content );
+		return $content;
+	}
 }
 
 /*

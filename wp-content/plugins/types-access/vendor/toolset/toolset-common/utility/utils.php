@@ -45,9 +45,7 @@ if ( ! class_exists( 'Toolset_Utils', false ) ) {
 					defined( 'DOING_AJAX' )
 					&& DOING_AJAX
 					&& isset( $_REQUEST['action'] )
-					&& (
-					in_array( $_REQUEST['action'], self::get_ajax_actions_array_to_exclude_on_frontend() )
-					)
+					&& in_array( $_REQUEST['action'], self::get_ajax_actions_array_to_exclude_on_frontend() )
 				)
 			);
 
@@ -55,15 +53,15 @@ if ( ! class_exists( 'Toolset_Utils', false ) ) {
 		}
 
 		/**
-         * Returns an array of ajax actions of third plugins to be excluded on frontend calling
-         *
+		 * Returns an array of ajax actions of third plugins to be excluded on frontend calling
+		 *
 		 * @return array
-         *
-         * @since 2.5.0
+		 *
+		 * @since 2.5.0
 		 */
 		public static function get_ajax_actions_array_to_exclude_on_frontend() {
-		    return array( 'wpv_get_view_query_results', 'wpv_get_archive_query_results', 'render_element_changed' );
-        }
+			return array( 'wpv_get_view_query_results', 'wpv_get_archive_query_results', 'render_element_changed' );
+		}
 
 		/**
 		 * help_box
@@ -142,13 +140,99 @@ if ( ! class_exists( 'Toolset_Utils', false ) ) {
 		}
 
 		/**
+		 * Check if a value is numeric and represents a non-negative number (zero is also ok, floats are ok).
+		 *
+		 * @param $value
+		 *
+		 * @return bool
+		 * @since m2m
+		 */
+		public static function is_nonnegative_numeric( $value ) {
+			return ( is_numeric( $value ) && ( 0 <= $value ) );
+		}
+
+
+		/**
+		 * Check if a value is numeric and represents an integer (not a float).
+		 *
+		 * @param $value
+		 *
+		 * @return bool
+		 * @since m2m
+		 */
+		public static function is_integer( $value ) {
+			// http://stackoverflow.com/questions/2559923/shortest-way-to-check-if-a-variable-contains-positive-integer-using-php
+			return ( (int) $value == $value );
+		}
+
+
+		/**
+		 * Check if a value is numeric, represents an integer, and is non-negative.
+		 *
+		 * @param $value
+		 *
+		 * @return bool
+		 */
+		public static function is_nonnegative_integer( $value ) {
+			return (
+				self::is_nonnegative_numeric( $value )
+				&& self::is_integer( $value )
+			);
+		}
+
+		/**
+		 * Check if a value is numeric, represents an integer (not a float) and positive.
+		 *
+		 * @param mixed $value
+		 *
+		 * @return bool
+		 * @since m2m
+		 */
+		public static function is_natural_numeric( $value ) {
+			return (
+				self::is_nonnegative_integer( $value )
+				&& ( 0 < (int) $value )
+			);
+		}
+
+
+		/**
+		 * Changes array of items into string of items, separated by comma and sql-escaped
+		 *
+		 * @see https://coderwall.com/p/zepnaw
+		 *
+		 * Taken from wpml_prepare_in().
+		 *
+		 * @param mixed|array $items item(s) to be joined into string
+		 * @param string $format %s or %d
+		 *
+		 * @return string Items separated by comma and sql-escaped
+		 * @since m2m
+		 */
+		public static function prepare_mysql_in( $items, $format = '%s' ) {
+			global $wpdb;
+
+			$items = (array) $items;
+			$how_many = count( $items );
+			$prepared_in = '';
+
+			if ( $how_many > 0 ) {
+				$placeholders = array_fill( 0, $how_many, $format );
+				$prepared_format = implode( ",", $placeholders );
+				$prepared_in = $wpdb->prepare( $prepared_format, $items );
+			}
+
+			return $prepared_in;
+		}
+
+		/**
 		 * Check for a custom field value's "emptiness".
 		 *
 		 * "0" is also a valid value that we need to take into account.
 		 *
 		 * @param $field_value
+		 ** @return bool
 		 *
-		 * @return bool
 		 * @since 2.2.3
 		 */
 		public static function is_field_value_truly_empty( $field_value ) {
@@ -504,14 +588,14 @@ if ( ! class_exists( 'Toolset_ErrorHandler', false ) ) {
 
 }
 
-/**
- * PHP 5.2 support.
- *
- * get_called_class() is only in PHP >= 5.3, this is a workaround.
- * This function is needed by WPDDL_Theme_Integration_Abstract.
- */
 if ( ! function_exists( 'get_called_class' ) ) {
 
+	/**
+	 * PHP 5.2 support.
+	 *
+	 * get_called_class() is only in PHP >= 5.3, this is a workaround.
+	 * This function is needed by WPDDL_Theme_Integration_Abstract (and others).
+	 */
 	function get_called_class() {
 		$bt = debug_backtrace();
 		$l = 0;
@@ -531,50 +615,32 @@ if ( ! function_exists( 'get_called_class' ) ) {
 }
 
 
-/**
- * Safely retrieve a key from $_GET variable.
- *
- * This is a wrapper for toolset_get_from_array(). See that for more information.
- *
- * @param string $key See toolset_getarr().
- * @param mixed $default See toolset_getarr().
- * @param null|array $valid See toolset_getarr().
- *
- * @return mixed See toolset_getarr().
- *
- * @since 1.8
- */
-if ( ! function_exists( 'toolset_getget' ) ) {
-
-	function toolset_getget( $key, $default = '', $valid = null ) {
-		return toolset_getarr( $_GET, $key, $default, $valid );
-	}
-
-}
-
-
-/**
- * Safely retrieve a key from given array (meant for $_POST, $_GET, etc).
- *
- * Checks if the key is set in the source array. If not, default value is returned. Optionally validates against array
- * of allowed values and returns default value if the validation fails.
- *
- * @param array $source The source array.
- * @param string $key The key to be retrieved from the source array.
- * @param mixed $default Default value to be returned if key is not set or the value is invalid. Optional.
- *     Default is empty string.
- * @param null|array $valid If an array is provided, the value will be validated against it's elements.
- *
- * @return mixed The value of the given key or $default.
- *
- * @since 1.8
- */
 if ( ! function_exists( 'toolset_getarr' ) ) {
 
+
+	/**
+	 * Safely retrieve a key from given array (meant for $_POST, $_GET, etc).
+	 *
+	 * Checks if the key is set in the source array. If not, default value is returned. Optionally validates against array
+	 * of allowed values and returns default value if the validation fails.
+	 *
+	 * @param array $source The source array.
+	 * @param string $key The key to be retrieved from the source array.
+	 * @param mixed $default Default value to be returned if key is not set or the value is invalid. Optional.
+	 *     Default is empty string.
+	 * @param null|array $valid If an array is provided, the value will be validated against it's elements.
+	 *
+	 * @return mixed The value of the given key or $default.
+	 *
+	 * @since 1.8
+	 */
 	function toolset_getarr( &$source, $key, $default = '', $valid = null ) {
 		if ( isset( $source[ $key ] ) ) {
 			$val = $source[ $key ];
-			if ( is_array( $valid ) && ! in_array( $val, $valid ) ) {
+
+			if ( is_callable( $valid ) && ! call_user_func( $valid, $val ) ) {
+				return $default;
+			} elseif ( is_array( $valid ) && ! in_array( $val, $valid ) ) {
 				return $default;
 			}
 
@@ -582,6 +648,136 @@ if ( ! function_exists( 'toolset_getarr' ) ) {
 		} else {
 			return $default;
 		}
+	}
+
+}
+
+
+if ( ! function_exists( 'toolset_getget' ) ) {
+
+	/**
+	 * Safely retrieve a key from $_GET variable.
+	 *
+	 * This is a wrapper for toolset_getarr(). See that for more information.
+	 *
+	 * @param string $key
+	 * @param mixed $default
+	 * @param null|array $valid
+	 *
+	 * @return mixed
+	 * @since 1.9
+	 */
+	function toolset_getget( $key, $default = '', $valid = null ) {
+		return toolset_getarr( $_GET, $key, $default, $valid );
+	}
+
+}
+
+
+if ( ! function_exists( 'toolset_getpost' ) ) {
+
+	/**
+	 * Safely retrieve a key from $_POST variable.
+	 *
+	 * This is a wrapper for toolset_getarr(). See that for more information.
+	 *
+	 * @param string $key
+	 * @param mixed $default
+	 * @param null|array $valid
+	 *
+	 * @return mixed
+	 * @since 1.9
+	 */
+	function toolset_getpost( $key, $default = '', $valid = null ) {
+		return toolset_getarr( $_POST, $key, $default, $valid );
+	}
+
+}
+
+
+if ( ! function_exists( 'toolset_ensarr' ) ) {
+
+	/**
+	 * Ensure that a variable is an array.
+	 *
+	 * @param mixed $array The original value.
+	 * @param array $default Default value to use when no array is provided. This one should definitely be an array,
+	 *     otherwise the function doesn't make much sense.
+	 *
+	 * @return array The original array or a default value if no array is provided.
+	 *
+	 * @since 1.9
+	 */
+	function toolset_ensarr( $array, $default = array() ) {
+		return ( is_array( $array ) ? $array : $default );
+	}
+
+}
+
+
+if ( ! function_exists( 'toolset_wraparr' ) ) {
+
+	/**
+	 * Wrap a variable value in an array if it's not array already.
+	 *
+	 * @param mixed $input
+	 *
+	 * @return array
+	 * @since 1.9.1
+	 */
+	function toolset_wraparr( $input ) {
+		return ( is_array( $input ) ? $input : array( $input ) );
+	}
+
+}
+
+
+if ( ! function_exists( 'toolset_getnest' ) ) {
+
+	/**
+	 * Get a value from nested associative array.
+	 *
+	 * This function will try to traverse a nested associative array by the set of keys provided.
+	 *
+	 * E.g. if you have $source = array( 'a' => array( 'b' => array( 'c' => 'my_value' ) ) ) and want to reach 'my_value',
+	 * you need to write: $my_value = wpcf_getnest( $source, array( 'a', 'b', 'c' ) );
+	 *
+	 * @param mixed|array $source The source array.
+	 * @param string[] $keys Keys which will be used to access the final value.
+	 * @param null|mixed $default Default value to return when the keys cannot be followed.
+	 *
+	 * @return mixed|null Value in the nested structure defined by keys or default value.
+	 *
+	 * @since 1.9
+	 */
+	function toolset_getnest( &$source, $keys = array(), $default = null ) {
+
+		$current_value = $source;
+
+		// For detecting if a value is missing in a sub-array, we'll use this temporary object.
+		// We cannot just use $default on every level of the nesting, because if $default is an
+		// (possibly nested) array itself, it might mess with the value retrieval in an unexpected way.
+		$missing_value = new stdClass();
+
+		while ( ! empty( $keys ) ) {
+			$current_key = array_shift( $keys );
+			$is_last_key = empty( $keys );
+
+			$current_value = toolset_getarr( $current_value, $current_key, $missing_value );
+
+			if ( $is_last_key ) {
+				// Apply given default value.
+				if ( $missing_value === $current_value ) {
+					return $default;
+				} else {
+					return $current_value;
+				}
+			} elseif ( ! is_array( $current_value ) ) {
+				return $default;
+			}
+		}
+
+		return $default;
 	}
 
 }

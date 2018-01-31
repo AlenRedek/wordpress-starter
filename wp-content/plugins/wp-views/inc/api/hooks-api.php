@@ -13,7 +13,8 @@ class WPV_API {
 			array( 'get_posts_by_content_template', 2 ),
 			array( 'duplicate_content_template', 4 ),
 			array( 'duplicate_wordpress_archive', 4 ),
-			array( 'duplicate_view', 4 )
+			array( 'duplicate_view', 4 ),
+			array( 'get_template_id_by_name', 2 )
 		);
 	}
 
@@ -185,6 +186,21 @@ class WPV_API {
 		$duplicate_ct = $original_ct->duplicate( $new_title, $adjust_duplicate_title );
 
 		return ( null == $duplicate_ct ) ? $default_result : $duplicate_ct->id;
+	}
+	
+	
+	/**
+	 * Get a Content Template ID given its title or slug.
+	 *
+	 * @param mixed $default_result Value to return on error.
+	 * @param string $template_name Title or slug of the Content Template.
+	 *
+	 * @return int ID of the duplicate or 0 if it does not exist.
+	 *
+	 * @since 2.5.0
+	 */
+	public function get_template_id_by_name( $default_result, $template_name ) {
+		return WPV_Content_Template_Embedded::get_template_id_by_name( $template_name );
 	}
 
 }

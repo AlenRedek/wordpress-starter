@@ -2,7 +2,7 @@
 
 class WPV_ViewsHelpVideos extends Toolset_HelpVideosFactoryAbstract{
     protected function define_toolset_videos(){
-        return  array(
+        $videos = array(
             'views_template' =>  array(
                 'name' => 'views_template',
                 'url' => 'http://d7j863fr5jhrr.cloudfront.net/toolset-views-templates.mp4',
@@ -31,6 +31,15 @@ class WPV_ViewsHelpVideos extends Toolset_HelpVideosFactoryAbstract{
                 'height' => '506px'
             )
         );
+
+	    // Avada / Divi adjustments
+        if( defined( 'AVADA_VERSION') || defined( 'ET_CORE' ) ) {
+	        // disable CT and WPA video
+        	unset( $videos['views_template'] );
+        	unset( $videos['archive_views'] );
+        }
+
+        return $videos;
     }
 }
 add_action( 'init', array("WPV_ViewsHelpVideos", "getInstance"), 9 );

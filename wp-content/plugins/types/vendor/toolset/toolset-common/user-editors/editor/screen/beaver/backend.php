@@ -1,13 +1,27 @@
 <?php
 
-if( ! class_exists( 'Toolset_User_Editors_Editor_Screen_Abstract', false ) ) {
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/screen/abstract.php' );
-}
-
 class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 	extends Toolset_User_Editors_Editor_Screen_Abstract {
 
-	public function __construct() {
+	/**
+	 * @var Toolset_Constants
+	 */
+	protected $constants;
+
+	/**
+	 * Toolset_User_Editors_Editor_Screen_Beaver_Backend constructor.
+	 *
+	 * @param Toolset_Constants|null $constants
+	 */
+	public function __construct( Toolset_Constants $constants = null ) {
+		$this->constants = $constants
+			? $constants
+			: new Toolset_Constants();
+
+		$this->constants->define( 'BEAVER_SCREEN_ID', 'beaver' );
+	}
+
+	public function initialize() {
 		
 		add_action( 'init',												array( $this, 'register_assets' ), 50 );
 		add_action( 'admin_enqueue_scripts',							array( $this, 'admin_enqueue_assets' ), 50 );
@@ -22,7 +36,9 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 		add_action( 'wp_ajax_toolset_user_editors_beaver',				array( $this, 'ajax' ) );
 	}
 
-	public function isActive() {
+
+
+	public function is_active() {
 		if ( ! $this->set_medium_as_post() ) {
 			return false;
 		}
@@ -33,8 +49,8 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 
 	private function action() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_assets' ) );
-		$this->medium->setHtmlEditorBackend( array( $this, 'html_output' ) );
-		$this->medium->pageReloadAfterBackendSave();
+		$this->medium->set_html_editor_backend( array( $this, 'html_output' ) );
+		$this->medium->page_reload_after_backend_save();
 	}
 
 	public function ajax() {
@@ -43,9 +59,9 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 		}
 
 		if( isset( $_REQUEST['post_id'] )
-		    && isset( $_REQUEST['template_path'] )
-		    && isset( $_REQUEST['preview_domain'] )
-		    && isset( $_REQUEST['preview_slug'] )
+			&& isset( $_REQUEST['template_path'] )
+			&& isset( $_REQUEST['preview_domain'] )
+			&& isset( $_REQUEST['preview_slug'] )
 		) {
 			$this->store_template_settings(
 				(int) $_REQUEST['post_id'],
@@ -65,7 +81,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 			'preview_slug' => $preview_slug
 		);
 
-		update_post_meta( $post_id, $this->editor->getOptionName(), $settings );
+		update_post_meta( $post_id, $this->editor->get_option_name(), $settings );
 	}
 	
 	public function register_assets() {
@@ -94,7 +110,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 			'toolset_user_editors_beaver', 
 			array(
 				'nonce' => wp_create_nonce( 'toolset_user_editors_beaver' ),
-				'mediumId' => $this->medium->getId()
+				'mediumId' => $this->medium->get_id()
 			) 
 		);
 		
@@ -109,12 +125,11 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 		);
 		
 		$beaver_layout_template_i18n = array(
-            'template_editor_url'	=> admin_url( 'admin.php?page=ct-editor' ),
+			'template_editor_url'	=> admin_url( 'admin.php?page=ct-editor' ),
 			'template_overlay'		=> array(
-										'title'		=> sprintf( __( 'This Content Template uses %1$s', 'wpv-views' ), $this->editor->getName() ),
-										'text'		=> sprintf( __( 'To modify this Content Template, go to edit it and launch the %1$s.', 'wpv-views' ), $this->editor->getName() ),
-										'button'	=> sprintf( __( 'Edit with %1$s', 'wpv-views' ), $this->editor->getName() ),
-										'discard'	=> sprintf( __( 'Stop using %1$s for this Content Template', 'wpv-views' ), $this->editor->getName() )
+										'title'		=> sprintf( __( 'You created this template using %1$s', 'wpv-views' ), $this->editor->get_name() ),
+										'button'	=> sprintf( __( 'Edit with %1$s', 'wpv-views' ), $this->editor->get_name() ),
+										'discard'	=> sprintf( __( 'Stop using %1$s for this Content Template', 'wpv-views' ), $this->editor->get_name() )
 									),
 		);
 		$toolset_assets_manager->localize_script( 
@@ -126,30 +141,22 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 	}
 	
 	public function admin_enqueue_assets() {
-		$page = toolset_getget( 'page' );
-		if ( 
-			'views-editor' == $page 
-			|| 'view-archives-editor' == $page 
-		) {
-			
+		if ( $this->is_views_or_wpa_edit_page() ) {
 			do_action( 'toolset_enqueue_scripts', array( 'toolset-user-editors-beaver-layout-template-script' ) );
-			
 		}
 	}
 
 	public function action_assets() {
-		
 		do_action( 'toolset_enqueue_styles',	array( 'toolset-user-editors-beaver-style' ) );
 		do_action( 'toolset_enqueue_scripts',	array( 'toolset-user-editors-beaver-script' ) );
-		
 	}
 
-	protected function getAllowedTemplates() {
+	protected function get_allowed_templates() {
 		return ;
 	}
 
 	private function set_medium_as_post() {
-		$medium_id  = $this->medium->getId();
+		$medium_id  = $this->medium->get_id();
 
 		if( ! $medium_id ) {
 			return false;
@@ -193,7 +200,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 			. sprintf( 
 				__( '%1$sStop using %2$s for this Content Template%3$s', 'wpv-views' ), 
 				'<a href="' . esc_url( $admin_url ) . '&ct_editor_choice=basic">',
-				$this->editor->getName(),
+				$this->editor->get_name(),
 				'</a>'
 			) 
 			. '</p>';
@@ -202,7 +209,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 	}
 	
 	public function register_user_editor( $editors ) {
-		$editors[ $this->editor->getId() ] = $this->editor->getName();
+		$editors[ $this->editor->get_id() ] = $this->editor->get_name();
 		return $editors;
 	}
 	
@@ -216,9 +223,9 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 	*/
 	
 	public function layout_template_attribute( $attributes, $content_template, $view_id ) {
-		$content_template_has_beaver = ( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ) == 'beaver' );
+		$content_template_has_beaver = ( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ) == $this->constants->constant( 'BEAVER_SCREEN_ID' ) );
 		if ( $content_template_has_beaver ) {
-			$attributes['builder'] = $this->editor->getId();
+			$attributes['builder'] = $this->editor->get_id();
 		}
 		return $attributes;
 	}
@@ -241,7 +248,7 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 			$post_has_ct	= get_post_meta( $post->ID, '_views_template', true );
 			$ct_has_beaver	= false;
 			if ( $post_has_ct ) {
-				$ct_has_beaver = ( get_post_meta( $post_has_ct, '_toolset_user_editors_editor_choice', true ) == 'beaver' );
+				$ct_has_beaver = ( get_post_meta( $post_has_ct, '_toolset_user_editors_editor_choice', true ) == $this->constants->constant( 'BEAVER_SCREEN_ID' ) );
 			}
 			$post_has_beaver = get_post_meta( $post->ID, '_fl_builder_enabled', true );
 			if (
@@ -255,24 +262,24 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 					<p><strong><?php echo sprintf( 
 						__( '%1$s %2$s design inside %2$s templates may cause problems', 'wpv-views' ), 
 						'<i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>',
-						$this->editor->getName(), 
-						$this->editor->getName()
+						$this->editor->get_name(),
+						$this->editor->get_name()
 					); ?></strong></p>
 					<p>
 						<?php echo sprintf(
 							__( 'You are using %1$s to design this page, but there is already a template <em>%2$s</em> created by %3$s for %4$s. This may work, but could produce visual glitches. Please consider using %5$s only for the template OR for this page.', 'wpv-views' ),
-							$this->editor->getName(),
+							$this->editor->get_name(),
 							$ct_title,
-							$this->editor->getName(),
+							$this->editor->get_name(),
 							'<em>' . $post_type_object->labels->name . '</em>',
-							$this->editor->getName()
+							$this->editor->get_name()
 						); ?>
 					</p>
 					<p>
 						<?php echo sprintf(
 							__( '%1$sDesigning templates with %2$s%3$s.', 'wpv-views' ),
 							'<a href="#" target="_blank">',
-							$this->editor->getName(),
+							$this->editor->get_name(),
 							'</a>'
 						); ?>
 					</p>
@@ -284,14 +291,14 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Backend
 	}
 	
 	public function register_inline_editor_action_buttons( $content_template ) {
-		$content_template_has_beaver = ( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ) == 'beaver' );
+		$content_template_has_beaver = ( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ) == $this->constants->constant( 'BEAVER_SCREEN_ID' ) );
 		?>
 		<button 
-			class="button button-secondary js-wpv-ct-apply-user-editor js-wpv-ct-apply-user-editor-<?php echo esc_attr( $this->editor->getId() ); ?>" 
-			data-editor="<?php echo esc_attr( $this->editor->getId() ); ?>" 
+			class="button button-secondary js-wpv-ct-apply-user-editor js-wpv-ct-apply-user-editor-<?php echo esc_attr( $this->editor->get_id() ); ?>"
+			data-editor="<?php echo esc_attr( $this->editor->get_id() ); ?>"
 			<?php disabled( $content_template_has_beaver );?>
 		>
-			<?php echo esc_html( $this->editor->getName() ); ?>
+			<?php echo esc_html( $this->editor->get_name() ); ?>
 		</button>
 		<?php
 	}

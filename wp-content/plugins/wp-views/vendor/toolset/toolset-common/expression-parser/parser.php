@@ -1323,7 +1323,7 @@ class Toolset_Tokenizer
         return null;
     }
 
-    public static function Tokanize($pstrExpression)
+    public function Tokenize( $pstrExpression )
     {
         // build fast lookup maps
         self::init();
@@ -1402,10 +1402,18 @@ class Toolset_Tokenizer
                     $chrNext = substr($pstrExpression,$intCntr + 1, 1);
                     if (count($arrTokens) > 0)
                         $prevToken = $arrTokens[$intIndex - 1];
-                    if (/*intCntr == 0 ||*/(($prevToken->isArithmeticOp ||
-                        $prevToken->isLeftParen || $prevToken->isComma) &&
-                        (self::_isDigit($chrNext) || $chrNext == "(")))
-                    {
+                    if (
+                    	/*intCntr == 0 ||*/
+                    	(
+                    		(
+                    			$prevToken->isArithmeticOp
+								|| $prevToken->isLeftParen
+								|| $prevToken->isComma
+								|| $prevToken->isCompOp
+							)
+							&& ( self::_isDigit( $chrNext ) || '(' == $chrNext )
+						)
+					) {
                         // Negative Number
                         $strToken .= $chrChar;
                     }
@@ -2460,11 +2468,12 @@ class Toolset_Parser
 
     private function _ParseExpression()
     {
-        $arrTokens = Toolset_Tokenizer::Tokanize($this->strInFix);
+    	$toolset_tokenizer = new Toolset_Tokenizer();
+        $arrTokens = $toolset_tokenizer->Tokenize( $this->strInFix );
         if (!isset($arrTokens))
-            throw new Exception("Unable to tokanize the expression!");
+            throw new Exception("Unable to tokenize the expression!");
         if (count($arrTokens) <= 0)
-            throw new Exception("Unable to tokanize the expression!");
+            throw new Exception("Unable to tokenize the expression!");
 
         //print_r($arrTokens);
 

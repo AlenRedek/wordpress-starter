@@ -641,7 +641,6 @@ WPViews.ShortcodesGUI = function( $ ) {
 					self.shortcode_to_append_selector.val( self.shortcode_to_append_selector.val() + shortcode_string );
 					self.shortcode_to_append_selector = null;
 				} else {
-				
 					self.shortcode_to_insert_on_target_dialog = shortcode_string;
 
 					self.textarea_target_dialog.dialog( 'open' ).dialog({
@@ -4290,7 +4289,8 @@ function wpv_add_conditional_quicktag_function(e, c, ed) {
 			// close tag
 			ed.openTags.splice(ret, 1);
 			WPViews.shortcodes_gui.views_conditional_qtags_opened = false;
-			t.tagStart = '[/wpv-conditional]';
+			var tagStart = '[/wpv-conditional]';
+			t.tagStart = Toolset.hooks.applyFilters( 'wpv-filter-wpv-shortcodes-transform-format', tagStart );
 			e.value = t.display;
 			QTags.TagButton.prototype.callback.call(t, e, c, ed);
 		}

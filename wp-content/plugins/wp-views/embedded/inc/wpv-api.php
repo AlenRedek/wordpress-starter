@@ -125,24 +125,23 @@ function get_view_query_results( $view_id, $post_in = null, $current_user_in = n
 */
 
 /**
-* render_view
-*
-* Renders a View and returns the result.
-*
-* @param array $args {
-*	 You can pass one of these keys:
-* 	 $name The View post_name.
-*	 $title The View post_title.
-*	 $id The View post ID.
-*	 $target_id The target page ID if you want to render just the View form.
-* }
-* @param array $post_override An array to be used to override $_GET values.
-*
-* @usage  <?php echo render_view( array( 'title' => 'Top pages' ) ); ?>
-*
-* @since unknown
-* @since 2.2.2	Return nothing when called before init.
-*/
+ * Renders a View and returns the result.
+ *
+ * @param array $args {
+ *	 You can pass one of these keys:
+ * 	 $name The View post_name.
+ *	 $title The View post_title.
+ *	 $id The View post ID.
+ *	 $target_id The target page ID if you want to render just the View form.
+ * }
+ * @param array $post_override An array to be used to override $_GET values.
+ *
+ * @usage  <?php echo render_view( array( 'title' => 'Top pages' ) ); ?>
+ *
+ * @since unknown
+ * @since 2.2.2	Return nothing when called before init.
+ * @since 2.5.1 Pass the outcome over the wpv_filter_wpv_view_shortcode_output filter for consistency.
+ */
 
 function render_view( $args, $get_override = array() ) {
 	
@@ -157,6 +156,8 @@ function render_view( $args, $get_override = array() ) {
 	
 	global $wpdb, $WP_Views;
 	$id = 0;
+	$out = '';
+	
     // Get View ID
 	if ( isset( $args['id'] ) ) {
 		$id = $args['id'];
@@ -205,10 +206,12 @@ function render_view( $args, $get_override = array() ) {
 		if ( !empty( $get_override ) ) {
 			$_GET = $post_old;
 		}
-		return $out;
-	} else {
-		return '';
 	}
+	
+	$out = apply_filters( 'wpv_filter_wpv_view_shortcode_output', $out, $id );
+	
+	return $out;
+	
 }
 
 /**

@@ -1,10 +1,5 @@
 <?php
 
-
-if( ! interface_exists( 'Toolset_User_Editors_Medium_Screen_Interface', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/medium/screen/interface.php' );
-
-
 interface Toolset_User_Editors_Medium_Interface {
 
 	/**
@@ -14,14 +9,14 @@ interface Toolset_User_Editors_Medium_Interface {
 	 * @param $id
 	 * @param Toolset_User_Editors_Medium_Screen_Interface $screen
 	 */
-	public function addScreen( $id, Toolset_User_Editors_Medium_Screen_Interface $screen );
+	public function add_screen( $id, Toolset_User_Editors_Medium_Screen_Interface $screen );
 
 	/**
 	 * Return all registered screens
 	 *
 	 * @return Toolset_User_Editors_Medium_Screen_Interface[]
 	 */
-	public function getScreens();
+	public function get_screens();
 
 	/**
 	 * If a screen is not active it should get removed, because sometimes
@@ -30,14 +25,14 @@ interface Toolset_User_Editors_Medium_Interface {
 	 *
 	 * @param $id
 	 */
-	public function removeScreen( $id );
+	public function remove_screen( $id );
 
 	/**
 	 * This function is used by screen objects.
 	 * e.g. Medium_Screen_Content_Template_Backend set it if $_REQUEST['ct_id'] is available
 	 * @param $id
 	 */
-	public function setId( $id );
+	public function set_id( $id );
 
 	/**
 	 * Id of the current medium element
@@ -45,7 +40,7 @@ interface Toolset_User_Editors_Medium_Interface {
 	 *
 	 * @return int
 	 */
-	public function getId();
+	public function get_id();
 
 	/**
 	 * Slug of medium type
@@ -53,7 +48,7 @@ interface Toolset_User_Editors_Medium_Interface {
 	 *
 	 * @return string
 	 */
-	public function getSlug();
+	public function get_slug();
 
 	/**
 	 * The id of the editor the user has chosen
@@ -61,14 +56,14 @@ interface Toolset_User_Editors_Medium_Interface {
 	 *
 	 * @return string id of the editor
 	 */
-	public function userEditorChoice();
+	public function user_editor_choice();
 
 	/**
 	 * List of allowed templates for using a Frontend-Editor
 	 * e.g. Content Templates provides the templates of the 'Usage' assignments
 	 * @return mixed
 	 */
-	public function getFrontendTemplates();
+	public function get_frontend_templates();
 
 	/**
 	 * Used by the editor, to give the medium the editor backend output
@@ -78,7 +73,7 @@ interface Toolset_User_Editors_Medium_Interface {
 	 *
 	 * @param $content callable
 	 */
-	public function setHtmlEditorBackend( $content );
+	public function set_html_editor_backend( $content );
 
 	/**
 	 * Used by setup, to give the medium the user selection for editors
@@ -94,14 +89,14 @@ interface Toolset_User_Editors_Medium_Interface {
 	 * with this function the medium will do a reload, even if by default it's stored via ajax
 	 * e.g. this function is called by Beaver when used on Content Templates
 	 */
-	public function pageReloadAfterBackendSave();
+	public function page_reload_after_backend_save();
 
 
 	/**
 	 * This manager class uses this function to make itself available for the medium
 	 * @param Toolset_User_Editors_Manager_Interface $manager
 	 */
-	public function addManager( Toolset_User_Editors_Manager_Interface $manager );
+	public function add_manager( Toolset_User_Editors_Manager_Interface $manager );
 
 
 	/**
@@ -109,5 +104,5 @@ interface Toolset_User_Editors_Medium_Interface {
 	 * e.g. user selected Beaver on CT, this will return 'beaver'
 	 * @return string
 	 */
-	public function getOptionNameEditorChoice();
+	public function get_option_name_editor_choice();
 }

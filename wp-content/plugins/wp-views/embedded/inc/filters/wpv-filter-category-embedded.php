@@ -862,7 +862,10 @@ class WPV_Taxonomy_Frontend_Filter {
 					is_array( $walker_args['selected'] ) 
 					&& in_array( (string) 0, $walker_args['selected'] ) 
 				) || (
-					$walker_args['type'] == 'multi-select' 
+					(
+						$walker_args['type'] == 'multi-select'
+						|| $walker_args['type'] == 'checkboxes'
+					)
 					&& $walker_args['operator'] == 'AND' 
 				) 
 			) {

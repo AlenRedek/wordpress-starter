@@ -148,6 +148,8 @@ if ( ! class_exists( 'Toolset_Menu', false ) ) {
                 $current_page = sanitize_text_field( $_GET['page'] );
                 do_action( 'toolset_enqueue_styles', array( 'toolset-common', 'toolset-notifications-css', 'font-awesome' ) );
                 do_action( 'toolset_enqueue_scripts', $current_page );
+				do_action( 'toolset_menu_admin_enqueue_styles', $current_page );
+				do_action( 'toolset_menu_admin_enqueue_scripts', $current_page );
             }
         }
 
@@ -244,16 +246,21 @@ if ( ! class_exists( 'Toolset_Menu', false ) ) {
                     'page_title'	=> __( 'Toolset Debug', 'wpv-views' ),
                     'callback'		=> array( $this, 'debug_page' )
                 );
+
+	            $toolset_common_bootstrap = Toolset_Common_Bootstrap::get_instance();
+	            $toolset_common_bootstrap->load_sections( array( Toolset_Common_Bootstrap::TOOLSET_DEBUG ) );
+
+	            $page = Toolset_Page_Troubleshooting::get_instance();
+	            $page->prepare();
             }
             return $pages;
         }
 
         public function debug_page() {
-            $toolset_common_bootstrap = Toolset_Common_Bootstrap::getInstance();
-            $toolset_common_sections = array(
-                'toolset_debug'
-            );
-            $toolset_common_bootstrap->load_sections( $toolset_common_sections );
+
+	        $page = Toolset_Page_Troubleshooting::get_instance();
+
+	        $page->render();
         }
 
     }

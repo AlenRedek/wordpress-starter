@@ -1,15 +1,12 @@
 <?php
 
-if( ! class_exists( 'Toolset_User_Editors_Editor_Screen_Abstract', false ) )
-	require_once( TOOLSET_COMMON_PATH . '/user-editors/editor/screen/abstract.php' );
-
 class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 	extends Toolset_User_Editors_Editor_Screen_Abstract {
 
 	private $post;
 	public $editor;
-	
-	public function __construct() {		
+
+	public function initialize() {
 		add_action( 'init',												array( $this, 'register_assets' ), 50 );
 		add_action( 'admin_enqueue_scripts',							array( $this, 'admin_enqueue_assets' ), 50 );
 		
@@ -21,8 +18,8 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 		//add_action( 'edit_form_after_title',				array( $this, 'preventNested' ) );
 	}
 
-	public function isActive() {
-		if( ! $this->setMediumAsPost() )
+	public function is_active() {
+		if( ! $this->set_medium_as_post() )
 			return false;
 
 		// check for functions used
@@ -49,7 +46,9 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 		add_action( 'admin_print_scripts', array( $this, 'print_scripts' ) );
 		add_action( 'admin_print_scripts', array( Vc_Shortcodes_Manager::getInstance(), 'buildShortcodesAssets' ), 1 );
 
-		$this->medium->setHtmlEditorBackend( array( $this, 'html_output' ) );
+		add_filter( 'toolset_filter_force_shortcode_generator_display', array( $this, 'force_shortcode_generator_display' ) );
+
+		$this->medium->set_html_editor_backend( array( $this, 'html_output' ) );
 	}
 
 	/**
@@ -70,8 +69,8 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 	}
 
 
-	private function setMediumAsPost() {
-		$medium_id  = $this->medium->getId();
+	private function set_medium_as_post() {
+		$medium_id  = $this->medium->get_id();
 
 		if( ! $medium_id )
 			return false;
@@ -98,14 +97,21 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 			TOOLSET_COMMON_VERSION,
 			true
 		);
+
+		$toolset_assets_manager->register_script(
+			'toolset-user-editors-vc-script',
+			TOOLSET_COMMON_URL . '/user-editors/editor/screen/visual-composer/backend_editor.js',
+			array( 'jquery' ),
+			TOOLSET_COMMON_VERSION,
+			true
+		);
 		
 		$vc_layout_template_i18n = array(
             'template_editor_url'	=> admin_url( 'admin.php?page=ct-editor' ),
 			'template_overlay'		=> array(
-										'title'		=> sprintf( __( 'This Content Template uses %1$s', 'wpv-views' ), $this->editor->getName() ),
-										'text'		=> sprintf( __( 'To modify this Content Template, go to edit it and launch the %1$s.', 'wpv-views' ), $this->editor->getName() ),
-										'button'	=> sprintf( __( 'Edit with %1$s', 'wpv-views' ), $this->editor->getName() ),
-										'discard'	=> sprintf( __( 'Stop using %1$s for this Content Template', 'wpv-views' ), $this->editor->getName() )
+										'title'		=> sprintf( __( 'You created this template using %1$s', 'wpv-views' ), $this->editor->get_name() ),
+										'button'	=> sprintf( __( 'Edit with %1$s', 'wpv-views' ), $this->editor->get_name() ),
+										'discard'	=> sprintf( __( 'Stop using %1$s for this Content Template', 'wpv-views' ), $this->editor->get_name() )
 									),
 		);
 		$toolset_assets_manager->localize_script( 
@@ -117,15 +123,12 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 	}
 	
 	public function admin_enqueue_assets() {
-		$page = toolset_getget( 'page' );
-		if ( 
-			'views-editor' == $page 
-			|| 'view-archives-editor' == $page 
-		) {
-			
+		$screen = get_current_screen();
+		if ( in_array( $screen->id, array( WPV_Page_Slug::VIEWS_EDIT_PAGE, WPV_Page_Slug::WORDPRESS_ARCHIVES_EDIT_PAGE ) ) ) {
 			do_action( 'toolset_enqueue_scripts', array( 'toolset-user-editors-vc-layout-template-script' ) );
-			
 		}
+
+		do_action( 'toolset_enqueue_scripts', array( 'toolset-user-editors-vc-script' ) );
 	}
 
 	public function html_output() {
@@ -235,7 +238,7 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 	}
 	
 	public function register_user_editor( $editors ) {
-		$editors[ $this->editor->getId() ] = $this->editor->getName();
+		$editors[ $this->editor->get_id() ] = $this->editor->get_name();
 		return $editors;
 	}
 	
@@ -251,7 +254,7 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 	public function layout_template_attribute( $attributes, $content_template, $view_id ) {
 		$content_template_has_vc = ( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ) == 'vc' );
 		if ( $content_template_has_vc ) {
-			$attributes['builder'] = $this->editor->getId();
+			$attributes['builder'] = $this->editor->get_id();
 		}
 		return $attributes;
 	}
@@ -260,12 +263,16 @@ class Toolset_User_Editors_Editor_Screen_Visual_Composer_Backend
 		$content_template_has_vc = ( get_post_meta( $content_template->ID, '_toolset_user_editors_editor_choice', true ) == 'vc' );
 		?>
 		<button 
-			class="button button-secondary js-wpv-ct-apply-user-editor js-wpv-ct-apply-user-editor-<?php echo esc_attr( $this->editor->getId() ); ?>" 
-			data-editor="<?php echo esc_attr( $this->editor->getId() ); ?>" 
+			class="button button-secondary js-wpv-ct-apply-user-editor js-wpv-ct-apply-user-editor-<?php echo esc_attr( $this->editor->get_id() ); ?>"
+			data-editor="<?php echo esc_attr( $this->editor->get_id() ); ?>"
 			<?php disabled( $content_template_has_vc );?>
 		>
-			<?php echo $this->editor->getName(); ?>
+			<?php echo $this->editor->get_name(); ?>
 		</button>
 		<?php
+	}
+
+	public function force_shortcode_generator_display( $register_section ) {
+		return true;
 	}
 }

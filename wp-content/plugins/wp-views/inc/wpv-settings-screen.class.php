@@ -17,7 +17,7 @@ class WPV_Settings_Screen {
 
     private function __construct() {
         add_action( 'init',						array( $this, 'init' ) );
-		add_action( 'toolset_enqueue_scripts',	array( $this, 'toolset_enqueue_scripts' ) );
+		add_action( 'toolset_menu_admin_enqueue_scripts',	array( $this, 'toolset_menu_admin_enqueue_scripts' ) );
     }
 	
     function init() {		
@@ -100,7 +100,7 @@ class WPV_Settings_Screen {
 		add_filter( 'wpv_filter_wpv_codemirror_autoresize',									array( $this, 'wpv_filter_wpv_codemirror_autoresize' ) );
     }
 	
-	function toolset_enqueue_scripts( $current_page ) {
+	function toolset_menu_admin_enqueue_scripts( $current_page ) {
 		switch ( $current_page ) {
 			case 'toolset-settings':
 				wp_enqueue_script( 'views-settings-js' );

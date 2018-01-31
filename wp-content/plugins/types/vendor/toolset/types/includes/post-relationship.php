@@ -332,7 +332,8 @@ function wpcf_admin_metabox_relationship($post_type)
         )
     );
 
-	$custom_types = get_option( WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
+	$post_type_option = new Types_Utils_Post_Type_Option();
+	$custom_types = $post_type_option->get_post_types();
 
 	$is_error = false;
 	$error_message = '';

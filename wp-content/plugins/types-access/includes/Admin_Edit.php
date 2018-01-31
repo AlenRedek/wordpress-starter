@@ -1663,7 +1663,7 @@ public static function wpcf_access_permissions_table($roles, $permissions, $sett
 				$error_value_value = $error_type_value = $archive_error_value_value = $archive_error_type_value = $text = $archive_text =  '';
 				if ( isset($current_custom_errors['everyone']) && !empty($current_custom_errors['everyone']) ) {
 					$error_type_value = $current_custom_errors['everyone'];
-					$error_value_value = $current_custom_errors_value['everyone'];
+					$error_value_value = ( isset( $current_custom_errors_value['everyone'] ) ? $current_custom_errors_value['everyone'] : '' );
 					if ( $error_type_value == 'error_404' ) {
 						$text = '404';
 						$link_title = __('Show 404 - page not found','wpcf-access');
@@ -1686,7 +1686,7 @@ public static function wpcf_access_permissions_table($roles, $permissions, $sett
 				//Set Archive Errors
 				if ( isset($current_archive_custom_errors['everyone']) && !empty($current_archive_custom_errors['everyone']) && isset($type_data['has_archive']) && $type_data['has_archive'] == 1  ) {
 					$archive_error_type_value = $current_archive_custom_errors['everyone'];
-					$archive_error_value_value = $current_archive_custom_errors_value['everyone'];
+					$archive_error_value_value = ( isset( $current_archive_custom_errors_value['everyone'] ) ? $current_archive_custom_errors_value['everyone'] : '' );
 					if ( $archive_error_type_value == 'default_error' ) {
 						$archive_text = __('Display: \'No posts found\'','wpcf-access');
 					} elseif ( $archive_error_type_value == 'error_ct' ) {
