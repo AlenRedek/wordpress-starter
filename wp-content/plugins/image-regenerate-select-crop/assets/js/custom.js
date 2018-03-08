@@ -1,8 +1,9 @@
 function sirsc_send_ajax_post_element(url, callback_action, elem, target) {
     var data = jQuery('#' + elem + ' :input').serializeArray();
     data.push({'name': 'callback', 'value': callback_action});
-    if (jQuery('#' + target).size()) {
-        jQuery('#' + target).prepend('<div class="spinner inline"></div>');
+    var $t = jQuery('#' + target);
+    if ($t.size()) {
+        $t.prepend('<div class="spinner inline"></div>');
     }
 
     var post_data = {
@@ -13,8 +14,8 @@ function sirsc_send_ajax_post_element(url, callback_action, elem, target) {
         ajaxurl,
         post_data,
         function (response) {
-            if (response && jQuery('#' + target).size()) {
-                jQuery('#' + target).html(response);
+            if (response && $t.size()) {
+                $t.html(response);
             }
         }
     );

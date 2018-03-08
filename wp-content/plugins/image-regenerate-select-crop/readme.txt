@@ -1,13 +1,13 @@
-=== Plugin Name ===
-Contributors: Iulia Cazan 
-Author URI: https://profiles.wordpress.org/iulia-cazan
-Tags: media, image, image sizes, image crop, image regenerate, image sizes details, missing images, image placeholder, image debug, wp-cli, command line, default crop
+=== Image Regenerate & Select Crop ===
+Contributors: Iulia Cazan
+Tags: image crop, image regenerate, image sizes details, image quality, default crop, wp-cli, media, image, image sizes, missing images, image placeholder, image debug, command line
 Requires at least: not tested
-Tested up to: 4.8
-Stable tag:  4.1
+Tested up to: 4.9.2
+Stable tag: 4.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JJA37EHZXWUTJ
+
 
 == Description ==
 The plugin appends two custom buttons that allows you to regenerate and crop the images, provides details about the image sizes registered in the application and the status of each image sizes for images. The plugin also appends a sub-menu to "Settings" that allows you to configure the plugin for global or particular post type attached images and to enable the developer mode for debug if necessary.
@@ -36,6 +36,20 @@ admin_enqueue_scripts, init, add_meta_boxes, wp_ajax_, plugins_loaded, admin_men
 None
 
 == Changelog ==
+= 4.2.2 =
+* Tested up to 4.9.2 version
+* Added Imagick support and fallback for placeholders
+* Added progress to WP-CLI commands
+
+= 4.2.1 =
+* Fix static warning, fix access to direct wp-admin folder instead of login
+
+= 4.2 =
+* Tested up to 4.8.3 version
+* Add the image quality option for each image size, display the quality settings and the file size in the image details overlay
+* Preserve the selected crop position for the image size in the image details overlay
+* Fix multisite warning on switching the blog when using the WP-CLI commands
+
 = 4.1 =
 * Tested up to 4.8 version
 * Fix the missing button for 4.8
@@ -68,9 +82,15 @@ None
 None
 
 == License ==
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 == Version history ==
+4.2.2 - Tested up to 4.9.2 version, added Imagick support and fallback for placeholders, added progress to WP-CLI commands
+
+4.2.1 - Fix static warning, fix direct access to the wp-admin folder instead of login
+
+4.2 - Tested up to 4.8.3 version, add the image quality option for each image size, display the quality settings and the file size in the image details overlay, preserve the selected crop position for the image size in the image details overlay, dix multisite warning on switching the blog when using the WP-CLI commands
+
 4.1 - Tested up to 4.8 version, fix the missing button for 4.8 in the edit post screen
 
 4.0 - Tested up to 4.6.1 version, update the image buttons to work with WP >= 4.6 new hooks parameters, changes for the image buttons backward compatibility (core versions less than 4.6)
@@ -86,23 +106,23 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 == Custom Actions ==
 If you want to display the custom buttons in your plugins, you can use the custom action with $attachmentId parameter as the image post->ID you want the button for. Usage example : do_action( 'image_regenerate_select_crop_button', $attachmentId );
 
-== Images Placeholders Developer Mode == 
+== Images Placeholders Developer Mode ==
 This option allows you to display placeholders for front-side images called programmatically (that are not embedded in content with their src, but retrieved with the wp_get_attachment_image_src, and the other related WP native functions). If there is no placeholder set, then the default behavior would be to display the full size image instead of a missing image size.
-If you activate the "force global" option, all the images on the front side that are related to posts will be replaced with the placeholders that mention the image size required. This is useful for debug, to quick identify the image sizes used for each layout. 
-If you activate the "only missing images" option, all the images on the front side that are related to posts and do not have the requested image size generate, will be replaced with the placeholders that mention the image size required. This is useful for showing smaller images instead of full size images. 
+If you activate the "force global" option, all the images on the front side that are related to posts will be replaced with the placeholders that mention the image size required. This is useful for debug, to quick identify the image sizes used for each layout.
+If you activate the "only missing images" option, all the images on the front side that are related to posts and do not have the requested image size generate, will be replaced with the placeholders that mention the image size required. This is useful for showing smaller images instead of full size images.
 
 == Global Ignore ==
-This option allows you to exclude globally from the application some of the image sizes that are registered through various plugins and themes options, but you don't need these in your application at all (these are just stored in your folders and database but not used). By excluding these, the unnecessary image sizes will not be generated at all. 
+This option allows you to exclude globally from the application some of the image sizes that are registered through various plugins and themes options, but you don't need these in your application at all (these are just stored in your folders and database but not used). By excluding these, the unnecessary image sizes will not be generated at all.
 
 == Hide Preview ==
 This option allows you to exclude from the "Image Regenerate & Select Crop Settings" lightbox the details and options for the selected image sizes. This is useful when you want to restrict from other users the functionality of crop or resize for particular image sizes.
 
 == Force Original ==
-This option means that the original image will be scaled to a max width or a max height specified by the image size you select. This might be useful if you do not use the original image in any of the layout at the full size, and this might save some storage space. 
-Leave "nothing selected" to keep the original image as what you upload. 
+This option means that the original image will be scaled to a max width or a max height specified by the image size you select. This might be useful if you do not use the original image in any of the layout at the full size, and this might save some storage space.
+Leave "nothing selected" to keep the original image as what you upload.
 
 == Cleanup All ==
-This option allows you to cleanup all the image sizes you already have in the application but you don't use these at all. Please be careful, once you click to remove the selected image size, the action is irreversible, the images generated will be deleted from your folders and database records. 
+This option allows you to cleanup all the image sizes you already have in the application but you don't use these at all. Please be careful, once you click to remove the selected image size, the action is irreversible, the images generated will be deleted from your folders and database records.
 
 == Regenerate All ==
 This option allows you to regenerate all the image for the selected image size Please be careful, once you click to regenerate the selected image size, the action is irreversible, the images already generated will be overwritten.
@@ -111,16 +131,16 @@ This option allows you to regenerate all the image for the selected image size P
 This option allows you to set a default crop position for the images generated for particular image size. This default option will be used when you chose to regenerate an individual image or all of these and also when a new image is uploaded.
 
 == WP-CLI Usage ==
-The available methods are "regenerate" and "cleanup". The arguments for both methods are the site id (1 for single site install, or if you are using the plugin in multi-site environment then you should specify the site id), the post type (post, page, or one of your custom post types), image size name (thumbnail, medium, etc.). 
+The available methods are "regenerate" and "cleanup". The arguments for both methods are the site id (1 for single site install, or if you are using the plugin in multi-site environment then you should specify the site id), the post type (post, page, or one of your custom post types), image size name (thumbnail, medium, etc.).
 
 However, if you do not know all the options you have you can simply start by running the command "sirsc regenerate 1" and for each argument that is not mentioned the plugin will present the list of available values.
 If you want to regenerate the images for only one post, then the 4th argument can be passed and this should be the post ID.
 
-So, for example, if I would want to regenerate just the thumbnails for a post with the ID = 7, my command would be 
+So, for example, if I would want to regenerate just the thumbnails for a post with the ID = 7, my command would be
 
 * sirsc regenerate 1 post thumbnail 7
 
-If I would want to regenerate just the medium images for a post with the id 7, my command would be 
+If I would want to regenerate just the medium images for a post with the id 7, my command would be
 
 * sirsc regenerate 1 post medium 7
 
