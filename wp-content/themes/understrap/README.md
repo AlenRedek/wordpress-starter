@@ -1,4 +1,4 @@
-Travis build: [![Build Status](https://travis-ci.org/holger1411/understrap.svg?branch=master)](https://travis-ci.org/holger1411/understrap) | Start talking: [![Gitter](https://img.shields.io/gitter/room/holger1411/understrap.svg?maxAge=2592000?style=flat-square)](https://gitter.im/holger1411/understrap)
+Travis build: [![Build Status](https://travis-ci.org/understrap/understrap.svg?branch=master)](https://travis-ci.org/understrap/understrap)
 
 #### See: [Official Demo](https://understrap.com/understrap) | Read: [Official Docs Page](https://understrap.github.io/)
 
@@ -95,11 +95,14 @@ To work and compile your Sass files on the fly start:
 
 Or, to run with Browser-Sync:
 
-- First change the browser-sync options to reflect your environment in the file `/gulpfile.js` in the beginning of the file:
+- First change the browser-sync options to reflect your environment in the file `/gulpconfig.json` in the beginning of the file:
 ```javascript
-var browserSyncOptions = {
-    proxy: "localhost/theme_test/", // <----- CHANGE HERE
-    notify: false
+{
+    "browserSyncOptions" : {
+        "proxy": "localhost/theme_test/", // <----- CHANGE HERE
+        "notify": false
+    },
+    ...
 };
 ```
 - then run: `$ gulp watch-bs`

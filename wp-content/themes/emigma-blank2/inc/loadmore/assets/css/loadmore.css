@@ -1,0 +1,8 @@
+.load-hidden-item {
+	display: none;
+}
+.loadmore-wrapper {
+    clear: both;
+    text-align: center;
+    padding: 30px 0;
+}

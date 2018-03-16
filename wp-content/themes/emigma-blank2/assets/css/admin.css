@@ -1,0 +1,3 @@
+.post-type-media #formatdiv #post-format-0,
+.post-type-media #formatdiv .post-format-standard,
+.post-type-media #formatdiv .post-format-standard + br { display: none; }

@@ -1,0 +1,131 @@
+body {
+	font-weight: $font-normal-weight;
+	color: $body-color;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-family: $font-family-heading;
+	color: $headings-color;
+	text-transform: uppercase;
+}
+a {
+    color: $link-color;
+    text-decoration: underline;
+    &:hover,&:active,&:focus {
+    	color: $link-color-hover;
+        text-decoration: none;
+    }
+    &[href^="mailto"] {
+		word-break: break-word;
+    }
+}
+.uppercase {
+	text-transform: uppercase !important;
+}
+.no-uppercase {
+	text-transform: none;
+}
+.text-large {
+	font-size: $font-size-h5;
+	font-family: $font-family-alt;
+}
+.text-bold {
+	font-family: $font-family-alt;
+}
+.hidden {
+	display: none;
+}
+.relative {
+	position: relative;
+}
+.inline-block {
+	display: inline-block;
+	vertical-align: middle;
+}
+.display-table {
+	display: table;
+	width: 100%; height: 100%;
+}
+.display-table-cell {
+	display: table-cell;
+	vertical-align: middle;
+}
+.z-index-2 {
+	z-index: 2;
+}
+.inline-separator {
+    padding-left: 5px;
+    padding-right: 5px;
+	&:after {
+		content: '|';
+	}
+}
+.inline-separators *:not(:last-child):after {
+	content: '|';
+    padding-left: 5px;
+}
+.valign-top {
+	vertical-align: top;
+}
+.valign-bottom {
+	vertical-align: bottom;
+}
+.text-center {
+	text-align: center;
+}
+.pointer {
+	cursor: pointer;
+}
+.underline {
+	text-decoration: underline;
+	&:hover {
+    	text-decoration: none;
+    }
+}
+.no-underline {
+	text-decoration: none;
+	&:hover {
+    	text-decoration: none;
+    }
+}
+.bottom {
+	position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+}
+.middle {
+	position: absolute;
+    bottom: 50%; left: 0;
+	width: 100%;
+	@include translate(0,50%);
+}
+@include color-variants('base', $body-color);
+@include color-variants('primary', $brand-primary);
+@include color-variants('secondary', $brand-secondary);
+@include color-variants('gray-lighter', $gray-lighter);
+@include color-variants('danger', $brand-danger);
+@include color-variants('white', #FFFFFF);
+@include register-font('GothamBook', 'otf');
+@include register-font('GothamMedium', 'otf');
+@media (max-width: $screen-xs-max) {
+	h1 {
+		font-size: floor($font-size-h1 * 0.6);
+	}
+	h2 {
+		font-size: floor($font-size-h2 * 0.8);
+	}
+}
+@media (min-width: $screen-xs) {
+	@include generate-spacing-classes('xs');
+	@include generate-flexbox-classes('xs');
+	@include helper-classes('xs');
+}
+@media (min-width: $screen-sm) {
+	@include generate-spacing-classes('sm');
+	@include generate-flexbox-classes('sm');
+	@include helper-classes('sm');
+}
+@media (min-width: $screen-md) {
+	@include generate-spacing-classes('md');
+	@include generate-flexbox-classes('md');
+	@include helper-classes('md');
+}

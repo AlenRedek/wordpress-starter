@@ -1,0 +1,43 @@
+{
+  "browserSyncOptions" : {
+    "proxy": "http://starter.razvija.se",
+    "port": 3017,
+	"ui": {
+		"port": 3018
+	},
+	"notify": false,
+    "open": false,
+    "files": [
+	    "./assets/css/*.css",
+	    "./assets/js/*.js",
+	    "./**/*.php"
+	]
+  },
+  "paths" : {
+    "js": "./assets/js",
+    "css": "./assets/css",
+    "fonts": "./assets/fonts",
+    "img": "./assets/img",
+    "scss": "./assets/scss",
+    "src": "./assets/src",
+    "node": "./node_modules/"
+  },
+  "vendors" : {
+	  "bootstrapJs" : {
+		  "src": "./node_modules/bootstrap/dist/js/bootstrap.bundle.js",
+		  "dest": "./assets/src/js/bootstrap"
+	  },
+	  "bootstrapScss" : {
+		  "src": "./node_modules/bootstrap/scss/**/*.scss",
+		  "dest": "./assets/src/scss/bootstrap"
+	  },
+	  "fontAwesomeFonts" : {
+		  "src": "./node_modules/font-awesome/fonts/**/*.{ttf,woff,woff2,eot,svg}",
+		  "dest": "./assets/fonts"
+	  },
+	  "fontAwesomeScss" : {
+		  "src": "./node_modules/font-awesome/scss/*.scss",
+		  "dest": "./assets/src/scss/font-awesome"
+	  }
+  }
+}

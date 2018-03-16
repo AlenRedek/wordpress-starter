@@ -79,8 +79,26 @@ if ( ! function_exists( 'pg_after_setup_theme' ) ) {
     add_action( 'after_setup_theme', 'pg_after_setup_theme' );
     function pg_after_setup_theme() {
         add_theme_support( 'post-thumbnails' );
-        add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption' ));
-        add_theme_support( 'post-formats', array( 'aside', 'image', 'gallery' , 'video', 'quote', 'link' ));
+        add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ));
+        add_theme_support( 'post-formats', array( 'aside', 'image', 'gallery', 'video', 'quote', 'link' ));
+		add_theme_support( 'custom-logo' );
+		// Adding support for Widget edit icons in customizer
+		add_theme_support( 'customize-selective-refresh-widgets' );
+		// Add default posts and comments RSS feed links to head.
+		add_theme_support( 'automatic-feed-links' );
+		/*
+		 * Let WordPress manage the document title.
+		 * By adding theme support, we declare that this theme does not use a
+		 * hard-coded <title> tag in the document head, and expect WordPress to
+		 * provide it for us.
+		 */
+		add_theme_support( 'title-tag' );
+		
+		// Set up the WordPress core custom background feature.
+		add_theme_support( 'custom-background', apply_filters( 'pg_custom_background_args', array(
+			'default-color' => 'ffffff',
+			'default-image' => '',
+		) ) );
     }
 }
 
@@ -145,10 +163,26 @@ if ( ! function_exists('pg_body_class') ) {
                 $classes[] = 'production';
             }
         }
+        
+        // Adds a class of group-blog to blogs with more than 1 published author.
+		if ( is_multi_author() ) {
+			$classes[] = 'group-blog';
+		}
+		// Adds a class of hfeed to non-singular pages.
+		if ( ! is_singular() ) {
+			$classes[] = 'hfeed';
+		}
 
         if(function_exists('pll_current_language')){
             $classes[] = 'lang-'.pll_current_language();
         }
+        
+        // Removes tag class from the body_class array to avoid Bootstrap markup styling issues.
+        foreach ( $classes as $key => $value ) {
+			if ( 'tag' == $value ) {
+				unset( $classes[ $key ] );
+			}
+		}
 
         return $classes;
     }

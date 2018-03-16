@@ -1,16 +1,20 @@
-// Load all the modules from package.json
-var gulp 		= require( 'gulp' ),
-	plumber 	= require( 'gulp-plumber' ),
-	watch 		= require( 'gulp-watch' ),
-	livereload 	= require( 'gulp-livereload' ),
-	minifycss 	= require( 'gulp-minify-css' ),
-	jshint 		= require( 'gulp-jshint' ),
-	stylish 	= require( 'jshint-stylish' ),
-	uglify 		= require( 'gulp-uglify' ),
-	rename 		= require( 'gulp-rename' ),
-	notify 		= require( 'gulp-notify' ),
-	include 	= require( 'gulp-include' ),
-	sass 		= require( 'gulp-sass' );
+// Defining requirements
+var gulp 			= require( 'gulp' ),
+	plumber 		= require( 'gulp-plumber' ),
+	sass 			= require( 'gulp-sass' ),
+	sourcemaps 		= require( 'gulp-sourcemaps' ),
+	cleanCSS 		= require( 'gulp-clean-css' ),
+	gulpSequence 	= require( 'gulp-sequence' ),
+	autoprefixer 	= require( 'gulp-autoprefixer' ),
+	rename 			= require( 'gulp-rename' ),
+	concat 			= require( 'gulp-concat' ),
+	uglify 			= require( 'gulp-uglify' ),
+	watch 			= require( 'gulp-watch' ),
+	browserSync 	= require( 'browser-sync' ).create();
+
+// Configuration file to keep your code DRY
+var config = require( './gulpconfig.json' );
+var paths = config.paths;
 
 // Default error handler
 var onError = function( err ) {
@@ -18,66 +22,77 @@ var onError = function( err ) {
 	this.emit('end');
 }
 
-var jsPath = './assets/js';
-var cssPath = './assets/css';
-var scssPath = './assets/scss';
-
-// Jshint outputs any kind of javascript problems you might have
-// Only checks javascript files inside /src directory
-gulp.task( 'jshint', function() {
-	return gulp.src( `${jsPath}/src/*.js` )
-		.pipe( jshint( '.jshintrc' ) )
-		.pipe( jshint.reporter( stylish ) )
-		.pipe( jshint.reporter( 'fail' ) );
-});
-
-// Concatenates all files that it finds in the manifest
-// and creates two versions: normal and minified.
-// It's dependent on the jshint task to succeed.
-gulp.task( 'scripts', ['jshint'], function() {
-  return gulp.src( `${jsPath}/manifest.js` )
-    .pipe( include() )
-    .pipe( rename( { basename: 'scripts' } ) )
-    .pipe( gulp.dest( `${jsPath}/vendor/` ) )
-    // Normal done, time to create the minified javascript (scripts.min.js)
-    .pipe( uglify() )
-    .pipe( rename( { suffix: '.min' } ) )
-    .pipe( gulp.dest( `${jsPath}/vendor/` ) )
-    .pipe( livereload() );
-});
-
-// As with javascripts this task creates two files, the regular and
-// the minified one. It automatically reloads browser as well.
-gulp.task('scss', function() {
-	return gulp.src(`${scssPath}/style.scss`)
-		.pipe( plumber( { errorHandler: onError } ) )
-		.pipe( sass() )
-		.pipe( gulp.dest( `${cssPath}/` ) )
-		// Normal done, time to do minified (style.min.css)
-		// remove the following 3 lines if you don't want it
-		.pipe( minifycss() )
-		.pipe( rename( { suffix: '.min' } ) )
-		.pipe( gulp.dest( `${cssPath}/` ) )
-		.pipe( livereload() );
-});
-
-
-// Start the livereload server and watch files for change
+// Run:
+// gulp watch
+// Starts watcher. Watcher runs gulp sass task on changes
 gulp.task( 'watch', function() {
-	livereload.listen();
-	
-	// don't listen to whole js folder, it'll create an infinite loop
-	gulp.watch( [ `${jsPath}/**/*.js`, `!${jsPath}/vendor/*.js` ], ['scripts'] );
-	
-	gulp.watch( `${scssPath}/**/*.scss`, ['scss'] );
-	
-	gulp.watch( './**/*.php' ).on( 'change', function( file ) {
-		// reload browser whenever any PHP file changes
-		livereload.changed( file );
-	});
+    gulp.watch( paths.scss + '/**/*.scss', ['styles'] );
+    gulp.watch( paths.src + '/js/**/*.js', ['scripts'] );
 });
 
+// Run:
+// gulp watch-bs
+// Starts watcher with browser-sync. Browser-sync reloads page automatically on your browser
+gulp.task( 'watch-bs', ['browser-sync', 'watch'], function() { 
+} );
 
-gulp.task( 'default', ['watch'], function() {
-	// Does nothing in this task, just triggers the dependent 'watch'
+// Run:
+// gulp browser-sync
+// Starts browser-sync task for starting the server.
+gulp.task( 'browser-sync', function() {
+    browserSync.init( config.browserSyncOptions );
+} );
+
+// Run:
+// gulp sass
+// Compiles SCSS files in CSS
+gulp.task( 'sass', function() {
+    var stream = gulp.src( paths.scss + '/*.scss' )
+        .pipe( plumber( { errorHandler: onError } ) )
+        .pipe( sass( { errLogToConsole: true } ) )
+        .pipe( autoprefixer( 'last 2 versions' ) )
+        .pipe( gulp.dest( paths.css ) );
+    return stream;
+});
+
+gulp.task( 'minifycss', function() {
+  return gulp.src( paths.css + '/theme.css' )
+    .pipe( sourcemaps.init( { loadMaps: true } ) )
+    .pipe( cleanCSS( { compatibility: '*' } ) )
+    .pipe( plumber( { errorHandler: onError } ) )
+    .pipe( rename( { suffix: '.min' } ) )
+	.pipe( sourcemaps.write( './' ) )
+    .pipe( gulp.dest( paths.css ) );
+});
+
+gulp.task( 'styles', function( callback ) {
+    gulpSequence( 'sass', 'minifycss' )( callback );
+} );
+
+// Run: 
+// gulp scripts. 
+// Uglifies and concat all JS files into one
+gulp.task( 'scripts', function() {
+	var scripts = paths.src + '/js/**/*.js';
+	
+	gulp.src( scripts )
+	  .pipe( concat( 'scripts.min.js' ) )
+	  .pipe( uglify() )
+	  .pipe( gulp.dest( paths.js ) );
+    
+	gulp.src( scripts )
+	  .pipe( concat( 'scripts.js' ) )
+	  .pipe( gulp.dest( paths.js ) );
+});
+
+// Run:
+// gulp copy-src.
+// Copy all needed dependency assets files from node_modules assets to themes src folder. Run this task after node install or node update
+gulp.task( 'copy-src', function() {
+
+	for (var prop in config.vendors) {
+		gulp.src( config.vendors[prop].src )
+		.pipe( gulp.dest( config.vendors[prop].dest ) );
+	}
+
 });

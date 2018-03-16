@@ -1,0 +1,10 @@
+{
+    "name": "EmigmaLab/starter",
+    "description": "Combines Automattic´s Underscores Starter Theme and Bootstrap 4",
+    "type": "library",
+    "license": "GPL-2.0",
+    "minimum-stability": "stable",
+    "require": {},
+    "keywords": ["wordpress","theme","bootstrap"],
+    "homepage": "https://starter.emigma.com"
+}

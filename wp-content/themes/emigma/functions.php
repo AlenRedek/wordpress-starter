@@ -1,34 +1,71 @@
 <?php
-	
-if(file_exists(get_stylesheet_directory().'/includes/init.php')){
-    require_once(get_stylesheet_directory().'/includes/init.php');
-}
+/**
+ * Understrap functions and definitions
+ *
+ * @package understrap
+ */
 
-if(file_exists(get_stylesheet_directory().'/includes/theme-functions.php')){
-    require_once(get_stylesheet_directory().'/includes/theme-functions.php');
-}
+/**
+ * Theme setup and custom theme supports.
+ */
+require get_template_directory() . '/includes/init.php';
 
-/*
-******************************************************************************************************
-	Load custom cells types for Layouts plugin from the /dd-layouts-cells/ directory
-******************************************************************************************************
-*/
-if ( defined('WPDDL_VERSION') && ! function_exists( 'include_ddl_layouts' ) ) {
+/**
+ * Initialize theme default settings
+ */
+require get_template_directory() . '/includes/admin/theme-settings.php';
 
-	function include_ddl_layouts( $tpls_dir = '' ) {
-		$dir_str = dirname( __FILE__ ) . $tpls_dir;
-		$dir     = opendir( $dir_str );
+/**
+ * Load Editor functions.
+ */
+require get_template_directory() . '/includes/admin/editor.php';
 
-		while ( ( $currentFile = readdir( $dir ) ) !== false ) {
-			if ( is_file( $dir_str . $currentFile ) ) {
-				include $dir_str . $currentFile;
-			}
-		}
-		
-		closedir( $dir );
-	}
+/**
+ * Custom Header Image.
+ */
+require get_template_directory() . '/includes/admin/custom-header.php';
 
-	include_ddl_layouts( '/includes/dd-layouts-cells/' );
-}
+/**
+ * Customizer additions.
+ */
+require get_template_directory() . '/includes/admin/customizer.php';
 
-?>
+/**
+ * Register widget area.
+ */
+require get_template_directory() . '/includes/widgets/widgets.php';
+
+/**
+ * Custom template tags for this theme.
+ */
+require get_template_directory() . '/includes/frontend/template-tags.php';
+
+/**
+ * Custom pagination for this theme.
+ */
+require get_template_directory() . '/includes/frontend/pagination.php';
+
+/**
+ * Custom Comments file.
+ */
+require get_template_directory() . '/includes/frontend/custom-comments.php';
+
+/**
+ * Load custom WordPress nav walker.
+ */
+require get_template_directory() . '/includes/frontend/bootstrap-wp-navwalker.php';
+
+/**
+ * Custom functions that act independently of the theme templates.
+ */
+require get_template_directory() . '/includes/frontend/extras.php';
+
+/**
+ * Load Jetpack compatibility file.
+ */
+require get_template_directory() . '/includes/utilities/jetpack.php';
+
+/**
+ * Load WooCommerce functions.
+ */
+require get_template_directory() . '/includes/utilities/woocommerce.php';

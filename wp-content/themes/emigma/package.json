@@ -1,22 +1,45 @@
 {
-  "name": "Emigma",
-  "version": "1.0.0",
-  "description": "Emigma starter theme, enhanced with Gulp workflow",
-  "main": "gulpfile.js",
-  "author": "Alen Redek <alen@emigma.com>",
+  "name": "emigma",
+  "version": "0.8.1",
+  "description": "WordPress Theme framework",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "gulp copy-assets"
+  },
+  "engines": {
+    "npm": ">=2.1.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EmigmaLab/starter.git"
+  },
+  "keywords": [
+    "wordpress",
+    "theme",
+    "framework",
+    "bootstrap",
+    "underscores"
+  ],
+  "author": "Emigma Multimedia Lab",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/EmigmaLab/starter/issues"
+  },
+  "homepage": "http://starter.razvija.se",
   "devDependencies": {
+    "bootstrap": "^4.0.0",
+    "browser-sync": "^2.23.6",
+    "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
-    "gulp-include": "^2.3.1",
-    "gulp-jshint": "^2.0.4",
-    "gulp-livereload": "^3.8.1",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-notify": "^3.0.0",
-    "gulp-plumber": "^1.1.0",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-clean-css": "^3.9.3",
+    "gulp-concat": "^2.6.1",
+    "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
+    "gulp-sequence": "^1.0.0",
+    "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
-    "gulp-watch": "^4.3.11",
-    "jshint": "^2.9.5",
-    "jshint-stylish": "^2.2.1"
+    "gulp-watch": "^5.0.0"
   }
 }

@@ -1,0 +1,16 @@
+@mixin button-size($padding-vertical, $padding-horizontal, $font-size, $line-height, $border-radius) {
+    padding: $padding-vertical $padding-horizontal;
+    font-size: $font-size;
+    line-height: $line-height;
+    border-radius: $border-radius;
+}
+@mixin button-effect($btn-color, $btn-border, $btn-bg, $btn-hover-color, $btn-hover-border, $btn-hover-bg) {
+    color: $btn-color !important;
+    border-color: $btn-border !important;
+    background-color: $btn-bg !important;
+    &:hover, &:focus, &:active {
+        color: $btn-hover-color !important;
+        border-color: $btn-hover-border !important;
+        background-color: $btn-hover-bg !important;
+    }
+}
