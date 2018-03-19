@@ -6,8 +6,8 @@ class Purgatorio {
 	
 	/**
 	 * Holds the singleton instance of this class
-	 * @since 2.3.3
-	 * @var Jetpack
+	 * @since 1.0
+	 * @var purgatorio
 	 */
 	static $instance = false;
 
@@ -63,17 +63,6 @@ class Purgatorio {
 		}
 		if($this->get_option('include_fontawesome')){
 			wp_enqueue_style('purgatorio-fontawesome', PURGATORIO__PLUGIN_URL . 'assets/css/vendor/font-awesome.min.css', array(), '4.7.0');
-		}
-		if($ga_tracking_id = $this->get_option('ga_tracking_id')){
-			wp_enqueue_script('purgatorio-ga-tracking', PURGATORIO__PLUGIN_URL . 'assets/js/ga_tracking.js', array(), PURGATORIO_VERSION, false);
-			wp_localize_script('purgatorio-ga-tracking', 'ga_tracking_id', $ga_tracking_id);
-		}
-		if($typekit_id = $this->get_option('typekit_id')){
-			wp_enqueue_script('purgatorio-typekit-src', 'https://use.typekit.net/'.$typekit_id.'.js', array(), PURGATORIO_VERSION, false);
-	    	wp_enqueue_script('purgatorio-typekit', PURGATORIO__PLUGIN_URL . 'assets/js/typekit.js', array('tpurgatorio-typekit-src'), PURGATORIO_VERSION, false);
-		}
-		if(pg_is_dev() && $this->get_option('enable_livereload')){
-			wp_enqueue_script('livereload', PURGATORIO__PLUGIN_URL . 'assets/js/livereload.js', array(), PURGATORIO_VERSION, true );
 		}
 		
 		if ( is_singular() && comments_open() && get_option('thread_comments') ){

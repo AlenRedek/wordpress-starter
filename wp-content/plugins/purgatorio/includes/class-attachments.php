@@ -2,108 +2,86 @@
 
 class PG_Attachments_Class {
 
-	private $metakey;
-	protected $title;
+	public $meta_field;
+	public $meta_subfield;
+	public $title;
 
-	public function __construct(){
-		$this->metakey = pg_get_option('attachments_metakey');
-		$this->title = __('File downloads','purgatorio');
-        
-        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
+	public function __construct($meta_field='attachments', $meta_subfield='attachment'){
+		$this->meta_field = $meta_field;
+		$this->meta_subfield = $meta_subfield;
+		$this->title = __('Download attachments','purgatorio');
         
         add_shortcode('pg_attachments', array($this, 'attachments_shortcode'));
 	}
 	
-	/*
-	******************************************************************************************************
-		Enqueue scripts & styles
-	******************************************************************************************************
-	*/
-	public function enqueue_scripts_styles(){
-		wp_enqueue_style('purgatorio-attachments', PURGATORIO__PLUGIN_URL . 'assets/css/attachments.css', array(), PURGATORIO_VERSION);
-	}
-
-	/*
-	******************************************************************************************************
-		Display media files after content
-	******************************************************************************************************
-	*/
 	public function display_attachments($post_id, $title){
 		$html = '';
-		$files = $this->get_files($post_id);
-		$has_files = false;
+		$attachments = $this->get_attachments($post_id);
 		if( ! $title ) $title = $this->title;
-		if( $files && (is_single() || is_page()) ){
-			foreach($files as $file){
-				if(is_array($file)){
-					$has_files = true;
-					break;
-				}
-			}
-			
-			if ( $has_files ) {
-				$html .= $this->before_files_output($title);
-				$html .= $this->files_output($files);
-				$html .= $this->after_files_output();
-			}
-		}
-		return $html;
-	}
-
-	/*
-	******************************************************************************************************
-		Get files
-	******************************************************************************************************
-	*/
-	public function get_files($post_id){
-		$files = array();
-		$files_urls = get_post_meta($post_id, $this->metakey);
-		if($files_urls){
-			foreach($files_urls as $file_url){
-				$file_id = pg_get_file_id($file_url);
-				if($file_id){
-					$file_mime_type = get_post_mime_type( $file_id );
-					
-					$files[$file_id]['id'] = $file_id;
-					$files[$file_id]['dir'] = get_attached_file($file_id);
-					$files[$file_id]['url'] = $file_url;
-					$files[$file_id]['mime_type'] = $file_mime_type;
-					$files[$file_id]['icon'] = $this->get_file_type($file_mime_type);
-					$files[$file_id]['size'] = pg_get_filesize( $file_id );
-					$files[$file_id]['title'] = get_the_title($file_id);
-				}
-			}
+		
+		if( $attachments ){
+			$html .= $this->before_attachments_output($title);
+			$html .= $this->attachments_output($attachments);
+			$html .= $this->after_attachments_output();
 		}
 		
-	    return $files;
+		return $html;
 	}
-
-	/*
-	******************************************************************************************************
-		Display media files after content
-	******************************************************************************************************
-	*/
-	public function before_files_output($title){
-		$html  = '<div class="panel files-panel">';
+	
+	public function get_attachments($post_id){
+		if( function_exists('have_rows') ){
+            $attachments = $this->get_attachments_acf($post_id);
+        }else{
+	        $attachments = array();
+			$attachments_urls = get_post_meta($post_id, $this->meta_field);
+			if($attachments_urls){
+				foreach($attachments_urls as $attachment_url){
+					$attachment_id = pg_get_file_id($attachment_url);
+					if($attachment_id){
+						$attachment_mime_type = get_post_mime_type( $attachment_id );
+						
+						$attachments[$attachment_id]['id'] = $attachment_id;
+						$attachments[$attachment_id]['dir'] = get_attached_file($attachment_id);
+						$attachments[$attachment_id]['url'] = $attachment_url;
+						$attachments[$attachment_id]['mime_type'] = $attachment_mime_type;
+						$attachments[$attachment_id]['title'] = get_the_title($attachment_id);
+					}
+				}
+			}
+        }
+        
+        return $attachments;
+	}
+	
+	public function get_attachments_acf($post_id){
+		if( have_rows($this->meta_field) ){
+			while ( have_rows($this->meta_field) ) : the_row();
+				$attachment = get_sub_field($this->meta_subfield);
+				if($attachment){
+					$attachments[] = $attachment;
+				}
+	    	endwhile;
+		}
+	    
+	    return $attachments;
+	}
+	
+	public function before_attachments_output($title){
+		$html  = '<div class="panel attachments-panel">';
 		if($title) $html .= '<div class="panel-heading"><h3>'.$title.'</h3></div>';
 		$html .= '<div class="panel-body">';
 		$html .= '<div class="row">';
 	    return $html;
 	}
-
-	/*
-	******************************************************************************************************
-		Files output
-	******************************************************************************************************
-	*/
-	public function files_output($files){
+	
+	public function attachments_output($attachments){
 		$html = '';
 		$i = 1;
-		if($files){
-			foreach($files as $f){
-				if($f){
-					$html .= '<div class="col-xs-12 col-sm-6 file-item">';
-					$html .= $this->generate_file_output($f);
+		if($attachments){
+			foreach($attachments as $attachment){
+				if($attachment){
+					$html .= '<div class="col-xs-12 col-sm-6 attachment-item">';
+					$html .= $this->generate_attachment_output($attachment);
 					$html .= '</div>';
 					if($i%2 === 0) $html .= '<div class="clearfix hidden-xs"></div>';
 					$i++;
@@ -112,42 +90,29 @@ class PG_Attachments_Class {
 		}
 	    return $html;
 	}
-
-	/*
-	******************************************************************************************************
-		Generate file output
-	******************************************************************************************************
-	*/
-	public function generate_file_output($file){
+	
+	public function generate_attachment_output($attachment){
+		$icon = $this->get_filetype($attachment['mime_type']);
+		$size = pg_get_filesize($attachment['id']);
 		$html = '';
-		$html .= '<a href="'.$file['url'].'" title="'.$file['title'].'" target="_blank" class="text-decoration-none">';
+		$html .= '<a href="'.$attachment['url'].'" title="'.$attachment['title'].'" target="_blank" class="text-decoration-none">';
 			$html .= '<div class="md-flex">';
-				$html .= '<i class="fa fa-file-' . $file['icon']['icon'] . 'o"></i>';
-				$html .= '<div><div class="font-weight-bold">'.$file['title'].'</div>'.'<div class="text-uppercase">'.$file['icon']['type'].'<span> | '.$file['size'].'</span></div></div>';
+				$html .= '<i class="fa fa-file-' . $icon['icon'] . 'o"></i>';
+				$html .= '<div><div class="font-weight-bold">'.$attachment['title'].'</div>'.'<div class="text-uppercase">'.$icon['type'].'<span> | '.$size.'</span></div></div>';
 			$html .= '</div>';
 		$html .= '</a>';
 
 		return $html;
 	}
-
-	/*
-	******************************************************************************************************
-		After files output
-	******************************************************************************************************
-	*/
-	public function after_files_output(){
+	
+	public function after_attachments_output(){
 		$html  = '</div>';
 		$html .= '</div>';
 		$html .= '</div>';
 	    return $html;
 	}
-
-	/*
-	******************************************************************************************************
-		Get file type based on file type
-	******************************************************************************************************
-	*/
-	protected function get_file_type($mime_type){
+	
+	public function get_filetype($mime_type){
 		$general_types = explode('/',$mime_type);
 		if($general_types[0] !== 'application')
 			return array('type'=>$general_types[0], 'icon'=>$general_types[0].'-');
@@ -195,13 +160,13 @@ class PG_Attachments_Class {
 	    /**
 		 * Filters the shortcode.
 		 *
-		 * @since Unknown
+		 * @since 1.0
 		 *
 		 * @param string $shortcode_string The full shortcode string.
 		 * @param array  $attributes       The attributes within the shortcode.
 		 * @param string $content          The content of the shortcode, if available.
 		 */
-		
+		 
 		$shortcode_string = apply_filters( "pg_attachments_shortcode", $shortcode_string, $atts, $content );
 
 		return $shortcode_string;

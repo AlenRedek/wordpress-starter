@@ -9,16 +9,6 @@ if ( ! function_exists( 'pg_widgets_init' ) ) {
     add_action( 'widgets_init', 'pg_widgets_init' );
     function pg_widgets_init() {
 
-        register_sidebar( array(
-            'name'          => __( 'Hero Static', 'purgatorio' ),
-            'description'   => __( 'Home Page main banner', 'purgatorio' ),
-            'id'            => 'statichero',
-            'before_widget' => '',
-            'after_widget'  => '',
-            'before_title'  => '',
-            'after_title'   => '',
-        ) );
-
         register_sidebar(array(
             'id'            => 'home-widget-1',
             'name'          => __( 'Homepage Widget 1', 'purgatorio' ),
@@ -128,14 +118,6 @@ if ( ! function_exists( 'pg_widgets_init' ) ) {
 		if(file_exists(PURGATORIO__PLUGIN_DIR.'widgets/widget-language-switcher.php')){
 			require_once(PURGATORIO__PLUGIN_DIR.'widgets/widget-language-switcher.php');
 			register_widget( 'pg_language_switcher_widget' );
-		}
-		if(file_exists(PURGATORIO__PLUGIN_DIR.'widgets/widget-login.php')){
-			require_once(PURGATORIO__PLUGIN_DIR.'widgets/widget-login.php');
-			register_widget( 'pg_login_widget' );
-		}
-		if(file_exists(PURGATORIO__PLUGIN_DIR.'widgets/widget-sidenav.php')){
-			require_once(PURGATORIO__PLUGIN_DIR.'widgets/widget-sidenav.php');
-			register_widget( 'pg_sidenav_widget' );
 		}
     }
 }

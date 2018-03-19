@@ -39,12 +39,14 @@ define( 'PURGATORIO__PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'PURGATORIO__SETTINGS', 'purgatorio_settings' );
 
 require_once(PURGATORIO__PLUGIN_DIR.'purgatorio-class.php');
-require_once(PURGATORIO__PLUGIN_DIR.'includes/global-init.php');
 require_once(PURGATORIO__PLUGIN_DIR.'includes/global-functions.php');
+require_once(PURGATORIO__PLUGIN_DIR.'includes/global-init.php');
+require_once(PURGATORIO__PLUGIN_DIR.'includes/i18n.php');
 require_once(PURGATORIO__PLUGIN_DIR.'includes/security.php');
+require_once(PURGATORIO__PLUGIN_DIR.'includes/tracking.php');
 require_once(PURGATORIO__PLUGIN_DIR.'includes/seo.php');
-require_once(PURGATORIO__PLUGIN_DIR.'widgets/widgets.php');
-require_once(PURGATORIO__PLUGIN_DIR.'loadmore/loadmore.php');
+//require_once(PURGATORIO__PLUGIN_DIR.'widgets/widgets.php');
+//require_once(PURGATORIO__PLUGIN_DIR.'shortcodes/shortcodes.php');
 
 /* Query class */
 require_once(PURGATORIO__PLUGIN_DIR.'includes/class-queries.php');
@@ -60,11 +62,6 @@ $pg_attachments = new PG_Attachments_Class();
 require_once(PURGATORIO__PLUGIN_DIR.'gmaps/class-gmaps.php');
 global $pg_gmaps;
 $pg_gmaps = new PG_GMaps_Class();
-
-/* Youtube class */
-require_once(PURGATORIO__PLUGIN_DIR.'includes/class-youtube.php');
-global $pg_youtube;
-$pg_youtube = new PG_Youtube_Class();
 
 if ( is_admin() ) {
 	require_once( PURGATORIO__PLUGIN_DIR . 'purgatorio-admin.php' );

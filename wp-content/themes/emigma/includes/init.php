@@ -23,10 +23,6 @@ if ( ! function_exists( 'theme_enqueue_styles_scripts' ) ) {
 		/* Scripts */
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/scripts.min.js', array('jquery'), $the_theme->get( 'Version' ), true );
-		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-			wp_enqueue_script( 'comment-reply' );
-		}
-		
 		wp_enqueue_script( 'theme-custom', get_template_directory_uri() . '/assets/js/custom.js', array('theme-scripts'), $the_theme->get( 'Version' ), true );
 	}
 }

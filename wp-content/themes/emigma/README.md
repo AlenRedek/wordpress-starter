@@ -45,18 +45,18 @@ Why not add a well known and supported layout framework to have a solid, clean a
 
 Some basics about the Sass and CSS files that come with UnderStrap:
 - The theme itself uses the `/style.css`file just to identify the theme inside of WordPress. The file is not loaded by the theme and does not include any styles.
-- The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` file(s) provides all styles. It is composed of five different SCSS sets and one variable file at `/assets/sass/theme.scss`:
+- The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` file(s) provides all styles. It is composed of several different SCSS sets and one variable file defined at `/assets/scss/theme.scss`:
 
                   - 1 "theme/theme_variables";  // <--------- Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
-                  - 2 "../assets/src/bootstrap-sass/assets/stylesheets/bootstrap";  // <--------- All the Bootstrap stuff - Don´t edit this!
-                  - 3 "understrap/understrap"; // <--------- Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
-                  - 4 "../assets/src/fontawesome/scss/font-awesome"; // <--------- Font Awesome Icon styles
+                  - 2 "../src/scss/bootstrap/bootstrap";  // <--------- All the Bootstrap stuff - Don´t edit this!
+                  - 3 "../src/scss/font-awesome/font-awesome"; // <--------- Font Awesome Icon styles
+                  - 4 "understrap/understrap"; // <--------- Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
 
                   // Any additional imported files //
                   - 5 "theme/theme";  // <--------- Add your styles into this file
 
-- Don’t edit the files no. 2-4 files/filesets or you won’t be able to update it without overwriting your own work!
-- Your design goes into: `/assets/sass/theme`. Add your styles to the `/assets/sass/theme/_theme.scss` file and your variables to the `/assets/sass/theme/_theme_variables.scss`. Or add other .scss files into it and `@import` it into `/assets/sass/theme/_theme.scss`.
+- Don’t edit the files within src filesets or you won’t be able to update it without overwriting your own work!
+- Your design goes into: `/assets/scss/theme`. Add your styles to the `/assets/scss/theme/_theme.scss` file and your variables to the `/assets/scss/theme/_variables.scss`. Or add other .scss files into it and `@import` it into `/assets/sass/theme/_theme.scss`.
 
 ## Installation
 

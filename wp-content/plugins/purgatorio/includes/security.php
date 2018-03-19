@@ -33,7 +33,7 @@ if ( ! function_exists('theme_remove_version') ) {
     Show less info to users on failed login for security (Will not let a valid username be known)
 ******************************************************************************************************
 */
-if ( ! function_exists('theme_remove_version') ) {
+if ( ! function_exists('show_less_login_info') ) {
 	add_filter( 'login_errors', 'show_less_login_info' );
 	function show_less_login_info() { 
 	    return "<strong>ERROR</strong>: Stop guessing!"; 

@@ -17,7 +17,7 @@ if(defined(BLOG_PUBLIC) && get_option('blog_public') != BLOG_PUBLIC){
 
 /*
 ******************************************************************************************************
-    Theme init actions
+    Plugin init actions
 ******************************************************************************************************
 */
 if( ! function_exists('pg_init_actions') ){
@@ -26,13 +26,11 @@ if( ! function_exists('pg_init_actions') ){
 		add_post_type_support( 'page', 'excerpt' );
 		
 		// Debugging options
-		if(function_exists('pg_is_dev')){
-			if( pg_is_dev() ){
-				ini_set('xdebug.var_display_max_depth', 20);
-				ini_set('xdebug.var_display_max_children', 256);
-				ini_set('xdebug.var_display_max_data', 5000);
-				ini_set('max_execution_time', 120); // Siteground's max
-			}
+		if( pg_is_dev() ){
+			ini_set('xdebug.var_display_max_depth', 20);
+			ini_set('xdebug.var_display_max_children', 256);
+			ini_set('xdebug.var_display_max_data', 5000);
+			ini_set('max_execution_time', 120); // Siteground's max
 		}
 	}
 }
@@ -104,45 +102,16 @@ if ( ! function_exists( 'pg_after_setup_theme' ) ) {
 
 /*
 ******************************************************************************************************
-    Custom font sizes on WYSIWYG
-******************************************************************************************************
-*/
-if ( ! function_exists('pg_tinymce_settings') ) {
-    add_filter('tiny_mce_before_init', 'pg_tinymce_settings');
-    function pg_tinymce_settings($arr){
-        $arr['block_formats'] = 'Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Paragraph=p';
-        return $arr;
-    }
-}
-
-/*
-******************************************************************************************************
     Modify admin menu
 ******************************************************************************************************
 */
 if ( ! function_exists('pg_admin_menu') ) {
     add_action('admin_menu', 'pg_admin_menu', 1000);
     function pg_admin_menu() {
-        if ( ! (current_user_can('administrator')) ) {
+        if ( ! current_user_can('administrator') ) {
 			// Remove unneeded admin menu pages
-			//remove_menu_page( 'jetpack' );
-			//remove_menu_page( 'wpcf7' );
 			remove_menu_page('vc-welcome');
 			remove_menu_page( 'aam' );
-        }
-    }
-}
-
-/*
-******************************************************************************************************
-    Remove Rev Slider Metabox
-******************************************************************************************************
-*/
-if ( ! function_exists('pg_remove_rev_slider_mb') ) {
-    if ( is_admin() && class_exists('RevSliderFront') ) {
-        add_action( 'do_meta_boxes', 'pg_remove_rev_slider_mb' );
-        function pg_remove_rev_slider_mb() {
-            remove_meta_box( 'mymetabox_revslider_0', get_post_type(), 'normal' );
         }
     }
 }
@@ -156,12 +125,10 @@ if ( ! function_exists('pg_body_class') ) {
     add_filter( 'body_class', 'pg_body_class' );
     function pg_body_class( $classes ) {
 
-        if(function_exists('pg_is_dev')){
-            if( pg_is_dev() ){
-                $classes[] = 'development';
-            }else{
-                $classes[] = 'production';
-            }
+        if( pg_is_dev() ){
+            $classes[] = 'dev';
+        }else{
+            $classes[] = 'prod';
         }
         
         // Adds a class of group-blog to blogs with more than 1 published author.
@@ -172,10 +139,8 @@ if ( ! function_exists('pg_body_class') ) {
 		if ( ! is_singular() ) {
 			$classes[] = 'hfeed';
 		}
-
-        if(function_exists('pll_current_language')){
-            $classes[] = 'lang-'.pll_current_language();
-        }
+		
+        $classes[] = 'lang-'.pg_get_current_language();
         
         // Removes tag class from the body_class array to avoid Bootstrap markup styling issues.
         foreach ( $classes as $key => $value ) {
@@ -202,67 +167,6 @@ if ( ! function_exists('pg_update_plugins') ) {
 	    if(isset($value->response['go_pricing/go_pricing.php'])) unset( $value->response['go_pricing/go_pricing.php'] );
 	    
 	    return $value;
-	}
-}
-
-/*
-******************************************************************************************************
-    Add additional data to Yoast's SEO JSON-LD output
-******************************************************************************************************
-*/
-if ( ! function_exists('pg_modify_wpseo_json_ld_output') ) {
-	add_filter('wpseo_json_ld_output', 'pg_modify_wpseo_json_ld_output', 10, 1);
-	function pg_modify_wpseo_json_ld_output( $data ) {
-		$pg_options = get_option( PURGATORIO__SETTINGS );
-		switch($data["@type"]){
-			case 'WebSite':
-				if(isset($pg_options['author_id'])){
-					$data['author'] = array(
-						'@id' => $pg_options['author_id']
-					);
-				}
-				if(isset($pg_options['publisher_id'])){
-					$data['publisher'] = array(
-						'@id' => $pg_options['publisher_id']
-					);
-				}
-			break;
-		}
-		
-		return $data;
-	
-	}
-}
-
-/*
-******************************************************************************************************
-	Yoast SEO breadcrumbs modifications for single pages
-******************************************************************************************************
-*/
-if ( ! function_exists( 'pg_wpseo_breadcrumb_links' ) ) {
-	add_filter( 'wpseo_breadcrumb_links', 'pg_wpseo_breadcrumb_links' );
-	function pg_wpseo_breadcrumb_links( $links ) {
-	    if(is_single() && function_exists('pg_get_cpt_page_id')) {
-	        $cpt_object = get_post_type_object(get_post_type());
-	        $landing_page = pg_get_cpt_page_id($cpt_object->name);
-	        if( ! $cpt_object->_builtin && $landing_page ){
-	        	foreach($links as $k=>$d){
-	        		if(isset($d['ptarchive']) && $d['ptarchive'] == $cpt_object->name){
-	        			$key = $k;
-	        			break;
-	        		}
-	        	}
-	        	if($key){
-	        		array_splice( $links, $key, 1, array(
-		                array(
-		                    'id' => $landing_page
-		                )
-		            ));
-	        	}
-	        }
-	    }
-	    
-	    return $links;
 	}
 }
 
@@ -295,56 +199,6 @@ if ( ! function_exists('pg_handle_upload') ) {
         }
         return $params;
     }
-}
-
-/*
-******************************************************************************************************
-	Custom Page Columns - Display page template PHP file location
-******************************************************************************************************
-*/
-add_filter('manage_pages_custom_column', 'pg_pages_custom_column', 10, 2);
-if ( ! function_exists( 'pg_pages_custom_column' ) ) {
-	function pg_pages_custom_column($column, $postid){
-		if($column == 'page_order'){
-			if($p = get_post($postid)){
-				$pn = get_post_ancestors($postid);
-				$pn = array_reverse($pn);
-				if(count($pn)){
-					foreach($pn as $n){
-						$pt = get_post($n);
-						echo $pt->menu_order.'. ';
-					}
-				}
-				echo $p->menu_order;
-			}
-		}else if($column == 'template'){
-			if($t = get_page_template_slug($postid)){
-				$templates = get_page_templates();
-				if($t_name = array_search($t, $templates)){
-					echo $t_name;
-					echo '<br /><span style="color:#9a9a9a">'.$t.'</span>';
-				}
-			}else echo '<span style="color:#ccc;">'.__('Default', 'gledalisce').'</span>';
-		}
-	}
-}
-
-add_action('manage_pages_columns', 'pg_manage_pages_columns', 99, 2);
-if ( ! function_exists( 'pg_manage_pages_columns' ) ) {
-	function pg_manage_pages_columns($columns){
-		$cols = array();
-		if(is_array($columns)){
-			foreach($columns as $k=>$c){
-				$cols[$k] = $c;
-				if($k == 'title'){
-					$cols['page_order'] = __('Order', 'emigma');
-					$cols['template'] = __('Template', 'emigma');
-				}
-			}
-			return $cols;
-		}else
-			return $columns;
-	}
 }
 
 ?>

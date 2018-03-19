@@ -165,7 +165,7 @@ class PG_GMaps_Class {
 	    /**
 		 * Filters the shortcode.
 		 *
-		 * @since Unknown
+		 * @since 1.0
 		 *
 		 * @param string $shortcode_string The full shortcode string.
 		 * @param array  $attributes       The attributes within the shortcode.

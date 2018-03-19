@@ -46,8 +46,7 @@ if ( ! function_exists('pg_get_theme_option') ) {
 **/
 if ( ! function_exists('pg_is_dev') ) {
     function pg_is_dev(){
-	    $dev_ip = pg_get_option('dev_ip');
-        if( $_SERVER['REMOTE_ADDR'] == $dev_ip || current_user_can('administrator') ){
+        if( current_user_can('administrator') ){
             return true;
         }else{
             return false;
@@ -62,48 +61,14 @@ if ( ! function_exists('pg_is_dev') ) {
  * @return HTML
  *
 **/
-if ( ! function_exists('avar_dump') ) {
-    function avar_dump(){
+if ( ! function_exists('lvar_dump') ) {
+    function lvar_dump(){
         $args = func_get_args();
-        if(is_development()){
+        if(pg_is_dev()){
             echo '<pre>';
                 var_dump($args);
             echo '</pre>';
         }
-    }
-}
-
-/**
- * Get translated post using Polylang
- *
- * @param integer
- * @return integer
- *
-**/
-if ( ! function_exists('pg_get_translated_post') ) {
-    function pg_get_translated_post($post_id) {
-        if(function_exists('pll_current_language') && function_exists('pll_get_post')){
-            $post_id = pll_get_post($post_id, pll_current_language());
-        }
-        
-        return $post_id;
-    }
-}
-
-/**
- * Get translated term using Polylang
- *
- * @param integer
- * @return integer
- *
-**/
-if ( ! function_exists('pg_get_translated_term') ) {
-    function pg_get_translated_term($term_id) {
-        if(function_exists('pll_current_language') && function_exists('pll_get_term')){
-            $term_id = pll_get_term($term_id, pll_current_language());
-        }
-        
-        return $term_id;
     }
 }
 
@@ -151,23 +116,6 @@ if ( ! function_exists('pg_group_posts_by_month') ) {
 			return explode(' ', $month_title);
 		}
 	}
-}
-
-/**
- * Get page template for pre-selected CPT
- *
- * @param string
- * @return integer
- *
-**/
-if ( ! function_exists('pg_get_cpt_page_id') ) {
-    function pg_get_cpt_page_id($key){
-        if(function_exists('get_field')) {
-            //return pg_get_translated_post(get_field($key,'options'));
-        }
-        
-        return false;
-    }
 }
 
 /**
@@ -311,11 +259,7 @@ if ( ! function_exists('pg_extract_url') ) {
  *
 **/
 if ( ! function_exists('pg_update_url_param') ) {
-    function pg_update_url_param($params, $url, $cpt) {
-        if( ! $url ){
-	        $url = get_permalink(pg_get_cpt_page_id($cpt));
-        }
-        
+    function pg_update_url_param($params, $url) {        
         $get_params = $_GET;
         foreach($params as $name=>$value){
             unset($get_params[$name]);

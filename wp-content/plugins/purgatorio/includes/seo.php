@@ -1,5 +1,34 @@
 <?php
 	
+/*
+******************************************************************************************************
+    Add additional data to Yoast's SEO JSON-LD output
+******************************************************************************************************
+*/
+if ( ! function_exists('pg_modify_wpseo_json_ld_output') ) {
+	add_filter('wpseo_json_ld_output', 'pg_modify_wpseo_json_ld_output', 10, 1);
+	function pg_modify_wpseo_json_ld_output( $data ) {
+		$pg_options = get_option( PURGATORIO__SETTINGS );
+		switch($data["@type"]){
+			case 'WebSite':
+				if(isset($pg_options['author_id'])){
+					$data['author'] = array(
+						'@id' => $pg_options['author_id']
+					);
+				}
+				if(isset($pg_options['publisher_id'])){
+					$data['publisher'] = array(
+						'@id' => $pg_options['publisher_id']
+					);
+				}
+			break;
+		}
+		
+		return $data;
+	
+	}
+}
+	
 /**
  * Required hatom microdata
  *

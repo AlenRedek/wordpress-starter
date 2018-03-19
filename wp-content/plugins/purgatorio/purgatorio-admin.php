@@ -63,6 +63,7 @@ class Purgatorio_Admin {
 			$option_group
 		);
 		
+/*
 		$field_key = 'dev_ip';
 		add_settings_field(
 			$field_key,
@@ -72,7 +73,9 @@ class Purgatorio_Admin {
 			$section_id,
 			array('field_key' => $field_key)
 		);
+*/
 		
+/*
 		$field_key = 'enable_livereload';
 		add_settings_field(
 			$field_key,
@@ -82,6 +85,7 @@ class Purgatorio_Admin {
 			$section_id,
 			array('field_key' => $field_key)
 		);
+*/
 		
 		$field_key = 'wp_docs_url';
 		add_settings_field(
@@ -97,16 +101,6 @@ class Purgatorio_Admin {
 		add_settings_field(
 			$field_key,
 			__( 'Theme option ID', 'purgatorio' ),
-			array($this, 'render_input_text_field'),
-			$option_group,
-			$section_id,
-			array('field_key' => $field_key)
-		);
-		
-		$field_key = 'typekit_id';
-		add_settings_field(
-			$field_key,
-			__( 'Typekit ID', 'purgatorio' ),
 			array($this, 'render_input_text_field'),
 			$option_group,
 			$section_id,
@@ -133,10 +127,10 @@ class Purgatorio_Admin {
 			array('field_key' => $field_key)
 		);
 		
-		$field_key = 'attachments_metakey';
+		$field_key = 'fb_tracking_id';
 		add_settings_field(
 			$field_key,
-			__( 'Attachments metakey', 'purgatorio' ),
+			__( 'Facebook Pixel tracking ID', 'purgatorio' ),
 			array($this, 'render_input_text_field'),
 			$option_group,
 			$section_id,
