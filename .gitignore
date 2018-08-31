@@ -22,26 +22,26 @@
 #
 # -----------------------------------------------------------------
 
-# ignore everything in the root except the "wp-content" directory.
+# ignore everything in the root directory.
 /*
+
+# track wp-content/themes folder only
 !wp-content/
+wp-content/*
+!wp-content/themes/
 
-# ignore some specific folders.
-wp-content/uploads/*
-wp-content/themes/*/node_modules/
-wp-content/themes/*/bower_components/
-wp-content/plugins/*
-wp-content/wflogs/
-
-# ignore caching folders
-cache/
-
-# track these files (i.e. do NOT ignore it)
+# track these files
 !.gitignore
 !.htaccess
 !php.ini
 !readme.md
 !robots.txt
+
+# ignore some specific folders.
+wp-content/themes/*/node_modules/
+wp-content/themes/*/bower_components/
+wp-content/themes/*/languages/
+cache/
 
 # ignore OS generated files
 ehthumbs.db
