@@ -26,10 +26,12 @@
 /*
 !wp-content/
 
-# ignore everything in the uploads folder.
+# ignore some specific folders.
 wp-content/uploads/*
 wp-content/themes/*/node_modules/
 wp-content/themes/*/bower_components/
+wp-content/plugins/*
+wp-content/wflogs/*
 
 # ignore caching folders
 cache/
