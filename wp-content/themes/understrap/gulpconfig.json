@@ -1,8 +1,7 @@
 {
   "browserSyncOptions" : {
-    "proxy": "http://starter.razvija.se/",
-    "notify": false,
-    "open": false
+    "proxy": "localhost/",
+    "notify": false
   },
   "browserSyncWatchFiles" : [
     "./css/*.min.css",
