@@ -33,6 +33,8 @@ wp-content/*
 # track these files
 !.gitignore
 !readme.md
+!docker-compose.yml
+!Dockerfile
 
 # ignore some specific folders.
 wp-content/themes/*/node_modules/
