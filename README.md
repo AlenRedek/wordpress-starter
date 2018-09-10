@@ -64,32 +64,17 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ## Installation
 
-### Classic install
-- Download the understrap folder from GitHub or from [https://understrap.com](https://understrap.com)
-- IMPORTANT: If you download it from GitHub make sure you rename the "understrap-master.zip" file just to "understrap.zip" or you might have problems using child themes !!
-- Upload it into your WordPress installation subfolder here: `/wp-content/themes/`
+### GIT Clone
+- Clone the theme folder from GitHub `git clone git@github.com:EmigmaLab/starter.git folder_name/`
 - Login to your WordPress backend
 - Go to Appearance → Themes
-- Activate the UnderStrap theme
-
-### npm install
-- Open your terminal
-- Change to the directory where you want to add UnderStrap
-- Type `npm install understrap`
-
-### WordPress.org install
-- Open your WordPress backend
-- Click on "Appearance -> Themes"
-- Hit the "Add new" button
-- Search for "UnderStrap"
-- Hit the "install" button
-- Activate the theme
+- Activate the Emigma theme
 
 ## Developing With npm, Gulp and SASS and [Browser Sync][1]
 
 ### Installing Dependencies
 - Make sure you have installed Node.js and Browser-Sync* (* optional, if you wanna use it) on your computer globally
-- Then open your terminal and browse to the location of your UnderStrap copy
+- Then open your terminal and browse to the location of your theme folder
 - Run: `$ npm install`
 
 ### Running
@@ -111,16 +96,7 @@ Or, to run with Browser-Sync:
 ```
 - then run: `$ gulp watch-bs`
 
-## How to Use the Build-In Widget Slider
-
-The front-page slider is widget driven. Simply add more than one widget to widget position “Hero”.
-- Click on Appearance → Widgets.
-- Add two, or more, widgets of any kind to widget area “Hero”.
-- That’s it.
-
-## RTL styles?
-Just add a new file to the themes root folder called rtl.css. Add all alignments to this file according to this description:
-https://codex.wordpress.org/Right_to_Left_Language_Support
+[1] Visit [http://browsersync.io](http://browsersync.io) for more information on Browser Sync
 
 ## Page Templates
 
@@ -135,8 +111,6 @@ The `empty.php` template displays a header and a footer only. A good starting po
 ### Full Width Template
 
 The `fullwidthpage.php` template has full width layout without a sidebar.
-
-[1] Visit [http://browsersync.io](http://browsersync.io) for more information on Browser Sync
 
 Licenses & Credits
 =
