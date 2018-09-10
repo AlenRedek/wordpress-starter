@@ -47,12 +47,12 @@ Some basics about the Sass and CSS files that come with UnderStrap:
 - The theme itself uses the `/style.css`file just to identify the theme inside of WordPress. The file is not loaded by the theme and does not include any styles.
 - The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` file(s) provides all styles. It is composed of several different SCSS sets and one variable file defined at `/assets/scss/theme.scss`:
 
-- 1 "/assets/scss/theme/_variables";  // <--------- Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
-- 2 "/assets/scss/understrap/understrap"; // <--------- Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
-- 3 "/assets/src/scss/bootstrap/bootstrap";  // <--------- All the Bootstrap stuff - Don´t edit this!
-- 4 "/assets/src/scss/font-awesome/font-awesome"; // <--------- Font Awesome Icon styles
+    - 1 "/assets/scss/theme/_variables";  // <--------- Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
+    - 2 "/assets/scss/understrap/understrap"; // <--------- Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
+    - 3 "/assets/src/scss/bootstrap/bootstrap";  // <--------- All the Bootstrap stuff - Don´t edit this!
+    - 4 "/assets/src/scss/font-awesome/font-awesome"; // <--------- Font Awesome Icon styles
 // Any additional imported files //
-- 5 "/assets/scss/theme/";  // <--------- Add your styles into this file
+    - 5 "/assets/scss/theme/";  // <--------- Add your styles into this file
 
 - Don’t edit the files within src filesets or you won’t be able to update it without overwriting your own work!
 - Your design goes into: `/assets/scss/theme`. Add your styles to the `/assets/scss/theme/_theme.scss` file and your variables to the `/assets/scss/theme/_variables.scss`. Or add other .scss files into it and `@import` it into `/assets/scss/theme/_theme.scss`.
