@@ -47,6 +47,8 @@ Some basics about the Sass and CSS files that come with UnderStrap:
 - The theme itself uses the `/style.css`file just to identify the theme inside of WordPress. The file is not loaded by the theme and does not include any styles.
 - The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` file(s) provides all styles. It is composed of several different SCSS sets and one variable file defined at `/assets/scss/theme.scss`:
 
+    - Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
+    `/assets/scss/theme/_variables`
     - `/assets/scss/theme/_variables`  // <--------- Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
     - `/assets/scss/understrap/understrap` // <--------- Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
     - `/assets/src/scss/bootstrap/bootstrap`  // <--------- All the Bootstrap stuff - Don´t edit this!
