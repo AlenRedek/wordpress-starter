@@ -4,7 +4,7 @@ Website: [https://understrap.com](https://understrap.com)
 
 Demo: [https://understrap.com/understrap](https://understrap.com/understrap)
 
-Docs: [https://understrap.github.io/](https://understrap.github.io/)
+Docs: [https://understrap.github.io](https://understrap.github.io)
 
 Child Theme Project: [https://github.com/holger1411/understrap-child](https://github.com/holger1411/understrap-child)
 
@@ -30,11 +30,11 @@ See [changelog](CHANGELOG.md)
 - Combines Underscore’s PHP/JS files and Bootstrap’s HTML/CSS/JS.
 - Comes with Bootstrap (v4) Sass source files and additional .scss files. Nicely sorted and ready to add your own variables and customize the Bootstrap variables.
 - Uses a single and minified CSS file for all the basic stuff.
-- [Font Awesome](http://fortawesome.github.io/Font-Awesome/) integration (v4.7.0)
+- Font Awesome integration (v4.7.0)
 - Jetpack ready.
 - WooCommerce support.
 - Contact Form 7 support.
-- [Child Theme](https://github.com/holger1411/understrap-child) ready.
+- Child Theme ready.
 - Translation ready.
 
 ## Starter Theme + HTML Framework = WordPress Theme Framework
@@ -65,11 +65,30 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ## Installation
 
-### GIT Clone
-- Clone the theme folder from GitHub `$ git clone git@github.com:EmigmaLab/starter.git`
-- Login to your WordPress backend
-- Go to Appearance → Themes
-- Activate the Emigma theme
+### GIT
+- Open your terminal and browse to the projects workplace folder.
+- Clone the theme from GitHub repository `$ git clone git@github.com:EmigmaLab/starter.git`
+
+### npm
+- Open your terminal and browse to the location of your theme folder
+- Install npm dependencies: `$ npm install`
+
+### Rsync
+- Open your terminal and browse to the root folder of project.
+- Download uploads folder: `$ rsync -Phvrt <project-name>@dev.razvija.se:/var/www/<project-name>.razvija.se/web/wp-content/uploads/ wp-content/uploads/`
+
+### Docker
+- Open your terminal and browse to the location of your theme folder
+- Build & Run Docker container: `$ docker-compose up`
+- When you're done, shut down the containers with command `$ docker-compose down`.
+
+### PHPMyAdmin
+- Open your browser and navigate to [http://localhost:8080](http://localhost:8080)
+- Log in with username `root` and password `toor`.
+- Create new database named `wp` and import appropriate SQL dump file.
+
+### Accessing the page
+- Open your browser and navigate to [http://localhost](http://localhost)
 
 ## Developing with npm, Gulp, SASS and Browser Sync[1]
 
