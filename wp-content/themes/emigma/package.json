@@ -4,7 +4,7 @@
   "description": "WordPress Theme framework",
   "main": "index.js",
   "scripts": {
-    "postinstall": "gulp copy-assets"
+    "postinstall": "gulp copy-src"
   },
   "engines": {
     "npm": ">=2.1.8"
