@@ -44,22 +44,22 @@ Why not add a well known and supported layout framework to have a solid, clean a
 ## Confused by All the CSS and Sass Files?
 
 Some basics about the Sass and CSS files that come with UnderStrap:
-- The theme itself uses the `/style.css`file just to identify the theme inside of WordPress. The file is not loaded by the theme and does not include any styles.
-- The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` file(s) provides all styles.
-Don´t edit these files!
-They're composed of several different SCSS sets and one variable file defined at `/assets/scss/theme.scss`.
-- Your design goes into: `/assets/scss/theme`. Add your styles to the `/assets/scss/theme/_theme.scss` file and your variables to the `/assets/scss/theme/_variables.scss`. Or add other .scss files into it and `@import` it into `/assets/scss/theme/_theme.scss`.
+- The theme itself uses the `/style.css` file just to identify the theme inside of WordPress. The file is not loaded by the theme and does not include any styles.
+- The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` file(s) provides all the styles.
+Don´t edit these files! They're composed of several different SCSS sets and one variable file defined at `/assets/scss/theme.scss`.
+- Your design goes into `/assets/scss/theme/` folder:
 
-    - Add any additional imports into this file
-    `/assets/scss/theme/`
+    - Add other `.scss` files into `/assets/scss/theme/` folder.
+    - Add any additional imports into this file by using `@import` keyword
+    `/assets/scss/theme/_theme.scss`
     - Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
-    `/assets/scss/theme/_variables`
+    `/assets/scss/theme/_variables.scss`
     - Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
     `/assets/scss/understrap/understrap`
 
 - Don’t edit the files within src filesets or you won’t be able to update it without overwriting your own work!
 
-    - All the Bootstrap stuff - Don´t edit this!
+    - All the Bootstrap stuff
     `/assets/src/scss/bootstrap/bootstrap`
     - Font Awesome Icon styles
     `/assets/src/scss/font-awesome/font-awesome`
