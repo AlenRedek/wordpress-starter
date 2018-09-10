@@ -49,12 +49,14 @@ Some basics about the Sass and CSS files that come with UnderStrap:
 
     - Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
     `/assets/scss/theme/_variables`
-    - `/assets/scss/theme/_variables`  // <--------- Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
-    - `/assets/scss/understrap/understrap` // <--------- Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
-    - `/assets/src/scss/bootstrap/bootstrap`  // <--------- All the Bootstrap stuff - Don´t edit this!
-    - `/assets/src/scss/font-awesome/font-awesome` // <--------- Font Awesome Icon styles
-// Any additional imported files //
-    - `/assets/scss/theme/`  // <--------- Add your styles into this file
+    - Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
+    `/assets/scss/understrap/understrap`
+    - All the Bootstrap stuff - Don´t edit this!
+    `/assets/src/scss/bootstrap/bootstrap`
+    - Font Awesome Icon styles
+    `/assets/src/scss/font-awesome/font-awesome`
+    - Add any additional imports into this file
+    `/assets/scss/theme/`
 
 - Don’t edit the files within src filesets or you won’t be able to update it without overwriting your own work!
 - Your design goes into: `/assets/scss/theme`. Add your styles to the `/assets/scss/theme/_theme.scss` file and your variables to the `/assets/scss/theme/_variables.scss`. Or add other .scss files into it and `@import` it into `/assets/scss/theme/_theme.scss`.
