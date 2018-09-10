@@ -67,7 +67,7 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ### GIT
 - Open your terminal and browse to the projects workplace folder.
-- Clone the theme from GitHub repository `$ git clone git@github.com:EmigmaLab/starter.git`
+- Clone the theme from GitHub repository `$ git clone git@github.com:EmigmaLab/<project-name>.git`
 
 ### npm
 - Open your terminal and browse to the location of your theme folder
