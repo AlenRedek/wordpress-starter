@@ -1,12 +1,14 @@
-Travis build: [![Build Status](https://travis-ci.org/understrap/understrap.svg?branch=master)](https://travis-ci.org/understrap/understrap)
-
-#### See: [Official Demo](https://understrap.com/understrap) | Read: [Official Docs Page](https://understrap.github.io/)
-
 # UnderStrap WordPress Theme Framework
 
 Website: [https://understrap.com](https://understrap.com)
 
+Demo: [https://understrap.com/understrap](https://understrap.com/understrap)
+
+Docs: [https://understrap.github.io/](https://understrap.github.io/)
+
 Child Theme Project: [https://github.com/holger1411/understrap-child](https://github.com/holger1411/understrap-child)
+
+Travis build: [![Build Status](https://travis-ci.org/understrap/understrap.svg?branch=master)](https://travis-ci.org/understrap/understrap)
 
 ## About
 
@@ -22,7 +24,6 @@ http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 
 ## Changelog
 See [changelog](CHANGELOG.md)
-
 
 ## Basic Features
 
@@ -70,7 +71,7 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 - Go to Appearance → Themes
 - Activate the Emigma theme
 
-## Developing With npm, Gulp and SASS and Browser Sync[1]
+## Developing with npm, Gulp, SASS and Browser Sync[1]
 
 ### Installing Dependencies
 - Make sure you have installed Node.js and Browser-Sync* (* optional, if you wanna use it) on your computer globally
@@ -120,6 +121,3 @@ and of course
 - jQuery: https://jquery.org | (Code licensed under MIT)
 - WP Bootstrap Navwalker by Edward McIntyre: https://github.com/twittem/wp-bootstrap-navwalker | GNU GPL
 - Bootstrap Gallery Script based on Roots Sage Gallery: https://github.com/roots/sage/blob/5b9786b8ceecfe717db55666efe5bcf0c9e1801c/lib/gallery.php
-
-
-[![Analytics](https://ga-beacon.appspot.com/UA-139292-31/chromeskel_a/readme)](https://github.com/igrigorik/ga-beacon)
