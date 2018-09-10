@@ -65,12 +65,12 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 ## Installation
 
 ### GIT Clone
-- Clone the theme folder from GitHub `git clone git@github.com:EmigmaLab/starter.git folder_name/`
+- Clone the theme folder from GitHub `$ git clone git@github.com:EmigmaLab/starter.git`
 - Login to your WordPress backend
 - Go to Appearance → Themes
 - Activate the Emigma theme
 
-## Developing With npm, Gulp and SASS and [Browser Sync][1]
+## Developing With npm, Gulp and SASS and Browser Sync[1]
 
 ### Installing Dependencies
 - Make sure you have installed Node.js and Browser-Sync* (* optional, if you wanna use it) on your computer globally
