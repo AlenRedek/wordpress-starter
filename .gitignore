@@ -32,10 +32,7 @@ wp-content/*
 
 # track these files
 !.gitignore
-!.htaccess
-!php.ini
 !readme.md
-!robots.txt
 
 # ignore some specific folders.
 wp-content/themes/*/node_modules/
