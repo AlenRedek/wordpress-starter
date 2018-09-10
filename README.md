@@ -90,6 +90,11 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 ### Accessing the page
 - Open your browser and navigate to [http://localhost](http://localhost)
 
+### Install required plugins
+- Navigate to WP admin area [http://localhost/wp-admin](http://localhost/wp-admin)
+- Go to "Appearance -> Themes"
+- Activate required plugins
+
 ## Developing with npm, Gulp, SASS and Browser Sync[1]
 
 ### Installing Dependencies
