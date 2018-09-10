@@ -1,12 +1,14 @@
-Travis build: [![Build Status](https://travis-ci.org/understrap/understrap.svg?branch=master)](https://travis-ci.org/understrap/understrap)
-
-#### See: [Official Demo](https://understrap.com/understrap) | Read: [Official Docs Page](https://understrap.github.io/)
-
 # UnderStrap WordPress Theme Framework
 
 Website: [https://understrap.com](https://understrap.com)
 
+Demo: [https://understrap.com/understrap](https://understrap.com/understrap)
+
+Docs: [https://understrap.github.io](https://understrap.github.io)
+
 Child Theme Project: [https://github.com/holger1411/understrap-child](https://github.com/holger1411/understrap-child)
+
+Travis build: [![Build Status](https://travis-ci.org/understrap/understrap.svg?branch=master)](https://travis-ci.org/understrap/understrap)
 
 ## About
 
@@ -23,17 +25,16 @@ http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 ## Changelog
 See [changelog](CHANGELOG.md)
 
-
 ## Basic Features
 
 - Combines Underscore’s PHP/JS files and Bootstrap’s HTML/CSS/JS.
 - Comes with Bootstrap (v4) Sass source files and additional .scss files. Nicely sorted and ready to add your own variables and customize the Bootstrap variables.
 - Uses a single and minified CSS file for all the basic stuff.
-- [Font Awesome](http://fortawesome.github.io/Font-Awesome/) integration (v4.7.0)
+- Font Awesome integration (v4.7.0)
 - Jetpack ready.
 - WooCommerce support.
 - Contact Form 7 support.
-- [Child Theme](https://github.com/holger1411/understrap-child) ready.
+- Child Theme ready.
 - Translation ready.
 
 ## Starter Theme + HTML Framework = WordPress Theme Framework
@@ -44,48 +45,61 @@ Why not add a well known and supported layout framework to have a solid, clean a
 ## Confused by All the CSS and Sass Files?
 
 Some basics about the Sass and CSS files that come with UnderStrap:
-- The theme itself uses the `/style.css`file just to identify the theme inside of WordPress. The file is not loaded by the theme and does not include any styles.
-- The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` file(s) provides all styles. It is composed of several different SCSS sets and one variable file defined at `/assets/scss/theme.scss`:
+- The theme itself uses the `/style.css` file just to identify the theme inside of WordPress. The file is not loaded by the theme and does not include any styles.
+- The `/assets/css/theme.css` and its minified little brother `/assets/css/theme.min.css` files provides all the styles.
+Don´t edit these files! They're composed of several different SCSS sets and one variable file defined at `/assets/scss/theme.scss`.
+- Your design goes into `/assets/scss/theme/` folder:
 
-                  - 1 "theme/theme_variables";  // <--------- Add your variables into this file. Also add variables to overwrite Bootstrap or UnderStrap variables here
-                  - 2 "../src/scss/bootstrap/bootstrap";  // <--------- All the Bootstrap stuff - Don´t edit this!
-                  - 3 "../src/scss/font-awesome/font-awesome"; // <--------- Font Awesome Icon styles
-                  - 4 "understrap/understrap"; // <--------- Some basic WordPress stylings and needed styles to combine Boostrap and Underscores
+    - Add other `_example.scss` files into `/assets/scss/theme/` folder. Hence the `_` prefix.
+    - Add any additional imports into `/assets/scss/theme/_theme.scss` file by using `@import` keyword
+    - Add your custom variables or variables to overwrite Bootstrap or UnderStrap variables into `/assets/scss/theme/_variables.scss` file.
+    - Some basic WordPress stylings to combine Boostrap and Underscores
+    `/assets/scss/understrap/understrap`
 
-                  // Any additional imported files //
-                  - 5 "theme/theme";  // <--------- Add your styles into this file
+- Don’t edit the files within `src` filesets or you won’t be able to update it without overwriting your own work!
 
-- Don’t edit the files within src filesets or you won’t be able to update it without overwriting your own work!
-- Your design goes into: `/assets/scss/theme`. Add your styles to the `/assets/scss/theme/_theme.scss` file and your variables to the `/assets/scss/theme/_variables.scss`. Or add other .scss files into it and `@import` it into `/assets/sass/theme/_theme.scss`.
+    - All the Bootstrap stuff
+    `/assets/src/scss/bootstrap/bootstrap`
+    - Font Awesome Icon styles
+    `/assets/src/scss/font-awesome/font-awesome`
 
 ## Installation
 
-### Classic install
-- Download the understrap folder from GitHub or from [https://understrap.com](https://understrap.com)
-- IMPORTANT: If you download it from GitHub make sure you rename the "understrap-master.zip" file just to "understrap.zip" or you might have problems using child themes !!
-- Upload it into your WordPress installation subfolder here: `/wp-content/themes/`
-- Login to your WordPress backend
-- Go to Appearance → Themes
-- Activate the UnderStrap theme
+### GIT
+- Open your terminal and browse to the projects workplace folder.
+- Clone the theme from GitHub repository `$ git clone git@github.com:EmigmaLab/<project-name>.git`
 
-### npm install
-- Open your terminal
-- Change to the directory where you want to add UnderStrap
-- Type `npm install understrap`
+### npm
+- Open your terminal and browse to the location of your theme folder
+- Install npm dependencies: `$ npm install`
 
-### WordPress.org install
-- Open your WordPress backend
-- Click on "Appearance -> Themes"
-- Hit the "Add new" button
-- Search for "UnderStrap"
-- Hit the "install" button
-- Activate the theme
+### Rsync
+- Open your terminal and browse to the root folder of project.
+- Download uploads folder: `$ rsync -Phvrt <project-name>@dev.razvija.se:/var/www/<project-name>.razvija.se/web/wp-content/uploads/ wp-content/uploads/`
 
-## Developing With npm, Gulp and SASS and [Browser Sync][1]
+### Docker
+- Open your terminal and browse to the location of your theme folder
+- Build & Run Docker container: `$ docker-compose up`
+- When you're done, shut down the containers with command `$ docker-compose down`.
+
+### PHPMyAdmin
+- Open your browser and navigate to [http://localhost:8080](http://localhost:8080)
+- Log in with username `root` and password `toor`.
+- Create new database named `wp` and import appropriate SQL dump file.
+
+### Accessing the page
+- Open your browser and navigate to [http://localhost](http://localhost)
+
+### Install required plugins
+- Navigate to WP admin area [http://localhost/wp-admin](http://localhost/wp-admin)
+- Go to "Appearance -> Themes"
+- Activate required plugins
+
+## Developing with npm, Gulp, SASS and Browser Sync[1]
 
 ### Installing Dependencies
 - Make sure you have installed Node.js and Browser-Sync* (* optional, if you wanna use it) on your computer globally
-- Then open your terminal and browse to the location of your UnderStrap copy
+- Then open your terminal and browse to the location of your theme folder
 - Run: `$ npm install`
 
 ### Running
@@ -107,16 +121,7 @@ Or, to run with Browser-Sync:
 ```
 - then run: `$ gulp watch-bs`
 
-## How to Use the Build-In Widget Slider
-
-The front-page slider is widget driven. Simply add more than one widget to widget position “Hero”.
-- Click on Appearance → Widgets.
-- Add two, or more, widgets of any kind to widget area “Hero”.
-- That’s it.
-
-## RTL styles?
-Just add a new file to the themes root folder called rtl.css. Add all alignments to this file according to this description:
-https://codex.wordpress.org/Right_to_Left_Language_Support
+[1] Visit [http://browsersync.io](http://browsersync.io) for more information on Browser Sync
 
 ## Page Templates
 
@@ -132,8 +137,6 @@ The `empty.php` template displays a header and a footer only. A good starting po
 
 The `fullwidthpage.php` template has full width layout without a sidebar.
 
-[1] Visit [http://browsersync.io](http://browsersync.io) for more information on Browser Sync
-
 Licenses & Credits
 =
 - Font Awesome: http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -142,6 +145,3 @@ and of course
 - jQuery: https://jquery.org | (Code licensed under MIT)
 - WP Bootstrap Navwalker by Edward McIntyre: https://github.com/twittem/wp-bootstrap-navwalker | GNU GPL
 - Bootstrap Gallery Script based on Roots Sage Gallery: https://github.com/roots/sage/blob/5b9786b8ceecfe717db55666efe5bcf0c9e1801c/lib/gallery.php
-
-
-[![Analytics](https://ga-beacon.appspot.com/UA-139292-31/chromeskel_a/readme)](https://github.com/igrigorik/ga-beacon)
