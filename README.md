@@ -79,8 +79,10 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ### Docker
 - Open your terminal and browse to the location of your theme folder
-- Build & Run Docker container: `$ docker-compose up`
-- When you're done, shut down the containers with command `$ docker-compose down`.
+- Build image & Run Docker container: `$ docker-compose up`
+- List all containers `$ docker container ls -a`
+- Enter running container `$ docker container exec -it <container_name> bash`
+- When you're done, shut down running containers with command `$ docker-compose down`.
 
 ### PHPMyAdmin
 - Open your browser and navigate to [http://localhost:8080](http://localhost:8080)
