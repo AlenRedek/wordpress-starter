@@ -71,6 +71,12 @@ if( ! function_exists('theme_register_required_plugins') ){
 
             // Free plugins
             array(
+                'name'     				=> 'Purgatorio',
+                'slug'     				=> 'purgatorio',
+                'source'   				=> 'https://github.com/EmigmaLab/purgatorio/archive/master.zip',
+                'required' 				=> true
+            ),
+            array(
                 'name'     				=> 'Cookie Notice',
                 'slug'     				=> 'cookie-notice',
                 'source'   				=> 'https://downloads.wordpress.org/plugin/cookie-notice.zip',
