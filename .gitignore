@@ -33,6 +33,7 @@ wp-content/*
 # track these files
 !.gitignore
 !readme.md
+!changelog.md
 !docker-compose.yml
 !Dockerfile
 
