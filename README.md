@@ -69,9 +69,9 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 - Open your terminal and browse to the projects workplace folder.
 - Clone the theme from GitHub repository `$ git clone git@github.com:EmigmaLab/<project-name>.git`
 
-### npm
-- Open your terminal and browse to the location of your theme folder
-- Install npm dependencies: `$ npm install`
+### Installing Dependencies
+- Then open your terminal and browse to the location of your theme folder
+- Run: `$ npm install`
 
 ### Rsync
 - Open your terminal and browse to the root folder of project.
@@ -92,19 +92,17 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ### Install required plugins
 - Navigate to WP admin area [http://localhost/wp-admin](http://localhost/wp-admin)
-- Go to "Appearance -> Themes"
+- Go to `Appearance -> Themes`
 - Activate required plugins
 
 ## Developing with npm, Gulp, SASS and Browser Sync[1]
 
 ### Installing Dependencies
-- Make sure you have installed Node.js and Browser-Sync* (* optional, if you wanna use it) on your computer globally
-- Then open your terminal and browse to the location of your theme folder
-- Run: `$ npm install`
+- Make sure you have installed Node.js and Gulp on your computer globally
+- Run: `$ npm install --global gulp`
 
 ### Running
-To work and compile your Sass files on the fly start:
-
+To work and compile your Sass files on the fly open your terminal and browse to the location of your theme folder and start:
 - `$ gulp watch`
 
 Or, to run with Browser-Sync:
