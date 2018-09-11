@@ -31,6 +31,11 @@ require get_template_directory() . '/includes/admin/custom-header.php';
 require get_template_directory() . '/includes/admin/customizer.php';
 
 /**
+ * Check for theme required plugins.
+ */
+require get_template_directory() . '/includes/plugins/plugin-activation.php';
+
+/**
  * Register widget area.
  */
 require get_template_directory() . '/includes/widgets/widgets.php';
