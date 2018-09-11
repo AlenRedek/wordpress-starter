@@ -33,7 +33,7 @@ require get_template_directory() . '/includes/admin/customizer.php';
 /**
  * Check for theme required plugins.
  */
-require get_template_directory() . '/includes/plugins/plugin-activation.php';
+require get_template_directory() . '/includes/plugins/required-plugins.php';
 
 /**
  * Register widget area.
