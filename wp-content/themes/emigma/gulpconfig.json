@@ -1,6 +1,6 @@
 {
   "browserSyncOptions" : {
-    "proxy": "http://starter.razvija.se",
+    "proxy": "http://localhost",
     "port": 3017,
 	"ui": {
 		"port": 3018
