@@ -92,8 +92,13 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ### Install required plugins
 - Navigate to WP admin area [http://localhost/wp-admin](http://localhost/wp-admin)
-- Go to `Appearance -> Themes`
-- Activate required plugins
+- Go to `Appearance -> Install plugins`
+- Install & Activate required plugins
+
+#### Premium plugins
+- Premium plugins are available at [http://hub.razvija.se/wp-plugins/](http://hub.razvija.se/wp-plugins/)
+- In order to update repository, upload a newer version of plugin
+- Run: `$ scp -i ~/.ssh/emigma_dev_rsa plugin-name.zip hub@dev.razvija.se:/var/www/hub.razvija.se/web/wp-plugins`
 
 ## Developing with npm, Gulp, SASS and Browser Sync[1]
 
