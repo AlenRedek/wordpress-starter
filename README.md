@@ -102,7 +102,11 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 - In order to update repository, upload a newer version of plugin
 - Run: `$ scp -i ~/.ssh/emigma_dev_rsa plugin-name.zip hub@dev.razvija.se:/var/www/hub.razvija.se/web/wp-plugins`
 
-## Developing with npm, Gulp, SASS and Browser Sync[1]
+#### Dev plugin - Purgatorio
+- WordPress plugin for faster theme development
+- [https://github.com/EmigmaLab/purgatorio](https://github.com/EmigmaLab/purgatorio)
+
+## Developing with npm, Gulp[1], SASS and Browser Sync[2]
 
 ### Installing Dependencies
 - Make sure you have installed Node.js and Gulp on your computer globally
@@ -126,7 +130,8 @@ Or, to run with Browser-Sync:
 ```
 - then run: `$ gulp watch-bs`
 
-[1] Visit [http://browsersync.io](http://browsersync.io) for more information on Browser Sync
+[1] Visit [https://codeable.io/speed-up-your-theme-development-with-gulp](https://codeable.io/speed-up-your-theme-development-with-gulp) for more information on Theme development with Gulp, Bower & Livereload
+[2] Visit [http://browsersync.io](http://browsersync.io) for more information on Browser Sync
 
 ## Page Templates
 
