@@ -102,7 +102,7 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 - In order to update repository, upload a newer version of plugin
 - Run: `$ scp -i ~/.ssh/emigma_dev_rsa plugin-name.zip hub@dev.razvija.se:/var/www/hub.razvija.se/web/wp-plugins`
 
-#### Dev plugin - Purgatorio
+#### Purgatorio - Dev plugin
 - WordPress plugin for faster theme development
 - [https://github.com/EmigmaLab/purgatorio](https://github.com/EmigmaLab/purgatorio)
 
