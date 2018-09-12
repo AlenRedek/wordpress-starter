@@ -21,16 +21,23 @@ if( ! function_exists('theme_register_required_plugins') ){
          */
         $plugins = array(
 
-            // Premium plugins
+            // Emigma Hub
+            
             array(
-                'name'     				=> 'Advanced Custom Fields PRO', // The plugin name
-                'slug'     				=> 'advanced-custom-fields-pro', // The plugin slug (typically the folder name)
-                'source'   				=> 'http://hub.razvija.se/wp-plugins/advanced-custom-fields-pro.zip', // The plugin source
+                'name'     				=> 'Purgatorio', // The plugin name
+                'slug'     				=> 'purgatorio', // The plugin slug (typically the folder name)
+                'source'   				=> 'http://hub.razvija.se/wp-plugins/purgatorio.zip', // The plugin source
                 'required' 				=> true, // If false, the plugin is only 'recommended' instead of required
-                'version' 				=> '5.7.5', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
+                'version' 				=> '1.0.0', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
                 'force_activation' 		=> false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch
                 'force_deactivation' 	=> false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins
                 'external_url' 			=> '', // If set, overrides default API URL and points to an external URL
+            ),
+            array(
+                'name'     				=> 'Advanced Custom Fields PRO',
+                'slug'     				=> 'advanced-custom-fields-pro',
+                'source'   				=> 'http://hub.razvija.se/wp-plugins/advanced-custom-fields-pro.zip',
+                'required' 				=> true
             ),
             array(
                 'name'     				=> 'Gravity Forms',
@@ -69,13 +76,7 @@ if( ! function_exists('theme_register_required_plugins') ){
                 'required' 				=> true
             ),
 
-            // Free plugins
-            array(
-                'name'     				=> 'Purgatorio',
-                'slug'     				=> 'purgatorio',
-                'source'   				=> 'https://github.com/EmigmaLab/purgatorio/archive/master.zip',
-                'required' 				=> true
-            ),
+            // WordPress Repository
             array(
                 'name'     				=> 'Cookie Notice',
                 'slug'     				=> 'cookie-notice',
