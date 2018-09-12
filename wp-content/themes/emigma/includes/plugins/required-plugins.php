@@ -58,12 +58,6 @@ if( ! function_exists('theme_register_required_plugins') ){
                 'required' 				=> true
             ),
             array(
-                'name'     				=> 'WPML Media',
-                'slug'     				=> 'wpml-media-translation',
-                'source'   				=> 'http://hub.razvija.se/wp-plugins/wpml-media-translation.zip',
-                'required' 				=> false
-            ),
-            array(
                 'name'     				=> 'WPML String Translation',
                 'slug'     				=> 'wpml-string-translation',
                 'source'   				=> 'http://hub.razvija.se/wp-plugins/wpml-string-translation.zip',
