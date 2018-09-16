@@ -67,7 +67,7 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ### GIT
 - Open your terminal and browse to the projects workplace folder.
-- Clone the theme from GitHub repository `$ git clone git@github.com:EmigmaLab/<project-name>.git`
+- Clone the theme from GitHub repository `$ git clone git@github.com:AlenRedek/wordpress-starter.git`
 
 ### Installing Dependencies
 - Then open your terminal and browse to the location of your theme folder
@@ -75,7 +75,7 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 
 ### Rsync
 - Open your terminal and browse to the root folder of project.
-- Download uploads folder: `$ rsync -Phvrt <project-name>@dev.razvija.se:/var/www/<project-name>.razvija.se/web/wp-content/uploads/ wp-content/uploads/`
+- Download uploads folder: `$ rsync -Phvrt <user>@<host>:/path/to/wordpress/wp-content/uploads/ wp-content/uploads/`
 
 ### Docker
 - Open your terminal and browse to the location of your theme folder
@@ -97,14 +97,9 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 - Go to `Appearance -> Install plugins`
 - Install & Activate required plugins
 
-#### Premium plugins
-- Premium plugins are available at [http://hub.razvija.se/wp-plugins/](http://hub.razvija.se/wp-plugins/)
-- In order to update repository, upload a newer version of plugin
-- Run: `$ scp -i ~/.ssh/emigma_dev_rsa plugin-name.zip hub@dev.razvija.se:/var/www/hub.razvija.se/web/wp-plugins`
-
 #### Purgatorio - Dev plugin
 - WordPress plugin for faster theme development
-- [https://github.com/EmigmaLab/purgatorio](https://github.com/EmigmaLab/purgatorio)
+- [https://github.com/AlenRedek/purgatorio](https://github.com/AlenRedek/purgatorio)
 
 ## Developing with npm, Gulp[1], SASS and Browser Sync[2]
 
