@@ -21,12 +21,12 @@ if( ! function_exists('theme_register_required_plugins') ){
          */
         $plugins = array(
 
-            // Emigma Hub
+            // Private Hub
             
             array(
                 'name'     				=> 'Purgatorio', // The plugin name
                 'slug'     				=> 'purgatorio', // The plugin slug (typically the folder name)
-                'source'   				=> 'https://github.com/EmigmaLab/purgatorio/archive/master.zip', // The plugin source
+                'source'   				=> 'https://github.com/AlenRedek/purgatorio', // The plugin source
                 'required' 				=> true, // If false, the plugin is only 'recommended' instead of required
                 'version' 				=> '1.0', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
                 'force_activation' 		=> false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch
