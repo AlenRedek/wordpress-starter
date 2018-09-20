@@ -78,8 +78,33 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 - Download uploads folder: `$ rsync -Phvrt <user>@<host>:/path/to/wordpress/wp-content/uploads/ wp-content/uploads/`
 
 ### Environment constants
-- In the root folder of the project create a file named `.env`
-- Fill in these values:
+
+#### wp-config.php
+- Loop through all the environment variables and define them as PHP constants
+- Create an empty `wp-config.php` file in your project root directory
+- Put the following contents in it:
+```php
+<?php
+
+$table_prefix  = getenv('TABLE_PREFIX') ?: 'wp_';
+
+foreach ($_ENV as $key => $value) {
+  $capitalized = strtoupper($key);
+  if (!defined($capitalized)) {
+    define($capitalized, $value);
+  }
+}
+
+if (!defined('ABSPATH'))
+    define('ABSPATH', dirname(__FILE__) . '/');
+
+require_once(ABSPATH . 'wp-settings.php');
+```
+
+#### .env
+- Define environment variables
+- Create an empty `.env` file in your project root directory
+- Fill with these values:
 ```
 # All of these constants are being read by wp-config.php
 DB_NAME=wp
