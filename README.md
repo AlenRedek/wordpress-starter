@@ -66,19 +66,49 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 ## Installation
 
 ### GIT
-- Open your terminal and browse to the projects workplace folder.
+- Open your terminal and browse to the projects workplace folder
 - Clone the theme from GitHub repository `$ git clone git@github.com:AlenRedek/wordpress-starter.git`
 
 ### Installing Dependencies
-- Then open your terminal and browse to the location of your theme folder
+- Open your terminal and browse to the location of your theme folder
 - Run: `$ npm install`
 
 ### Rsync
-- Open your terminal and browse to the root folder of project.
+- Open your terminal and browse to the root folder of the project
 - Download uploads folder: `$ rsync -Phvrt <user>@<host>:/path/to/wordpress/wp-content/uploads/ wp-content/uploads/`
 
+### Environment constants
+- In the root folder of the project create a file named `.env`
+- Fill in these values:
+```
+# All of these constants are being read by wp-config.php
+DB_NAME=wp
+DB_USER=root
+DB_PASSWORD=toor
+DB_HOST=mysql
+TABLE_PREFIX=em_
+WP_SITEURL=http://localhost/
+WP_HOME=http://localhost/
+WP_DEBUG=0
+WP_CACHE=1
+WP_AUTO_UPDATE_CORE=0
+FS_METHOD=direct
+DISALLOW_FILE_EDIT=1
+BLOG_PUBLIC=0
+
+# Don't forget to update these salts: https://api.wordpress.org/secret-key/1.1/salt/
+AUTH_KEY=your_auth_key
+SECURE_AUTH_KEY=your_secure_auth_key
+LOGGED_IN_KEY=your_logged_in_key
+NONCE_KEY=your_nonce_key
+AUTH_SALT=your_auth_salt
+SECURE_AUTH_SALT=your_secure_auth_salt
+LOGGED_IN_SALT=your_logged_in_salt
+NONCE_SALT=your_nonce_salt
+```
+
 ### Docker
-- Open your terminal and browse to the location of your theme folder
+- Open your terminal and browse to the root folder of the project
 - Build image & Run Docker container: `$ docker-compose up`
 - List all containers `$ docker container ls -a`
 - Enter running container `$ docker container exec -it <container_name> bash`
