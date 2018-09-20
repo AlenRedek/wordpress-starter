@@ -66,7 +66,7 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 ## Installation
 
 ### GIT
-- Open your terminal and browse to the projects workplace folder
+- Open your terminal and browse to your workplace direcotry
 - Clone the theme from GitHub repository `$ git clone git@github.com:AlenRedek/wordpress-starter.git`
 
 ### Installing Dependencies
@@ -74,7 +74,7 @@ Don´t edit these files! They're composed of several different SCSS sets and one
 - Run: `$ npm install`
 
 ### Rsync
-- Open your terminal and browse to the root folder of the project
+- Open your terminal and browse to the project root directory
 - Download uploads folder: `$ rsync -Phvrt <user>@<host>:/path/to/wordpress/wp-content/uploads/ wp-content/uploads/`
 
 ### Environment constants
@@ -133,7 +133,7 @@ NONCE_SALT=your_nonce_salt
 ```
 
 ### Docker
-- Open your terminal and browse to the root folder of the project
+- Open your terminal and browse to the project root directory
 - Build image & Run Docker container: `$ docker-compose up`
 - List all containers `$ docker container ls -a`
 - Enter running container `$ docker container exec -it <container_name> bash`
