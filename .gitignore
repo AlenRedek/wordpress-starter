@@ -36,6 +36,7 @@ wp-content/*
 !changelog.md
 !docker-compose.yml
 !Dockerfile
+!wp-config.php
 
 # ignore some specific folders.
 wp-content/themes/twenty*
